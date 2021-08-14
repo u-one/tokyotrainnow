@@ -1,0 +1,1 @@
+https://start.spring.io/#!type=gradle-project&language=java&platformVersion=2.5.3&packaging=jar&jvmVersion=11&groupId=net.uoneweb&artifactId=tokyotrainnow&name=tokyotrainnow&description=Application%20for%20Tokyo%20public%20transportation&packageName=net.uoneweb.tokyotrainnow&dependencies=lombok,thymeleaf,web
