@@ -29,4 +29,5 @@ jobs:
       - name: Deploy to App Engine
         uses: google-github-actions/deploy-appengine@v0.4.0
         with:
+          working_directory: ${{ github.workspace }}
           credentials: ${{ secrets.GCP_SA_KEY }}
