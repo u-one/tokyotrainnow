@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="jp" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>鉄道</title>
+</head>
+<body>
+<p th:text="${name}" />
+<table>
+    <thead>
+    </thead>
+    <tbody>
+    <tr th:each="station : ${stations}">
+        <td><span th:text="${station.sameAs}"></span></td>
+        <td><span th:text="${station.title}"></span></td>
+        <td><span th:text="${station.stationTitle.ja}"></span></td>
+        <td><span th:text="${station.stationTitle.en}"></span></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

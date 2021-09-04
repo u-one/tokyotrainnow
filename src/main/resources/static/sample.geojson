@@ -1,0 +1,27 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          139.5196, 35.6180
+        ]
+      },
+      "properties": {
+        "title": "Mapbox DC"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [139.5197, 35.6190]
+      },
+      "properties": {
+        "title": "Mapbox SF"
+      }
+    }
+  ]
+}

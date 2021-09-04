@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="jp" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>路線</title>
+</head>
+<body>
+<div th:id="${railway.sameAs}" th:text="${railway.color}" th:style="'background-color:' + ${railway.color}"></div>
+<b><div th:text="${railway.lineCode} + ' ' + ${railway.operator} + ' ' + ${railway.sameAs} + ' ' + ${railway.railwayTitles}"></div></b>
+<table>
+    <thead>
+    </thead>
+    <tbody>
+    <tr th:each="station : ${railway.stationOrder}">
+        <td><span th:text="${station.index}"></span></td>
+        <td><span th:text="${station.station}"></span></td>
+        <td><span th:text="${station.stationTitles.ja}"></span></td>
+        <td><span th:text="${station.stationTitles.en}"></span></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

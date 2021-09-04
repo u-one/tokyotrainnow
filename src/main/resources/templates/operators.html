@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="jp" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>鉄道</title>
+</head>
+<body>
+<table>
+    <thead>
+    </thead>
+    <tbody>
+    <tr th:each="operator : ${operators}">
+        <td><a th:href="'./railways/' + ${operator.sameAs}"><span th:text="${operator.title}"></span></a></td>
+        <td><span th:text="${operator.sameAs}"></span></td>
+        <td><span th:text="${operator.operatorTitles}"></span></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

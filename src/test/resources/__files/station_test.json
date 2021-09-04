@@ -1,0 +1,27 @@
+[
+{
+  "@id": "urn:ucode:_00001C000000000000010000031025A3",
+  "@type": "odpt:Station",
+  "dc:date": "2021-06-21T14:00:00+09:00",
+  "geo:lat": 35.33356,
+  "@context": "http://vocab.odpt.org/context_odpt.jsonld",
+  "dc:title": "君津",
+  "geo:long": 139.89538,
+  "owl:sameAs": "odpt.Station:JR-East.Uchibo.Kimitsu",
+  "odpt:railway": "odpt.Railway:JR-East.Uchibo",
+  "odpt:operator": "odpt.Operator:JR-East",
+  "odpt:stationTitle": {
+    "en": "Kimitsu",
+    "ja": "君津"
+  },
+  "odpt:passengerSurvey": [
+    "odpt.PassengerSurvey:JR-East.Kimitsu"
+  ],
+  "odpt:stationTimetable": [
+    "odpt.StationTimetable:JR-East.Uchibo.Kimitsu.Inbound.Weekday",
+    "odpt.StationTimetable:JR-East.Uchibo.Kimitsu.Inbound.SaturdayHoliday",
+    "odpt.StationTimetable:JR-East.Uchibo.Kimitsu.Outbound.Weekday",
+    "odpt.StationTimetable:JR-East.Uchibo.Kimitsu.Outbound.SaturdayHoliday"
+  ]
+}
+]

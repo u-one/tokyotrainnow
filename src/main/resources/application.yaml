@@ -1,0 +1,11 @@
+spring:
+  profiles:
+    active: debug
+net:
+  uoneweb:
+    tokyotrainnow:
+      odptapi:
+        _key: ""
+        _endpoint: "https://api-tokyochallenge.odpt.org/api/v4/"
+        key: "TEST-KEY"
+        endpoint: "http://localhost:8081"

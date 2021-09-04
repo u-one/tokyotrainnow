@@ -1,0 +1,182 @@
+[
+  {
+    "@id": "urn:uuid:22edaf41-d71f-4ec2-b5e4-2a970e6c319a",
+    "@type": "odpt:Train",
+    "dc:date": "2021-08-14T22:27:13+09:00",
+    "@context": "http://vocab.odpt.org/context_odpt.jsonld",
+    "dct:valid": "2021-08-14T22:32:13+09:00",
+    "odpt:delay": 0,
+    "owl:sameAs": "odpt.Train:JR-East.SobuRapid.2129F",
+    "odpt:railway": "odpt.Railway:JR-East.SobuRapid",
+    "odpt:operator": "odpt.Operator:JR-East",
+    "odpt:toStation": null,
+    "odpt:trainType": "odpt.TrainType:JR-East.Rapid",
+    "odpt:fromStation": "odpt.Station:JR-East.SobuRapid.Tsudanuma",
+    "odpt:trainNumber": "2129F",
+    "odpt:railDirection": "odpt.RailDirection:Outbound",
+    "odpt:carComposition": 15,
+    "odpt:destinationStation": [
+      "odpt.Station:JR-East.Sobu.Sakura"
+    ]
+  },
+  {
+    "@id": "urn:uuid:f1fc6a7b-a50f-4590-9875-ec1a109ae8c2",
+    "@type": "odpt:Train",
+    "dc:date": "2021-08-14T22:27:13+09:00",
+    "@context": "http://vocab.odpt.org/context_odpt.jsonld",
+    "dct:valid": "2021-08-14T22:32:13+09:00",
+    "odpt:delay": 0,
+    "owl:sameAs": "odpt.Train:JR-East.SobuRapid.2059F",
+    "odpt:railway": "odpt.Railway:JR-East.SobuRapid",
+    "odpt:operator": "odpt.Operator:JR-East",
+    "odpt:toStation": "odpt.Station:JR-East.SobuRapid.Funabashi",
+    "odpt:trainType": "odpt.TrainType:JR-East.Rapid",
+    "odpt:fromStation": "odpt.Station:JR-East.SobuRapid.Ichikawa",
+    "odpt:trainNumber": "2059F",
+    "odpt:railDirection": "odpt.RailDirection:Outbound",
+    "odpt:carComposition": 15,
+    "odpt:destinationStation": [
+      "odpt.Station:JR-East.NaritaAirportBranch.NaritaAirportTerminal1"
+    ]
+  },
+  {
+    "@id": "urn:uuid:6257f29a-dbea-4091-af86-ca135057d6cc",
+    "@type": "odpt:Train",
+    "dc:date": "2021-08-14T22:27:13+09:00",
+    "@context": "http://vocab.odpt.org/context_odpt.jsonld",
+    "dct:valid": "2021-08-14T22:32:13+09:00",
+    "odpt:delay": 0,
+    "owl:sameAs": "odpt.Train:JR-East.SobuRapid.2115F",
+    "odpt:railway": "odpt.Railway:JR-East.SobuRapid",
+    "odpt:operator": "odpt.Operator:JR-East",
+    "odpt:toStation": "odpt.Station:JR-East.SobuRapid.ShinKoiwa",
+    "odpt:trainType": "odpt.TrainType:JR-East.Rapid",
+    "odpt:fromStation": "odpt.Station:JR-East.SobuRapid.Kinshicho",
+    "odpt:trainNumber": "2115F",
+    "odpt:railDirection": "odpt.RailDirection:Outbound",
+    "odpt:carComposition": 15,
+    "odpt:destinationStation": [
+      "odpt.Station:JR-East.SobuRapid.Chiba"
+    ]
+  },
+  {
+    "@id": "urn:uuid:8f3b4aab-9ea6-4412-9897-aba611fc3861",
+    "@type": "odpt:Train",
+    "dc:date": "2021-08-14T22:27:13+09:00",
+    "@context": "http://vocab.odpt.org/context_odpt.jsonld",
+    "dct:valid": "2021-08-14T22:32:13+09:00",
+    "odpt:delay": 0,
+    "owl:sameAs": "odpt.Train:JR-East.SobuRapid.2187F",
+    "odpt:railway": "odpt.Railway:JR-East.SobuRapid",
+    "odpt:operator": "odpt.Operator:JR-East",
+    "odpt:toStation": null,
+    "odpt:trainType": "odpt.TrainType:JR-East.Rapid",
+    "odpt:fromStation": "odpt.Station:JR-East.SobuRapid.Tokyo",
+    "odpt:trainNumber": "2187F",
+    "odpt:railDirection": "odpt.RailDirection:Outbound",
+    "odpt:carComposition": 15,
+    "odpt:destinationStation": [
+      "odpt.Station:JR-East.SobuRapid.Chiba"
+    ]
+  },
+  {
+    "@id": "urn:uuid:0557289e-7209-458f-b8b6-eac9f37e99e4",
+    "@type": "odpt:Train",
+    "dc:date": "2021-08-14T22:27:13+09:00",
+    "@context": "http://vocab.odpt.org/context_odpt.jsonld",
+    "dct:valid": "2021-08-14T22:32:13+09:00",
+    "odpt:delay": 0,
+    "owl:sameAs": "odpt.Train:JR-East.SobuRapid.2296F",
+    "odpt:railway": "odpt.Railway:JR-East.SobuRapid",
+    "odpt:operator": "odpt.Operator:JR-East",
+    "odpt:toStation": null,
+    "odpt:trainType": "odpt.TrainType:JR-East.Rapid",
+    "odpt:fromStation": "odpt.Station:JR-East.SobuRapid.Chiba",
+    "odpt:trainNumber": "2296F",
+    "odpt:railDirection": "odpt.RailDirection:Inbound",
+    "odpt:carComposition": 15,
+    "odpt:destinationStation": [
+      "odpt.Station:JR-East.Yokosuka.Ofuna"
+    ]
+  },
+  {
+    "@id": "urn:uuid:9f025a70-12ba-4a62-ae01-169e208b8bee",
+    "@type": "odpt:Train",
+    "dc:date": "2021-08-14T22:27:13+09:00",
+    "@context": "http://vocab.odpt.org/context_odpt.jsonld",
+    "dct:valid": "2021-08-14T22:32:13+09:00",
+    "odpt:delay": 0,
+    "owl:sameAs": "odpt.Train:JR-East.SobuRapid.2180F",
+    "odpt:railway": "odpt.Railway:JR-East.SobuRapid",
+    "odpt:operator": "odpt.Operator:JR-East",
+    "odpt:toStation": "odpt.Station:JR-East.SobuRapid.Tsudanuma",
+    "odpt:trainType": "odpt.TrainType:JR-East.Rapid",
+    "odpt:fromStation": "odpt.Station:JR-East.SobuRapid.Inage",
+    "odpt:trainNumber": "2180F",
+    "odpt:railDirection": "odpt.RailDirection:Inbound",
+    "odpt:carComposition": 15,
+    "odpt:destinationStation": [
+      "odpt.Station:JR-East.SobuRapid.Tokyo"
+    ]
+  },
+  {
+    "@id": "urn:uuid:bf8a118a-5a37-4794-ac17-fa4c3ad54ea0",
+    "@type": "odpt:Train",
+    "dc:date": "2021-08-14T22:27:13+09:00",
+    "@context": "http://vocab.odpt.org/context_odpt.jsonld",
+    "dct:valid": "2021-08-14T22:32:13+09:00",
+    "odpt:delay": 0,
+    "owl:sameAs": "odpt.Train:JR-East.SobuRapid.2178F",
+    "odpt:railway": "odpt.Railway:JR-East.SobuRapid",
+    "odpt:operator": "odpt.Operator:JR-East",
+    "odpt:toStation": null,
+    "odpt:trainType": "odpt.TrainType:JR-East.Rapid",
+    "odpt:fromStation": "odpt.Station:JR-East.SobuRapid.Ichikawa",
+    "odpt:trainNumber": "2178F",
+    "odpt:railDirection": "odpt.RailDirection:Inbound",
+    "odpt:carComposition": 11,
+    "odpt:destinationStation": [
+      "odpt.Station:JR-East.Yokosuka.Kurihama"
+    ]
+  },
+  {
+    "@id": "urn:uuid:238432e4-c3af-4d0a-a0dd-be7d57d1d0af",
+    "@type": "odpt:Train",
+    "dc:date": "2021-08-14T22:27:13+09:00",
+    "@context": "http://vocab.odpt.org/context_odpt.jsonld",
+    "dct:valid": "2021-08-14T22:32:13+09:00",
+    "odpt:delay": 0,
+    "owl:sameAs": "odpt.Train:JR-East.SobuRapid.2110F",
+    "odpt:railway": "odpt.Railway:JR-East.SobuRapid",
+    "odpt:operator": "odpt.Operator:JR-East",
+    "odpt:toStation": "odpt.Station:JR-East.SobuRapid.Tokyo",
+    "odpt:trainType": "odpt.TrainType:JR-East.Rapid",
+    "odpt:fromStation": "odpt.Station:JR-East.SobuRapid.ShinNihombashi",
+    "odpt:trainNumber": "2110F",
+    "odpt:railDirection": "odpt.RailDirection:Inbound",
+    "odpt:carComposition": 15,
+    "odpt:destinationStation": [
+      "odpt.Station:JR-East.Yokosuka.Kurihama"
+    ]
+  },
+  {
+    "@id": "urn:uuid:db9becf7-5190-4a3d-8130-75c007e5b9e8",
+    "@type": "odpt:Train",
+    "dc:date": "2021-08-14T22:27:13+09:00",
+    "@context": "http://vocab.odpt.org/context_odpt.jsonld",
+    "dct:valid": "2021-08-14T22:32:13+09:00",
+    "odpt:delay": 0,
+    "owl:sameAs": "odpt.Train:JR-East.SobuRapid.2054M",
+    "odpt:railway": "odpt.Railway:JR-East.SobuRapid",
+    "odpt:operator": "odpt.Operator:JR-East",
+    "odpt:toStation": "odpt.Station:JR-East.SobuRapid.Ichikawa",
+    "odpt:trainType": "odpt.TrainType:JR-East.LimitedExpress",
+    "odpt:fromStation": "odpt.Station:JR-East.SobuRapid.Funabashi",
+    "odpt:trainNumber": "2054M",
+    "odpt:railDirection": "odpt.RailDirection:Inbound",
+    "odpt:carComposition": 12,
+    "odpt:destinationStation": [
+      "odpt.Station:JR-East.Yokosuka.Ofuna"
+    ]
+  }
+]

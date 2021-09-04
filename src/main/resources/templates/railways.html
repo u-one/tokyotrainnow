@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="jp" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>鉄道</title>
+</head>
+<body>
+
+<table>
+    <thead>
+    </thead>
+    <tbody>
+    <tr th:each="railway : ${railways}">
+       <td><span><a th:text="${railway.railwayTitles.ja}" th:href="'#'+ ${railway.sameAs}"></a></span></td>
+       <td><span><a th:text="路線" th:href="'/railway/'+ ${railway.sameAs}"></a></span></td>
+       <td><span th:text="${railway.lineCode}"></span></td>
+       <td><span th:text="${railway.operator}"></span></td>
+    </tr>
+    </tbody>
+</table>
+
+<!--
+<ul th:each="railway : ${railways}">
+   <li><a th:href="'#'+ ${railway.operator}" th:text="${railway.lineCode} + ' ' + ${railway.operator} + ' ' + ${railway.railwayTitles}"></a></li>
+</ul>
+-->
+
+<div th:each="railway : ${railways}">
+<div th:id="${railway.sameAs}" th:text="${railway.color}" th:style="'background-color:' + ${railway.color}"></div>
+<b><div th:text="${railway.lineCode} + ' ' + ${railway.operator} + ' ' + ${railway.sameAs} + ' ' + ${railway.railwayTitles}"></div></b>
+<table>
+    <thead>
+    </thead>
+    <tbody>
+    <tr th:each="station : ${railway.stationOrder}">
+        <td><span th:text="${station.index}"></span></td>
+        <td><span th:text="${station.station}"></span></td>
+        <td><span th:text="${station.stationTitles.ja}"></span></td>
+        <td><span th:text="${station.stationTitles.en}"></span></td>
+    </tr>
+    </tbody>
+</table>
+<br>
+</div>
+
+</body>
+</html>

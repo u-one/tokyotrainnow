@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="jp" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>鉄道</title>
+</head>
+<body>
+<p th:text="${name}" />
+<table>
+    <thead>
+    <tr><th>列車番号</th><th>行先</th><th colspan="2">現在位置</th><th>編成</th><th>遅延</th></tr>
+    </thead>
+    <tbody>
+    <tr th:each="train : ${trains}">
+        <td><span th:text="${train.trainNumber}"></span></td>
+        <td><span th:text="${train.destinationStation}"></span></td>
+        <td><span th:text="${train.fromStation}"></span></td>
+        <td><span th:text="${train.toStation}"></span></td>
+        <td><span th:text="${train.carComposition}"></span></td>
+        <td><span th:text="${train.delay}"></span></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

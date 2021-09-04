@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="jp" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>東京交通Now</h1>
+
+<h2>Dump API</h2>
+<ul>
+    <li><a th:href="${apiendpoint} + '/odpt:Calendar.json?acl:consumerKey=' + ${apitoken}">曜日・日付区分</a></li>
+    <li><a th:href="${apiendpoint} + '/odpt:StationTimetable.json?acl:consumerKey=' + ${apitoken}">駅時刻表</a></li>
+    <li><a th:href="${apiendpoint} + '/odpt:TrainTimetable.json?acl:consumerKey=' + ${apitoken}">列車時刻表</a></li>
+    <li><a th:href="${apiendpoint} + '/odpt:TrainType.json?acl:consumerKey=' + ${apitoken}">列車種別</a></li>
+    <li><a th:href="${apiendpoint} + '/odpt:RailDirection.json?acl:consumerKey=' + ${apitoken}">進行方向</a></li>
+    <li><a th:href="${apiendpoint} + '/odpt:RailwayFare.json?acl:consumerKey=' + ${apitoken}">運賃情報</a></li>
+    <li><a th:href="${apiendpoint} + '/odpt:PassengerSurvey.json?acl:consumerKey=' + ${apitoken}">駅別乗降人員</a></li>
+    <li><a th:href="${apiendpoint} + '/odpt:Airport.json?acl:consumerKey=' + ${apitoken}">空港情報</a></li>
+    <li><a th:href="${apiendpoint} + '/odpt:AirportTerminal.json?acl:consumerKey=' + ${apitoken}">空港ターミナル情報</a></li>
+    <li><a th:href="${apiendpoint} + '/odpt:FlightSchedule.json?acl:consumerKey=' + ${apitoken}">フライト時刻表</a></li>
+    <li><a th:href="${apiendpoint} + '/odpt:FlightStatus.json?acl:consumerKey=' + ${apitoken}">フライト状況</a></li>
+</ul>
+
+<h2>API</h2>
+<ul>
+    <li><a th:href="${apiendpoint} + '/odpt:TrainTimetable?acl:consumerKey=' + ${apitoken} + '&odpt:operator=odpt.Operator:JR-East&odpt:railway=odpt.Railway:JR-East.SobuRapid'">列車時刻表</a></li>
+    <li><a th:href="${apiendpoint} + 'odpt:FlightInformationArrival?acl:consumerKey=' + ${apitoken} + '&odpt:airline=odpt.Operator:ANA'">フライト到着情報</a></li>
+    <li><a th:href="${apiendpoint} + 'odpt:FlightInformationDeparture?acl:consumerKey=' + ${apitoken} + '&odpt:airline=odpt.Operator:ANA&odpt:airport=odpt.Airport:HND'">フライト出発情報</a></li>
+
+</ul>
+
+<h2>生データ</h2>
+<ul>
+    <li><a href="./operators">事業者</a></li>
+    <li><a href="./railways">路線</a></li>
+    <li><a href="./stations">駅</a></li>
+    <li><a href="./train">在線情報</a></li>
+</ul>
+
+<form action="./train" method="get">
+    <select name="operator">
+        <option th:each="operator : ${operators}" th:value="${operator.sameAs}" th:text="${operator.title}" th:selected="${operator.sameAs == 'odpt.Operator:JR-East'}"></option>
+    </select>
+
+    <select name="railway">
+        <option th:each="railway : ${railways}" th:value="${railway.sameAs}" th:text="${railway.title}" th:selected="${railway.sameAs == 'odpt.Railway:JR-East.SobuRapid'}"></option>
+    </select>
+
+    <button>Get</button>
+</form>
+
+<form action="./railway" method="get">
+    <select name="railway">
+        <option th:each="railway : ${railways}" th:value="${railway.sameAs}" th:text="${railway.title}" th:selected="${railway.sameAs == 'odpt.Railway:JR-East.SobuRapid'}"></option>
+    </select>
+    <button>Get</button>
+</form>
+
+<h2>加工データ</h2>
+<li><a href="./train_operators">鉄道事業者</a></li>
+<li><a href="./maps">MAPS</a></li>
+
+
+</body>
+</html>
