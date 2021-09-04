@@ -1,0 +1,25 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to App Engine
+        uses: google-github-actions/deploy-appengine@v0.4.0
+        with:
+          # The GCP project ID. Overrides project ID set by credentials.
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          # The path to set the working directory. The deliverables will be referenced from this path.
+          working_directory: # optional
+    deliverables: src/main/appengine/app.yaml
+    credentials: ${{ secrets.GCP_SA_KEY }}
+    
