@@ -1,8 +1,24 @@
+
+// Google App Engine plugin設定
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.2.0.RELEASE'
+		classpath 'com.google.cloud.tools:appengine-gradle-plugin:2.2.0'
+	}
+}
+
 plugins {
 	id 'org.springframework.boot' version '2.5.3'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+
 }
+
+// Google App Engine plugin設定
+apply plugin: 'com.google.cloud.tools.appengine'
 
 group = 'net.uoneweb'
 version = '0.0.1-SNAPSHOT'
@@ -21,6 +37,7 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'com.google.appengine:appengine-api-1.0-sdk:+'  // Google App Engine plugin設定
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -28,4 +45,12 @@ dependencies {
 
 test {
 	useJUnitPlatform()
+}
+
+// Google App Engine plugin設定
+appengine {
+	deploy {
+		projectId = 'tokyotrainnow'
+		version = 'GCLOUD_CONFIG'
+	}
 }
