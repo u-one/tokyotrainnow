@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 
 import java.util.Map;
 
-@Builder
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonldResource
