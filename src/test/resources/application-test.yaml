@@ -1,0 +1,6 @@
+net:
+  uoneweb:
+    tokyotrainnow:
+      odptapi:
+        key: "TEST-KEY"
+        endpoint: "http://localhost:8081/"

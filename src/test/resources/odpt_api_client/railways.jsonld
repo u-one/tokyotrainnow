@@ -1,0 +1,379 @@
+[
+  {
+    "@id": "urn:ucode:_00001C00000000000001000003100E52",
+    "@type": "odpt:Railway",
+    "dc:date": "2020-04-01T12:00:00+09:00",
+    "@context": "http://vocab.odpt.org/context_odpt.jsonld",
+    "dc:title": "小田原線",
+    "owl:sameAs": "odpt.Railway:Odakyu.Odawara",
+    "odpt:operator": "odpt.Operator:Odakyu",
+    "odpt:railwayTitle": {
+      "en": "Odawara Line",
+      "ja": "小田原線"
+    },
+    "odpt:stationOrder": [],
+    "odpt:ascendingRailDirection": "odpt.RailDirection:Outbound",
+    "odpt:descendingRailDirection": "odpt.RailDirection:Inbound"
+  },
+  {
+    "@id": "urn:ucode:_00001C00000000000001000003100E1D",
+    "@type": "odpt:Railway",
+    "dc:date": "2021-06-21T14:00:00+09:00",
+    "@context": "http://vocab.odpt.org/context_odpt.jsonld",
+    "dc:title": "総武快速線",
+    "odpt:color": "#0074BE",
+    "owl:sameAs": "odpt.Railway:JR-East.SobuRapid",
+    "odpt:lineCode": "JO",
+    "odpt:operator": "odpt.Operator:JR-East",
+    "odpt:railwayTitle": {
+      "en": "Sobu Rapid Line",
+      "ja": "総武快速線"
+    },
+    "odpt:stationOrder": [
+      {
+        "odpt:index": 1,
+        "odpt:station": "odpt.Station:JR-East.SobuRapid.Tokyo",
+        "odpt:stationTitle": {
+          "en": "Tokyo",
+          "ja": "東京"
+        }
+      },
+      {
+        "odpt:index": 2,
+        "odpt:station": "odpt.Station:JR-East.SobuRapid.ShinNihombashi",
+        "odpt:stationTitle": {
+          "en": "Shin-Nihombashi",
+          "ja": "新日本橋"
+        }
+      },
+      {
+        "odpt:index": 3,
+        "odpt:station": "odpt.Station:JR-East.SobuRapid.Bakurocho",
+        "odpt:stationTitle": {
+          "en": "Bakurocho",
+          "ja": "馬喰町"
+        }
+      },
+      {
+        "odpt:index": 4,
+        "odpt:station": "odpt.Station:JR-East.SobuRapid.Kinshicho",
+        "odpt:stationTitle": {
+          "en": "Kinshicho",
+          "ja": "錦糸町"
+        }
+      },
+      {
+        "odpt:index": 5,
+        "odpt:station": "odpt.Station:JR-East.SobuRapid.ShinKoiwa",
+        "odpt:stationTitle": {
+          "en": "Shin-Koiwa",
+          "ja": "新小岩"
+        }
+      },
+      {
+        "odpt:index": 6,
+        "odpt:station": "odpt.Station:JR-East.SobuRapid.Ichikawa",
+        "odpt:stationTitle": {
+          "en": "Ichikawa",
+          "ja": "市川"
+        }
+      },
+      {
+        "odpt:index": 7,
+        "odpt:station": "odpt.Station:JR-East.SobuRapid.Funabashi",
+        "odpt:stationTitle": {
+          "en": "Funabashi",
+          "ja": "船橋"
+        }
+      },
+      {
+        "odpt:index": 8,
+        "odpt:station": "odpt.Station:JR-East.SobuRapid.Tsudanuma",
+        "odpt:stationTitle": {
+          "en": "Tsudanuma",
+          "ja": "津田沼"
+        }
+      },
+      {
+        "odpt:index": 9,
+        "odpt:station": "odpt.Station:JR-East.SobuRapid.Inage",
+        "odpt:stationTitle": {
+          "en": "Inage",
+          "ja": "稲毛"
+        }
+      },
+      {
+        "odpt:index": 10,
+        "odpt:station": "odpt.Station:JR-East.SobuRapid.Chiba",
+        "odpt:stationTitle": {
+          "en": "Chiba",
+          "ja": "千葉"
+        }
+      }
+    ],
+    "odpt:ascendingRailDirection": "odpt.RailDirection:Outbound",
+    "odpt:descendingRailDirection": "odpt.RailDirection:Inbound"
+  },
+  {
+    "@id": "urn:ucode:_00001C000000000000010000030C46B0",
+    "@type": "odpt:Railway",
+    "dc:date": "2021-06-21T14:00:00+09:00",
+    "@context": "http://vocab.odpt.org/context_odpt.jsonld",
+    "dc:title": "千代田線",
+    "odpt:color": "#00BB85",
+    "owl:sameAs": "odpt.Railway:TokyoMetro.Chiyoda",
+    "odpt:lineCode": "C",
+    "odpt:operator": "odpt.Operator:TokyoMetro",
+    "odpt:railwayTitle": {
+      "en": "Chiyoda Line",
+      "ja": "千代田線",
+      "ko": "치요다선",
+      "zh-Hans": "千代田线",
+      "zh-Hant": "千代田線"
+    },
+    "odpt:stationOrder": [
+      {
+        "odpt:index": 1,
+        "odpt:station": "odpt.Station:TokyoMetro.Chiyoda.YoyogiUehara",
+        "odpt:stationTitle": {
+          "en": "Yoyogi-uehara",
+          "ja": "代々木上原",
+          "ko": "요요기우에하라",
+          "ja-Hrkt": "よよぎうえはら",
+          "zh-Hans": "代々木上原",
+          "zh-Hant": "代代木上原"
+        }
+      },
+      {
+        "odpt:index": 2,
+        "odpt:station": "odpt.Station:TokyoMetro.Chiyoda.YoyogiKoen",
+        "odpt:stationTitle": {
+          "en": "Yoyogi-koen",
+          "ja": "代々木公園",
+          "ko": "요요기코엔",
+          "ja-Hrkt": "よよぎこうえん",
+          "zh-Hans": "代々木公园",
+          "zh-Hant": "代代木公園"
+        }
+      },
+      {
+        "odpt:index": 3,
+        "odpt:station": "odpt.Station:TokyoMetro.Chiyoda.MeijiJingumae",
+        "odpt:stationTitle": {
+          "en": "Meiji-jingumae<Harajuku>",
+          "ja": "明治神宮前〈原宿〉",
+          "ko": "메이지진구마에<하라주쿠>",
+          "ja-Hrkt": "めいじじんぐうまえ<はらじゅく>",
+          "zh-Hans": "明治神宫前<原宿>",
+          "zh-Hant": "明治神宮前<原宿>"
+        }
+      },
+      {
+        "odpt:index": 4,
+        "odpt:station": "odpt.Station:TokyoMetro.Chiyoda.OmoteSando",
+        "odpt:stationTitle": {
+          "en": "Omote-sando",
+          "ja": "表参道",
+          "ko": "오모테산도",
+          "ja-Hrkt": "おもてさんどう",
+          "zh-Hans": "表参道",
+          "zh-Hant": "表參道"
+        }
+      },
+      {
+        "odpt:index": 5,
+        "odpt:station": "odpt.Station:TokyoMetro.Chiyoda.Nogizaka",
+        "odpt:stationTitle": {
+          "en": "Nogizaka",
+          "ja": "乃木坂",
+          "ko": "노기자카",
+          "ja-Hrkt": "のぎざか",
+          "zh-Hans": "乃木坂",
+          "zh-Hant": "乃木坂"
+        }
+      },
+      {
+        "odpt:index": 6,
+        "odpt:station": "odpt.Station:TokyoMetro.Chiyoda.Akasaka",
+        "odpt:stationTitle": {
+          "en": "Akasaka",
+          "ja": "赤坂",
+          "ko": "아카사카",
+          "ja-Hrkt": "あかさか",
+          "zh-Hans": "赤坂",
+          "zh-Hant": "赤坂"
+        }
+      },
+      {
+        "odpt:index": 7,
+        "odpt:station": "odpt.Station:TokyoMetro.Chiyoda.KokkaiGijidomae",
+        "odpt:stationTitle": {
+          "en": "Kokkai-gijidomae",
+          "ja": "国会議事堂前",
+          "ko": "곳카이기지도마에",
+          "ja-Hrkt": "こっかいぎじどうまえ",
+          "zh-Hans": "国会议事堂前",
+          "zh-Hant": "國會議事堂前"
+        }
+      },
+      {
+        "odpt:index": 8,
+        "odpt:station": "odpt.Station:TokyoMetro.Chiyoda.Kasumigaseki",
+        "odpt:stationTitle": {
+          "en": "Kasumigaseki",
+          "ja": "霞ケ関",
+          "ko": "가스미가세키",
+          "ja-Hrkt": "かすみがせき",
+          "zh-Hans": "霞关",
+          "zh-Hant": "霞關"
+        }
+      },
+      {
+        "odpt:index": 9,
+        "odpt:station": "odpt.Station:TokyoMetro.Chiyoda.Hibiya",
+        "odpt:stationTitle": {
+          "en": "Hibiya",
+          "ja": "日比谷",
+          "ko": "히비야",
+          "ja-Hrkt": "ひびや",
+          "zh-Hans": "日比谷",
+          "zh-Hant": "日比谷"
+        }
+      },
+      {
+        "odpt:index": 10,
+        "odpt:station": "odpt.Station:TokyoMetro.Chiyoda.Nijubashimae",
+        "odpt:stationTitle": {
+          "en": "Nijubashimae<Marunouchi>",
+          "ja": "二重橋前〈丸の内〉",
+          "ko": "니주바시마에<마루노우치선>",
+          "ja-Hrkt": "にじゅうばしまえ<まるのうち>",
+          "zh-Hans": "二重桥前<丸之内>",
+          "zh-Hant": "二重橋前<丸之內>"
+        }
+      },
+      {
+        "odpt:index": 11,
+        "odpt:station": "odpt.Station:TokyoMetro.Chiyoda.Otemachi",
+        "odpt:stationTitle": {
+          "en": "Otemachi",
+          "ja": "大手町",
+          "ko": "오테마치",
+          "ja-Hrkt": "おおてまち",
+          "zh-Hans": "大手町",
+          "zh-Hant": "大手町"
+        }
+      },
+      {
+        "odpt:index": 12,
+        "odpt:station": "odpt.Station:TokyoMetro.Chiyoda.ShinOchanomizu",
+        "odpt:stationTitle": {
+          "en": "Shin-ochanomizu",
+          "ja": "新御茶ノ水",
+          "ko": "신오차노미즈",
+          "ja-Hrkt": "しんおちゃのみず",
+          "zh-Hans": "新御茶之水",
+          "zh-Hant": "新御茶之水"
+        }
+      },
+      {
+        "odpt:index": 13,
+        "odpt:station": "odpt.Station:TokyoMetro.Chiyoda.Yushima",
+        "odpt:stationTitle": {
+          "en": "Yushima",
+          "ja": "湯島",
+          "ko": "유시마",
+          "ja-Hrkt": "ゆしま",
+          "zh-Hans": "汤岛",
+          "zh-Hant": "湯島"
+        }
+      },
+      {
+        "odpt:index": 14,
+        "odpt:station": "odpt.Station:TokyoMetro.Chiyoda.Nezu",
+        "odpt:stationTitle": {
+          "en": "Nezu",
+          "ja": "根津",
+          "ko": "네즈",
+          "ja-Hrkt": "ねづ",
+          "zh-Hans": "根津",
+          "zh-Hant": "根津"
+        }
+      },
+      {
+        "odpt:index": 15,
+        "odpt:station": "odpt.Station:TokyoMetro.Chiyoda.Sendagi",
+        "odpt:stationTitle": {
+          "en": "Sendagi",
+          "ja": "千駄木",
+          "ko": "센다기",
+          "ja-Hrkt": "せんだぎ",
+          "zh-Hans": "千驮木",
+          "zh-Hant": "千馱木"
+        }
+      },
+      {
+        "odpt:index": 16,
+        "odpt:station": "odpt.Station:TokyoMetro.Chiyoda.NishiNippori",
+        "odpt:stationTitle": {
+          "en": "Nishi-nippori",
+          "ja": "西日暮里",
+          "ko": "니시닛포리",
+          "ja-Hrkt": "にしにっぽり",
+          "zh-Hans": "西日暮里",
+          "zh-Hant": "西日暮里"
+        }
+      },
+      {
+        "odpt:index": 17,
+        "odpt:station": "odpt.Station:TokyoMetro.Chiyoda.Machiya",
+        "odpt:stationTitle": {
+          "en": "Machiya",
+          "ja": "町屋",
+          "ko": "마치야",
+          "ja-Hrkt": "まちや",
+          "zh-Hans": "町屋",
+          "zh-Hant": "町屋"
+        }
+      },
+      {
+        "odpt:index": 18,
+        "odpt:station": "odpt.Station:TokyoMetro.Chiyoda.KitaSenju",
+        "odpt:stationTitle": {
+          "en": "Kita-senju",
+          "ja": "北千住",
+          "ko": "기타센주",
+          "ja-Hrkt": "きたせんじゅ",
+          "zh-Hans": "北千住",
+          "zh-Hant": "北千住"
+        }
+      },
+      {
+        "odpt:index": 19,
+        "odpt:station": "odpt.Station:TokyoMetro.Chiyoda.Ayase",
+        "odpt:stationTitle": {
+          "en": "Ayase",
+          "ja": "綾瀬",
+          "ko": "아야세",
+          "ja-Hrkt": "あやせ",
+          "zh-Hans": "绫瀬",
+          "zh-Hant": "綾瀨"
+        }
+      },
+      {
+        "odpt:index": 20,
+        "odpt:station": "odpt.Station:TokyoMetro.Chiyoda.KitaAyase",
+        "odpt:stationTitle": {
+          "en": "Kita-ayase",
+          "ja": "北綾瀬",
+          "ko": "기타아야세",
+          "ja-Hrkt": "きたあやせ",
+          "zh-Hans": "北绫瀬",
+          "zh-Hant": "北綾瀨"
+        }
+      }
+    ],
+    "odpt:ascendingRailDirection": "odpt.RailDirection:TokyoMetro.KitaAyase",
+    "odpt:descendingRailDirection": "odpt.RailDirection:TokyoMetro.YoyogiUehara"
+  }
+]
