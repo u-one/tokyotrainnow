@@ -4,12 +4,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldId;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldResource;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Map;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @JsonldResource
 @JsonldType("odpt:Railway")
 public class Railway {
@@ -44,6 +51,9 @@ public class Railway {
     private String descendingRailDirection;
 
     @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     @JsonldResource
     public static class Station {
         @JsonProperty("odpt:index")
