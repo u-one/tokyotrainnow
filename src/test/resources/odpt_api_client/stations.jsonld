@@ -1,0 +1,115 @@
+[
+  {
+    "@id": "urn:ucode:_00001C000000000000010000031022A3",
+    "@type": "odpt:Station",
+    "dc:date": "2020-04-01T12:00:00+09:00",
+    "@context": "http://vocab.odpt.org/context_odpt.jsonld",
+    "dc:title": "成城学園前",
+    "owl:sameAs": "odpt.Station:Odakyu.Odawara.SeijogakuenMae",
+    "odpt:railway": "odpt.Railway:Odakyu.Odawara",
+    "odpt:operator": "odpt.Operator:Odakyu",
+    "odpt:stationTitle": {
+      "en": "Seijogakuen-Mae",
+      "ja": "成城学園前"
+    }
+  },
+  {
+    "@id": "urn:ucode:_00001C000000000000010000031027F5",
+    "@type": "odpt:Station",
+    "dc:date": "2021-06-21T14:00:00+09:00",
+    "geo:lat": 35.69018,
+    "@context": "http://vocab.odpt.org/context_odpt.jsonld",
+    "dc:title": "新宿",
+    "geo:long": 139.70038,
+    "owl:sameAs": "odpt.Station:JR-East.ChuoRapid.Shinjuku",
+    "odpt:railway": "odpt.Railway:JR-East.ChuoRapid",
+    "odpt:operator": "odpt.Operator:JR-East",
+    "odpt:stationCode": "JC05",
+    "odpt:stationTitle": {
+      "en": "Shinjuku",
+      "ja": "新宿"
+    },
+    "odpt:passengerSurvey": [
+      "odpt.PassengerSurvey:JR-East.Shinjuku"
+    ],
+    "odpt:stationTimetable": [
+      "odpt.StationTimetable:JR-East.ChuoRapid.Shinjuku.Inbound.Weekday",
+      "odpt.StationTimetable:JR-East.ChuoRapid.Shinjuku.Inbound.SaturdayHoliday",
+      "odpt.StationTimetable:JR-East.ChuoRapid.Shinjuku.Outbound.Weekday",
+      "odpt.StationTimetable:JR-East.ChuoRapid.Shinjuku.Outbound.SaturdayHoliday"
+    ],
+    "odpt:connectingRailway": [
+      "odpt.Railway:JR-East.ChuoSobuLocal",
+      "odpt.Railway:JR-East.SaikyoKawagoe",
+      "odpt.Railway:JR-East.ShonanShinjuku",
+      "odpt.Railway:JR-East.Yamanote",
+      "odpt.Railway:Keio.Keio",
+      "odpt.Railway:Keio.KeioNew",
+      "odpt.Railway:Odakyu.Odawara",
+      "odpt.Railway:Seibu.Shinjuku",
+      "odpt.Railway:Toei.Oedo",
+      "odpt.Railway:Toei.Shinjuku",
+      "odpt.Railway:TokyoMetro.Marunouchi"
+    ]
+  },
+  {
+    "@id": "urn:ucode:_00001C00000000000001000003102657",
+    "@type": "odpt:Station",
+    "dc:date": "2021-06-21T14:00:00+09:00",
+    "geo:lat": 35.63603,
+    "@context": "http://vocab.odpt.org/context_odpt.jsonld",
+    "dc:title": "舞浜",
+    "geo:long": 139.8837,
+    "owl:sameAs": "odpt.Station:JR-East.Keiyo.Maihama",
+    "odpt:railway": "odpt.Railway:JR-East.Keiyo",
+    "odpt:operator": "odpt.Operator:JR-East",
+    "odpt:stationCode": "JE07",
+    "odpt:stationTitle": {
+      "en": "Maihama",
+      "ja": "舞浜"
+    },
+    "odpt:passengerSurvey": [
+      "odpt.PassengerSurvey:JR-East.Maihama"
+    ],
+    "odpt:stationTimetable": [
+      "odpt.StationTimetable:JR-East.Keiyo.Maihama.Inbound.Weekday",
+      "odpt.StationTimetable:JR-East.Keiyo.Maihama.Inbound.SaturdayHoliday",
+      "odpt.StationTimetable:JR-East.Keiyo.Maihama.Outbound.Weekday",
+      "odpt.StationTimetable:JR-East.Keiyo.Maihama.Outbound.SaturdayHoliday"
+    ]
+  },
+  {
+    "@id": "urn:ucode:_00001C000000000000010000030C46DB",
+    "@type": "odpt:Station",
+    "dc:date": "2021-06-21T14:00:00+09:00",
+    "geo:lat": 35.665652,
+    "@context": "http://vocab.odpt.org/context_odpt.jsonld",
+    "dc:title": "表参道",
+    "geo:long": 139.711346,
+    "owl:sameAs": "odpt.Station:TokyoMetro.Chiyoda.OmoteSando",
+    "odpt:railway": "odpt.Railway:TokyoMetro.Chiyoda",
+    "odpt:operator": "odpt.Operator:TokyoMetro",
+    "odpt:stationCode": "C04",
+    "odpt:stationTitle": {
+      "en": "Omote-sando",
+      "ja": "表参道",
+      "ko": "오모테산도",
+      "ja-Hrkt": "おもてさんどう",
+      "zh-Hans": "表参道",
+      "zh-Hant": "表參道"
+    },
+    "odpt:passengerSurvey": [
+      "odpt.PassengerSurvey:TokyoMetro.OmoteSando"
+    ],
+    "odpt:stationTimetable": [
+      "odpt.StationTimetable:TokyoMetro.Chiyoda.OmoteSando.TokyoMetro.YoyogiUehara.Weekday",
+      "odpt.StationTimetable:TokyoMetro.Chiyoda.OmoteSando.TokyoMetro.YoyogiUehara.SaturdayHoliday",
+      "odpt.StationTimetable:TokyoMetro.Chiyoda.OmoteSando.TokyoMetro.KitaAyase.Weekday",
+      "odpt.StationTimetable:TokyoMetro.Chiyoda.OmoteSando.TokyoMetro.KitaAyase.SaturdayHoliday"
+    ],
+    "odpt:connectingRailway": [
+      "odpt.Railway:TokyoMetro.Ginza",
+      "odpt.Railway:TokyoMetro.Hanzomon"
+    ]
+  }
+]

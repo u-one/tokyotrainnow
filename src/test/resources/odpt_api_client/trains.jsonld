@@ -1,0 +1,42 @@
+[
+  {
+    "@id": "urn:uuid:0557289e-7209-458f-b8b6-eac9f37e99e4",
+    "@type": "odpt:Train",
+    "dc:date": "2021-08-14T22:27:13+09:00",
+    "@context": "http://vocab.odpt.org/context_odpt.jsonld",
+    "dct:valid": "2021-08-14T22:32:13+09:00",
+    "odpt:delay": 0,
+    "owl:sameAs": "odpt.Train:JR-East.SobuRapid.2296F",
+    "odpt:railway": "odpt.Railway:JR-East.SobuRapid",
+    "odpt:operator": "odpt.Operator:JR-East",
+    "odpt:toStation": null,
+    "odpt:trainType": "odpt.TrainType:JR-East.Rapid",
+    "odpt:fromStation": "odpt.Station:JR-East.SobuRapid.Chiba",
+    "odpt:trainNumber": "2296F",
+    "odpt:railDirection": "odpt.RailDirection:Inbound",
+    "odpt:carComposition": 15,
+    "odpt:destinationStation": [
+      "odpt.Station:JR-East.Yokosuka.Ofuna"
+    ]
+  },
+  {
+    "@id": "urn:uuid:db9becf7-5190-4a3d-8130-75c007e5b9e8",
+    "@type": "odpt:Train",
+    "dc:date": "2021-08-14T22:27:13+09:00",
+    "@context": "http://vocab.odpt.org/context_odpt.jsonld",
+    "dct:valid": "2021-08-14T22:32:13+09:00",
+    "odpt:delay": 0,
+    "owl:sameAs": "odpt.Train:JR-East.SobuRapid.2054M",
+    "odpt:railway": "odpt.Railway:JR-East.SobuRapid",
+    "odpt:operator": "odpt.Operator:JR-East",
+    "odpt:toStation": "odpt.Station:JR-East.SobuRapid.Ichikawa",
+    "odpt:trainType": "odpt.TrainType:JR-East.LimitedExpress",
+    "odpt:fromStation": "odpt.Station:JR-East.SobuRapid.Funabashi",
+    "odpt:trainNumber": "2054M",
+    "odpt:railDirection": "odpt.RailDirection:Inbound",
+    "odpt:carComposition": 12,
+    "odpt:destinationStation": [
+      "odpt.Station:JR-East.Yokosuka.Ofuna"
+    ]
+  }
+]

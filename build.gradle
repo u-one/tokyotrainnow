@@ -37,6 +37,7 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'com.io-informatics.oss:jackson-jsonld:0.1.1'
 	implementation 'com.google.appengine:appengine-api-1.0-sdk:+'  // Google App Engine plugin設定
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
