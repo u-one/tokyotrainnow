@@ -4,7 +4,33 @@
     <meta charset="UTF-8">
     <title>東京鉄道Now</title>
 </head>
-<body>
+<body style="background-color:#EEEEEE">
 <h1>東京鉄道Now</h1>
+
+<table>
+    <tr><td rowspan="2" th:style="'background-color:' + ${railway.color}" width="20px"></td><td>JR東日本</td></tr>
+    <tr><td><h1 th:text="${railway.title}"></h1></td></tr>
+</table>
+<div style="background-color:#0074BE"></div>
+<b>
+    <div></div>
+</b>
+
+<table>
+    <thead>
+    <tr>
+        <td></td>
+        <td></td>
+        <td>上り</td>
+        <td>下り</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="station : ${railway.stationOrder}">
+        <td><span th:text="${station.getStationTitles()['ja']}"></span></td>
+    </tr>
+    </tbody>
+</table>
+
 </body>
 </html>
