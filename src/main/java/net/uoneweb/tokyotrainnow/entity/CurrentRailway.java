@@ -1,7 +1,6 @@
 package net.uoneweb.tokyotrainnow.entity;
 
 import lombok.*;
-import net.uoneweb.tokyotrainnow.odpt.entity.Train;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +24,12 @@ public class CurrentRailway {
     // 列車の在線位置をあらわす区間単位
     @Data
     public static abstract class Section {
-        @NonNull
+        private String title = "";
+
         private String stationId = "";
+
+        private String stationCode = "";
+
         private List<Train> trains = new ArrayList<>();
 
         public void addTrain(Train train) {
@@ -44,19 +47,41 @@ public class CurrentRailway {
         private net.uoneweb.tokyotrainnow.odpt.entity.Station odptStation;
 
         @Builder
-        public Station(String stationId, net.uoneweb.tokyotrainnow.odpt.entity.Station odptStation) {
+        public Station(String title, String stationId, String stationCode, net.uoneweb.tokyotrainnow.odpt.entity.Station odptStation) {
+            this.setTitle(title);
             this.setStationId(stationId);
+            this.setStationCode(stationCode);
             this.odptStation = odptStation;
         }
     }
 
     // 駅間の走行区間をあらわす
-    @Builder
     @NoArgsConstructor
     // @Dataは使えない
     @Getter
     @Setter
     @ToString(callSuper = true)
     public static class Line extends Section {
+        @Builder
+        public Line(String title) {
+            this.setTitle(title);
+        }
+    }
+
+    @Data
+    @Builder
+    public static class Train {
+        @NonNull
+        String destination;
+
+        @NonNull
+        String trainNumber;
+
+        @NonNull
+        String trainType;
+
+        int carComposition;
+
+        int delay;
     }
 }

@@ -5,9 +5,11 @@ import net.uoneweb.tokyotrainnow.entity.CurrentRailway;
 import net.uoneweb.tokyotrainnow.odpt.client.OdptApiClient;
 import net.uoneweb.tokyotrainnow.odpt.entity.Railway;
 import net.uoneweb.tokyotrainnow.odpt.entity.Train;
+import net.uoneweb.tokyotrainnow.odpt.entity.TrainType;
 import net.uoneweb.tokyotrainnow.repository.RailwayRepository;
 import net.uoneweb.tokyotrainnow.repository.StationRepository;
 import net.uoneweb.tokyotrainnow.repository.TrainRepository;
+import net.uoneweb.tokyotrainnow.repository.TrainTypeRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,6 +43,9 @@ public class DefaultTrainServiceTest {
 
     @Mock
     private TrainRepository trainRepository;
+
+    @Mock
+    private TrainTypeRepository trainTypeRepository;
 
     @InjectMocks
     DefaultTrainService trainService;
@@ -77,7 +82,15 @@ public class DefaultTrainServiceTest {
         when(stationRepository.findByStationId("odpt.Station:JR-East.SobuRapid.Tokyo")).thenReturn(TestDataBuilder.sobuRapidTokyo());
         when(stationRepository.findByStationId("odpt.Station:JR-East.SobuRapid.Inage")).thenReturn(TestDataBuilder.sobuRapidInage());
         when(stationRepository.findByStationId("odpt.Station:JR-East.SobuRapid.Chiba")).thenReturn(TestDataBuilder.sobuRapidChiba());
+        when(stationRepository.findByStationId("odpt.Station:JR-East.Yokosuka.Ofuna")).thenReturn(TestDataBuilder.yokosukaOfuna());
+        when(stationRepository.findByStationId("odpt.Station:JR-East.Uchibo.Kimitsu")).thenReturn(TestDataBuilder.uchiboKimitsu());
         when(trainRepository.find("odpt.Operator:JR-East", "odpt.Railway:JR-East.SobuRapid")).thenReturn(createTrains());
+        when(trainTypeRepository.findByTrainTypeId("odpt.TrainType:JR-East.Rapid")).thenReturn(TrainType.builder()
+                .sameAs("odpt.TrainType:JR-East.Rapid")
+                .title("快速")
+                .operator("odpt.Operator:JR-East")
+                .trainTypeTitles(Map.of("en", "Rapid","ja", "快速"))
+                .build());
 
         CurrentRailway railway = trainService.getCurrentRailway("odpt.Railway:JR-East.SobuRapid");
         assertThat(railway.getTitle()).isEqualTo("総武快速線");
@@ -99,13 +112,11 @@ public class DefaultTrainServiceTest {
 
         // 東京
         assertThat(railway.getSections().get(0).getTrains())
-                .extracting(Train::getSameAs).containsExactly("odpt.Train:JR-East.SobuRapid.2296F");
+                .extracting(CurrentRailway.Train::getTrainNumber).containsExactly("2296F");
 
         // 千葉-稲毛
         assertThat(railway.getSections().get(3).getTrains())
-                .extracting(Train::getSameAs).containsExactly("odpt.Train:JR-East.SobuRapid.575F");
-
-
+                .extracting(CurrentRailway.Train::getTrainNumber).containsExactly("575F");
     }
 
     @ParameterizedTest
@@ -200,7 +211,7 @@ public class DefaultTrainServiceTest {
                         .railway("odpt.Railway:JR-East.SobuRapid")
                         .operator("odpt.Operator:JR-East")
                         .trainType("odpt.TrainType:JR-East.Rapid")
-                        .trainNumber("2296F")
+                        .trainNumber("575F")
                         .carComposition(15)
                         .fromStation("odpt.Station:JR-East.SobuRapid.Inage")
                         .toStation("odpt.Station:JR-East.SobuRapid.Chiba")

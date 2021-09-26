@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="jp" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>東京鉄道Now</title>
+</head>
+<body style="background-color:#EEEEEE">
+<h1>東京鉄道Now</h1>
+
+<table>
+    <tr><td rowspan="2" th:style="'background-color:' + ${railway.color}" width="20px"></td><td>JR東日本</td></tr>
+    <tr><td><h1 th:text="${railway.title}"></h1></td></tr>
+</table>
+<div style="background-color:#0074BE"></div>
+<b>
+    <div></div>
+</b>
+
+<table>
+    <thead>
+    <tr>
+        <td></td>
+        <td>列車</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="station : ${railway.sections}">
+        <td><span th:text="${station.getTitle()}"></span></td>
+        <td>
+            <div th:each="train : ${station.getTrains()}">
+                <span th:text="${train.getTrainNumber()} + ' ' + ${train.getTrainType()} + ' ' + ${train.getDestination} + '行'"></span>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

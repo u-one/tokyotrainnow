@@ -92,5 +92,52 @@ public class TestDataBuilder {
                 .build();
     }
 
+    public static Station uchiboKimitsu() {
+        return Station.builder()
+                .title("君津")
+                .sameAs("odpt.Station:JR-East.Uchibo.Kimitsu")
+                .operator("odpt.Operator:JR-East")
+                .railway("odpt.Railway:JR-East.Uchibo")
+                .stationTitle(Map.of("en", "Kimitsu","ja", "君津"))
+                .geo_lat(35.33356)
+                .geo_long(139.89538)
+                .passengerSurveys(List.of("odpt.PassengerSurvey:JR-East.Kimitsu"))
+                .stationTimetables(List.of(
+                        "odpt.StationTimetable:JR-East.SobuRapid.Inage.Inbound.Weekday",
+                        "odpt.StationTimetable:JR-East.SobuRapid.Inage.Inbound.SaturdayHoliday",
+                        "odpt.StationTimetable:JR-East.SobuRapid.Inage.Outbound.Weekday",
+                        "odpt.StationTimetable:JR-East.SobuRapid.Inage.Outbound.SaturdayHoliday"
+                        )
+                )
+                .build();
+    }
+
+    public static Station yokosukaOfuna() {
+        return Station.builder()
+                .title("大船")
+                .sameAs("odpt.Station:JR-East.Yokosuka.Ofuna")
+                .operator("odpt.Operator:JR-East")
+                .railway("odpt.Railway:JR-East.Yokosuka")
+                .stationCode("JO09")
+                .stationTitle(Map.of("en", "Ofuna", "ja", "大船"))
+                .geo_lat(35.35383)
+                .geo_long(139.53124)
+                .passengerSurveys(List.of("odpt.PassengerSurvey:JR-East.Ofuna"))
+                .stationTimetables(List.of(
+                                "odpt.StationTimetable:JR-East.Yokosuka.Ofuna.Inbound.Weekday",
+                                "odpt.StationTimetable:JR-East.Yokosuka.Ofuna.Inbound.SaturdayHoliday",
+                                "odpt.StationTimetable:JR-East.Yokosuka.Ofuna.Outbound.Weekday",
+                                "odpt.StationTimetable:JR-East.Yokosuka.Ofuna.Outbound.SaturdayHoliday"
+                        )
+                )
+                .connectingRailways(List.of(
+                                "odpt.Railway:JR-East.KeihinTohokuNegishi",
+                                "odpt.Railway:JR-East.ShonanShinjuku",
+                                "odpt.Railway:JR-East.Tokaido"
+                        )
+                )
+                .build();
+
+    }
 
 }

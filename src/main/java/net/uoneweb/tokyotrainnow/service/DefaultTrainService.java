@@ -7,14 +7,18 @@ import net.uoneweb.tokyotrainnow.odpt.client.OdptApiClient;
 import net.uoneweb.tokyotrainnow.odpt.entity.Railway;
 import net.uoneweb.tokyotrainnow.odpt.entity.Station;
 import net.uoneweb.tokyotrainnow.odpt.entity.Train;
+import net.uoneweb.tokyotrainnow.odpt.entity.TrainType;
 import net.uoneweb.tokyotrainnow.repository.RailwayRepository;
 import net.uoneweb.tokyotrainnow.repository.StationRepository;
 import net.uoneweb.tokyotrainnow.repository.TrainRepository;
+import net.uoneweb.tokyotrainnow.repository.TrainTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -33,6 +37,9 @@ public class DefaultTrainService implements TrainService {
     @Autowired
     private TrainRepository trainRepository;
 
+    @Autowired
+    private TrainTypeRepository trainTypeRepository;
+
     @Override
     public void update() {
         List<Railway> railways = odptApiClient.getRailways();
@@ -46,6 +53,12 @@ public class DefaultTrainService implements TrainService {
         for (Station station : stations) {
             stationRepository.add(station.getSameAs(), station);
         }
+
+        List<TrainType> trainTypes = odptApiClient.getTrainTypes();
+        trainTypeRepository.deleteAll();
+        for (TrainType trainType : trainTypes) {
+            trainTypeRepository.add(trainType.getSameAs(), trainType);
+        }
     }
 
     @Override
@@ -56,18 +69,30 @@ public class DefaultTrainService implements TrainService {
     @Override
     public CurrentRailway getCurrentRailway(String railwayId) {
         Railway railway = railwayRepository.findByRailwayId(railwayId);
-
+        if (Objects.isNull(railway)) {
+            log.error("Railway is null", railwayId);
+            return null;
+        }
 
         List<Railway.Station> stations = railway.getStationOrder();
         List<CurrentRailway.Section> sections = new ArrayList<>();
         for (int i = 0; i < stations.size(); i++) {
-            Station station = stationRepository.findByStationId(stations.get(i).getStation());
+            String stationId = stations.get(i).getStation();
+            Station station = stationRepository.findByStationId(stationId);
+            if (Objects.isNull(station)) {
+                log.error("Station is null", stationId);
+                return null;
+            }
 
             sections.add(CurrentRailway.Station.builder()
+                    .title(station.getStationTitle().get("ja"))
                     .stationId(station.getSameAs())
+                    .stationCode(station.getStationCode())
                     .odptStation(station).build());
             if (i < stations.size() - 1) {
-                sections.add(CurrentRailway.Line.builder().build());
+                sections.add(CurrentRailway.Line.builder()
+                        .title("|")
+                        .build());
             }
         }
 
@@ -83,8 +108,28 @@ public class DefaultTrainService implements TrainService {
             boolean ascending = isAscendingDirection(train, railway);
             final String from = train.getFromStation();
             final String to = train.getToStation();
+
+            final String dest = train.getDestinationStations().stream().map(
+                    destId -> stationRepository.findByStationId(destId))
+                .map(station -> {
+                    String title = "-";
+                    if (Objects.nonNull(station)) {
+                        title = station.getStationTitle().get("ja");
+                    }
+                    return title;
+                }).collect(Collectors.joining("・"));
+
             int index = findIndex(sections, from, to, ascending);
-            sections.get(index).addTrain(train);
+
+            final String trainType = trainTypeRepository.findByTrainTypeId(train.getTrainType()).getTrainTypeTitles().get("ja");
+
+            sections.get(index).addTrain(CurrentRailway.Train.builder()
+                            .destination(dest)
+                            .delay(train.getDelay())
+                            .trainNumber(train.getTrainNumber())
+                            .trainType(trainType)
+                            .carComposition(train.getCarComposition())
+                    .build());
         }
 
         for (CurrentRailway.Section section : sections) {
