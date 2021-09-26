@@ -1,6 +1,6 @@
 package net.uoneweb.tokyotrainnow.repository;
 
-import net.uoneweb.tokyotrainnow.entity.Railway;
+import net.uoneweb.tokyotrainnow.odpt.entity.Railway;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;

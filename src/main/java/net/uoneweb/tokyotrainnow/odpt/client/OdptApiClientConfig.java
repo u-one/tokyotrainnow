@@ -1,4 +1,4 @@
-package net.uoneweb.tokyotrainnow.client;
+package net.uoneweb.tokyotrainnow.odpt.client;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

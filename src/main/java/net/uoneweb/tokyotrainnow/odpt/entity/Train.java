@@ -1,4 +1,4 @@
-package net.uoneweb.tokyotrainnow.entity;
+package net.uoneweb.tokyotrainnow.odpt.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;

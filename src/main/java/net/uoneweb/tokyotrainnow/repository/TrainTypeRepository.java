@@ -1,7 +1,7 @@
 package net.uoneweb.tokyotrainnow.repository;
 
 import lombok.RequiredArgsConstructor;
-import net.uoneweb.tokyotrainnow.entity.TrainType;
+import net.uoneweb.tokyotrainnow.odpt.entity.TrainType;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;

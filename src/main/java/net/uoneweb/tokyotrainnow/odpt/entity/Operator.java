@@ -1,4 +1,4 @@
-package net.uoneweb.tokyotrainnow.entity;
+package net.uoneweb.tokyotrainnow.odpt.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldId;
@@ -16,8 +16,8 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonldResource
-@JsonldType("odpt:TrainType")
-public class TrainType {
+@JsonldType("odpt:Operator")
+public class Operator {
     @JsonldId
     private String id;
 
@@ -27,9 +27,6 @@ public class TrainType {
     @JsonProperty("owl:sameAs")
     private String sameAs;
 
-    @JsonProperty("odpt:operator")
-    private String operator;
-
-    @JsonProperty("odpt:trainTypeTitle")
-    private Map<String, String> trainTypeTitles;
+    @JsonProperty("odpt:operatorTitle")
+    private Map<String, String> operatorTitles;
 }

@@ -1,4 +1,4 @@
-package net.uoneweb.tokyotrainnow.entity;
+package net.uoneweb.tokyotrainnow.odpt.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldId;

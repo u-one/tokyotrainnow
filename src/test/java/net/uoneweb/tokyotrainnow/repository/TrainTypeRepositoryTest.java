@@ -1,6 +1,6 @@
 package net.uoneweb.tokyotrainnow.repository;
 
-import net.uoneweb.tokyotrainnow.entity.TrainType;
+import net.uoneweb.tokyotrainnow.odpt.entity.TrainType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

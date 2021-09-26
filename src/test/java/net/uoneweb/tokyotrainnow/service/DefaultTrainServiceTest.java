@@ -1,7 +1,7 @@
 package net.uoneweb.tokyotrainnow.service;
 
-import net.uoneweb.tokyotrainnow.client.OdptApiClient;
-import net.uoneweb.tokyotrainnow.entity.Railway;
+import net.uoneweb.tokyotrainnow.odpt.client.OdptApiClient;
+import net.uoneweb.tokyotrainnow.odpt.entity.Railway;
 import net.uoneweb.tokyotrainnow.repository.RailwayRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

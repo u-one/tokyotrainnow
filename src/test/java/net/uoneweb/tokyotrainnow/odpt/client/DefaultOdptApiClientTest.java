@@ -1,6 +1,6 @@
-package net.uoneweb.tokyotrainnow.client;
+package net.uoneweb.tokyotrainnow.odpt.client;
 
-import net.uoneweb.tokyotrainnow.entity.*;
+import net.uoneweb.tokyotrainnow.odpt.entity.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

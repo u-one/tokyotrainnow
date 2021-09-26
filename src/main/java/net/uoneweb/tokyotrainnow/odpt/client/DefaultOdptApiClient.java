@@ -1,7 +1,7 @@
-package net.uoneweb.tokyotrainnow.client;
+package net.uoneweb.tokyotrainnow.odpt.client;
 
 import lombok.extern.slf4j.Slf4j;
-import net.uoneweb.tokyotrainnow.entity.*;
+import net.uoneweb.tokyotrainnow.odpt.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;

@@ -1,8 +1,8 @@
 package net.uoneweb.tokyotrainnow.service;
 
 import lombok.RequiredArgsConstructor;
-import net.uoneweb.tokyotrainnow.client.OdptApiClient;
-import net.uoneweb.tokyotrainnow.entity.Railway;
+import net.uoneweb.tokyotrainnow.odpt.client.OdptApiClient;
+import net.uoneweb.tokyotrainnow.odpt.entity.Railway;
 import net.uoneweb.tokyotrainnow.repository.RailwayRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

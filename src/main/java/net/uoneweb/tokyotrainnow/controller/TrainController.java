@@ -1,7 +1,7 @@
 package net.uoneweb.tokyotrainnow.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import net.uoneweb.tokyotrainnow.entity.Railway;
+import net.uoneweb.tokyotrainnow.odpt.entity.Railway;
 import net.uoneweb.tokyotrainnow.service.TrainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
