@@ -1,15 +1,17 @@
 <!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <html lang="jp" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>東京鉄道Now</title>
 </head>
 <body style="background-color:#EEEEEE">
-<h1>東京鉄道Now</h1>
+<h2>東京鉄道Now</h2>
 
 <table>
     <tr><td rowspan="2" th:style="'background-color:' + ${railway.color}" width="20px"></td><td>JR東日本</td></tr>
-    <tr><td><h1 th:text="${railway.title}"></h1></td></tr>
+    <tr><td><h2 th:text="${railway.title}"></h2></td></tr>
 </table>
 <div style="background-color:#0074BE"></div>
 <b>
