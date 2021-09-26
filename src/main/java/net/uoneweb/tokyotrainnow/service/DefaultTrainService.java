@@ -26,6 +26,9 @@ public class DefaultTrainService implements TrainService {
     private OperatorRepository operatorRepository;
 
     @Autowired
+    private RailDirectionRepository railDirectionRepository;
+
+    @Autowired
     private RailwayRepository railwayRepository;
 
     @Autowired
@@ -43,6 +46,12 @@ public class DefaultTrainService implements TrainService {
         operatorRepository.deleteAll();
         for (Operator operator : operators) {
             operatorRepository.add(operator.getSameAs(), operator);
+        }
+
+        List<RailDirection> railDirections = odptApiClient.getRailDirections();
+        railDirectionRepository.deleteAll();
+        for (RailDirection railDirection : railDirections) {
+            railDirectionRepository.add(railDirection.getSameAs(), railDirection);
         }
 
         List<Railway> railways = odptApiClient.getRailways();
@@ -79,6 +88,22 @@ public class DefaultTrainService implements TrainService {
             return null;
         }
 
+        String ascendingTitle = "-";
+        RailDirection ascendingRailDirecton = railDirectionRepository.find(railway.getAscendingRailDirection());
+        if (Objects.isNull(ascendingRailDirecton)) {
+            log.error("raildirection is null", railway.getAscendingRailDirection());
+        } else {
+            ascendingTitle = ascendingRailDirecton.getRailDirectionTitles().get(lang);
+        }
+
+        String descendingTitle = "-";
+        RailDirection descendingRailDirection = railDirectionRepository.find(railway.getDescendingRailDirection());
+        if (Objects.isNull(ascendingRailDirecton)) {
+            log.error("raildirection is null", railway.getDescendingRailDirection());
+        } else {
+            descendingTitle = descendingRailDirection.getRailDirectionTitles().get(lang);
+        }
+
         Operator operator = operatorRepository.findByOperatorId(railway.getOperator());
         String operatorTitle = "";
         if (Objects.isNull(operator)) {
@@ -111,6 +136,8 @@ public class DefaultTrainService implements TrainService {
 
         CurrentRailway currentRailway = CurrentRailway.builder()
                 .title(railway.getTitle())
+                .ascendingTitle(ascendingTitle)
+                .descendingTitle(descendingTitle)
                 .operator(operatorTitle)
                 .color(railway.getColor())
                 .lineCode(railway.getLineCode())
@@ -141,6 +168,7 @@ public class DefaultTrainService implements TrainService {
                             .delay(train.getDelay())
                             .trainNumber(train.getTrainNumber())
                             .trainType(trainType)
+                            .ascending(ascending)
                             .carComposition(train.getCarComposition())
                     .build());
         }

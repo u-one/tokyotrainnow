@@ -30,15 +30,21 @@
     <thead>
     <tr>
         <td></td>
-        <td>列車</td>
+        <td th:text="${railway.ascendingTitle}">下り</td>
+        <td th:text="${railway.descendingTitle}">上り</td>
     </tr>
     </thead>
     <tbody>
     <tr th:each="station : ${railway.sections}">
         <td><span th:text="${station.getTitle()}"></span></td>
         <td>
-            <div th:each="train : ${station.getTrains()}">
-                <span th:text="${train.getTrainNumber()} + ' ' + ${train.getTrainType()} + ' ' + ${train.getDestination} + '行'"></span>
+            <div th:each="train : ${station.getTrainsByDirection(true)}">
+                <span th:text="${train.getTrainNumber()} + ' ' + ${train.getTrainType()} + ' ' + ${train.getDestination} + '行 ' + ${train.carComposition} + '両'"></span>
+            </div>
+        </td>
+        <td>
+            <div th:each="train : ${station.getTrainsByDirection(false)}">
+                <span th:text="${train.getTrainNumber()} + ' ' + ${train.getTrainType()} + ' ' + ${train.getDestination} + '行 ' + ${train.carComposition} + '両'"></span>
             </div>
         </td>
     </tr>

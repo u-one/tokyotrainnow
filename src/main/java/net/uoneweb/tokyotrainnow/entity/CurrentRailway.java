@@ -4,6 +4,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -21,6 +22,10 @@ public class CurrentRailway {
 
     private List<Section> sections;
 
+    private String ascendingTitle;
+
+    private String descendingTitle;
+
     // 列車の在線位置をあらわす区間単位
     @Data
     public static abstract class Section {
@@ -34,6 +39,11 @@ public class CurrentRailway {
 
         public void addTrain(Train train) {
             trains.add(train);
+        }
+
+        public List<Train> getTrainsByDirection(boolean ascending) {
+            return trains.stream().filter(t -> t.isAscending() == ascending)
+                    .collect(Collectors.toList());
         }
     }
 
@@ -83,5 +93,7 @@ public class CurrentRailway {
         int carComposition;
 
         int delay;
+
+        boolean ascending;
     }
 }

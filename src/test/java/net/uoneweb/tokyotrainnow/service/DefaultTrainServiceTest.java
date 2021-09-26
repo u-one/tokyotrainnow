@@ -3,10 +3,7 @@ package net.uoneweb.tokyotrainnow.service;
 import net.uoneweb.tokyotrainnow.TestDataBuilder;
 import net.uoneweb.tokyotrainnow.entity.CurrentRailway;
 import net.uoneweb.tokyotrainnow.odpt.client.OdptApiClient;
-import net.uoneweb.tokyotrainnow.odpt.entity.Operator;
-import net.uoneweb.tokyotrainnow.odpt.entity.Railway;
-import net.uoneweb.tokyotrainnow.odpt.entity.Train;
-import net.uoneweb.tokyotrainnow.odpt.entity.TrainType;
+import net.uoneweb.tokyotrainnow.odpt.entity.*;
 import net.uoneweb.tokyotrainnow.repository.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,6 +32,9 @@ public class DefaultTrainServiceTest {
 
     @Mock
     private OperatorRepository operatorRepository;
+
+    @Mock
+    private RailDirectionRepository railDirectionRepository;
 
     @Mock
     private RailwayRepository railwayRepository;
@@ -80,6 +80,12 @@ public class DefaultTrainServiceTest {
     @Test
     public void getCurrentRailwaySuccess() {
         when(railwayRepository.findByRailwayId("odpt.Railway:JR-East.SobuRapid")).thenReturn(createRailway());
+        when(railDirectionRepository.find("odpt.RailDirection:Inbound")).thenReturn(RailDirection.builder()
+                .railDirectionTitles(Map.of("en", "Inbound", "ja", "上り"))
+                .build());
+        when(railDirectionRepository.find("odpt.RailDirection:Outbound")).thenReturn(RailDirection.builder()
+                .railDirectionTitles(Map.of("en", "Outbound", "ja", "下り"))
+                .build());
         when(operatorRepository.findByOperatorId("odpt.Operator:JR-East")).thenReturn(Operator.builder()
                 .operatorTitles(Map.of("en", "JR East", "ja", "JR東日本"))
                 .build());
