@@ -1,0 +1,26 @@
+[
+  {
+    "@id": "urn:ucode:_00001C0000000000000100000320030B",
+    "@type": "odpt:RailDirection",
+    "dc:date": "2019-04-25T14:00:00+09:00",
+    "@context": "http://vocab.odpt.org/context_odpt.jsonld",
+    "dc:title": "上り",
+    "owl:sameAs": "odpt.RailDirection:Inbound",
+    "odpt:railDirectionTitle": {
+      "en": "Inbound",
+      "ja": "上り"
+    }
+  },
+  {
+    "@id": "urn:ucode:_00001C0000000000000100000320030D",
+    "@type": "odpt:RailDirection",
+    "dc:date": "2019-04-25T14:00:00+09:00",
+    "@context": "http://vocab.odpt.org/context_odpt.jsonld",
+    "dc:title": "下り",
+    "owl:sameAs": "odpt.RailDirection:Outbound",
+    "odpt:railDirectionTitle": {
+      "en": "Outbound",
+      "ja": "下り"
+    }
+  }
+]

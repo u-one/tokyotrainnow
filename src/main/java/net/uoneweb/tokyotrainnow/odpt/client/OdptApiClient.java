@@ -13,6 +13,8 @@ public interface OdptApiClient {
 
     List<TrainType> getTrainTypes();
 
+    List<RailDirection> getRailDirections();
+
     List<Train> getTrains();
 
     List<Train> getTrain(String operator, String railway);

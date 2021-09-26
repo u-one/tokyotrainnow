@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
@@ -34,6 +35,9 @@ public class DefaultOdptApiClientTest {
 
     @Value("classpath:/odpt_api_client/railways.jsonld")
     Resource railwaysFile;
+
+    @Value("classpath:/odpt_api_client/raildirections.jsonld")
+    Resource railDirectionFile;
 
     @Value("classpath:/odpt_api_client/stations.jsonld")
     Resource stationsFile;
@@ -163,5 +167,24 @@ public class DefaultOdptApiClientTest {
 
         List<Train> trains = odptApiClient.getTrain(operator, railway);
         assertEquals(2, trains.size());
+    }
+
+    @Test
+    public void getRailDirectionSuccess() {
+        MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
+
+        server.expect(requestTo("http://localhost:8081/odpt:RailDirection.json?"
+                        + "acl:consumerKey=TEST-KEY"))
+                .andRespond(withSuccess(railDirectionFile, MediaType.APPLICATION_JSON));
+
+        List<RailDirection> railDirections = odptApiClient.getRailDirections();
+        Map<String, RailDirection> map = railDirections.stream().collect(Collectors.toMap(
+                t -> t.getSameAs(),
+                t -> t
+        ));
+        assertEquals("上り", map.get("odpt.RailDirection:Inbound").getTitle());
+        assertThat(map.get("odpt.RailDirection:Outbound").getRailDirectionTitles())
+                .containsEntry("en", "Outbound")
+                .containsEntry("ja", "下り");
     }
 }

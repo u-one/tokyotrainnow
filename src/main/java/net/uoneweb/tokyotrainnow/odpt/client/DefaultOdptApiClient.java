@@ -53,6 +53,15 @@ public class DefaultOdptApiClient implements OdptApiClient {
         return Arrays.asList(trainTypes);
     }
 
+    @Override
+    public List<RailDirection> getRailDirections() {
+        String url = config.getEndpoint() + "odpt:RailDirection.json?"
+                + "acl:consumerKey=" + config.getKey();
+        ResponseEntity<RailDirection[]> res = restOperations.getForEntity(url, RailDirection[].class);
+        RailDirection[] railDirections = res.getBody();
+        return Arrays.asList(railDirections);
+    }
+
     public List<Train> getTrains() {
         String operator = "odpt.Operator:JR-East";
         String railway = "odpt.Railway:JR-East.SobuRapid";
