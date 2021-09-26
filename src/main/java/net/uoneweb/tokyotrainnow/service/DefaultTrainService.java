@@ -4,14 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.uoneweb.tokyotrainnow.entity.CurrentRailway;
 import net.uoneweb.tokyotrainnow.odpt.client.OdptApiClient;
-import net.uoneweb.tokyotrainnow.odpt.entity.Railway;
-import net.uoneweb.tokyotrainnow.odpt.entity.Station;
-import net.uoneweb.tokyotrainnow.odpt.entity.Train;
-import net.uoneweb.tokyotrainnow.odpt.entity.TrainType;
-import net.uoneweb.tokyotrainnow.repository.RailwayRepository;
-import net.uoneweb.tokyotrainnow.repository.StationRepository;
-import net.uoneweb.tokyotrainnow.repository.TrainRepository;
-import net.uoneweb.tokyotrainnow.repository.TrainTypeRepository;
+import net.uoneweb.tokyotrainnow.odpt.entity.*;
+import net.uoneweb.tokyotrainnow.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +23,9 @@ public class DefaultTrainService implements TrainService {
     private OdptApiClient odptApiClient;
 
     @Autowired
+    private OperatorRepository operatorRepository;
+
+    @Autowired
     private RailwayRepository railwayRepository;
 
     @Autowired
@@ -42,6 +39,12 @@ public class DefaultTrainService implements TrainService {
 
     @Override
     public void update() {
+        List<Operator> operators = odptApiClient.getOperators();
+        operatorRepository.deleteAll();
+        for (Operator operator : operators) {
+            operatorRepository.add(operator.getSameAs(), operator);
+        }
+
         List<Railway> railways = odptApiClient.getRailways();
         railwayRepository.deleteAll();
         for (Railway railway : railways) {
@@ -68,10 +71,20 @@ public class DefaultTrainService implements TrainService {
 
     @Override
     public CurrentRailway getCurrentRailway(String railwayId) {
+        final String lang = "ja";
+
         Railway railway = railwayRepository.findByRailwayId(railwayId);
         if (Objects.isNull(railway)) {
             log.error("Railway is null", railwayId);
             return null;
+        }
+
+        Operator operator = operatorRepository.findByOperatorId(railway.getOperator());
+        String operatorTitle = "";
+        if (Objects.isNull(operator)) {
+            log.error("operator is null", railway.getOperator());
+        } else {
+            operatorTitle = operator.getOperatorTitles().get(lang);
         }
 
         List<Railway.Station> stations = railway.getStationOrder();
@@ -85,7 +98,7 @@ public class DefaultTrainService implements TrainService {
             }
 
             sections.add(CurrentRailway.Station.builder()
-                    .title(station.getStationTitle().get("ja"))
+                    .title(station.getStationTitle().get(lang))
                     .stationId(station.getSameAs())
                     .stationCode(station.getStationCode())
                     .odptStation(station).build());
@@ -98,7 +111,7 @@ public class DefaultTrainService implements TrainService {
 
         CurrentRailway currentRailway = CurrentRailway.builder()
                 .title(railway.getTitle())
-                .operator(railway.getOperator())
+                .operator(operatorTitle)
                 .color(railway.getColor())
                 .lineCode(railway.getLineCode())
                 .sections(sections).build();
@@ -114,7 +127,7 @@ public class DefaultTrainService implements TrainService {
                 .map(station -> {
                     String title = "-";
                     if (Objects.nonNull(station)) {
-                        title = station.getStationTitle().get("ja");
+                        title = station.getStationTitle().get(lang);
                     }
                     return title;
                 }).collect(Collectors.joining("・"));

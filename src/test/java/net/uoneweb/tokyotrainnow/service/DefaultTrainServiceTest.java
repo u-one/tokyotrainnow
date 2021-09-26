@@ -3,13 +3,11 @@ package net.uoneweb.tokyotrainnow.service;
 import net.uoneweb.tokyotrainnow.TestDataBuilder;
 import net.uoneweb.tokyotrainnow.entity.CurrentRailway;
 import net.uoneweb.tokyotrainnow.odpt.client.OdptApiClient;
+import net.uoneweb.tokyotrainnow.odpt.entity.Operator;
 import net.uoneweb.tokyotrainnow.odpt.entity.Railway;
 import net.uoneweb.tokyotrainnow.odpt.entity.Train;
 import net.uoneweb.tokyotrainnow.odpt.entity.TrainType;
-import net.uoneweb.tokyotrainnow.repository.RailwayRepository;
-import net.uoneweb.tokyotrainnow.repository.StationRepository;
-import net.uoneweb.tokyotrainnow.repository.TrainRepository;
-import net.uoneweb.tokyotrainnow.repository.TrainTypeRepository;
+import net.uoneweb.tokyotrainnow.repository.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,6 +32,9 @@ public class DefaultTrainServiceTest {
 
     @Mock
     private OdptApiClient odptApiClient;
+
+    @Mock
+    private OperatorRepository operatorRepository;
 
     @Mock
     private RailwayRepository railwayRepository;
@@ -79,6 +80,9 @@ public class DefaultTrainServiceTest {
     @Test
     public void getCurrentRailwaySuccess() {
         when(railwayRepository.findByRailwayId("odpt.Railway:JR-East.SobuRapid")).thenReturn(createRailway());
+        when(operatorRepository.findByOperatorId("odpt.Operator:JR-East")).thenReturn(Operator.builder()
+                .operatorTitles(Map.of("en", "JR East", "ja", "JR東日本"))
+                .build());
         when(stationRepository.findByStationId("odpt.Station:JR-East.SobuRapid.Tokyo")).thenReturn(TestDataBuilder.sobuRapidTokyo());
         when(stationRepository.findByStationId("odpt.Station:JR-East.SobuRapid.Inage")).thenReturn(TestDataBuilder.sobuRapidInage());
         when(stationRepository.findByStationId("odpt.Station:JR-East.SobuRapid.Chiba")).thenReturn(TestDataBuilder.sobuRapidChiba());

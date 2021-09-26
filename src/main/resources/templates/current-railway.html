@@ -9,9 +9,17 @@
 <body style="background-color:#EEEEEE">
 <h2>東京鉄道Now</h2>
 
+開発中。
+<h5>
+このサイトは東京公共交通オープンデータチャレンジAPIを利用して制作しています。
+</h5>
+
 <table>
-    <tr><td rowspan="2" th:style="'background-color:' + ${railway.color}" width="20px"></td><td>JR東日本</td></tr>
-    <tr><td><h2 th:text="${railway.title}"></h2></td></tr>
+    <tr>
+        <td rowspan="2" style="background-color:#808080" th:style="'background-color:' + ${railway.color}" width="20px"></td>
+        <td th:text="${railway.getOperator()}">事業者</td>
+    </tr>
+    <tr><td><h2 th:text="${railway.title}">路線名</h2></td></tr>
 </table>
 <div style="background-color:#0074BE"></div>
 <b>
