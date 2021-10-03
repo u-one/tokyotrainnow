@@ -62,7 +62,7 @@ public class DefaultTrainServiceTest {
     @BeforeEach
     void setup() {
         closable = MockitoAnnotations.openMocks(this);
-        when(clock.getZone()).thenReturn(ZoneId.of("Asia/Tokyo"));
+        when(clock.getZone()).thenReturn(ZoneId.of("UTC"));
     }
 
     @AfterEach
@@ -73,7 +73,8 @@ public class DefaultTrainServiceTest {
     @Test
     public void updateSuccess() {
         Railway railway = createRailway();
-        when(clock.instant()).thenReturn(Instant.parse("2021-10-01T03:00:00.000Z"));
+        when(clock.instant()).thenReturn(Instant.parse("2021-10-01T12:00:00.000Z"));
+        when(clock.withZone(ZoneId.of("Asia/Tokyo"))).thenReturn(clock);
         when(odptApiClient.getRailways()).thenReturn(List.of(railway));
         doNothing().when(railwayRepository).add("odpt.Railway:JR-East.SobuRapid", railway);
 

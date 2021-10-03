@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -50,7 +51,7 @@ public class DefaultTrainService implements TrainService {
 
     @Override
     public void update() {
-        LocalDateTime now = LocalDateTime.now(clock);
+        LocalDateTime now = LocalDateTime.now(clock.withZone(ZoneId.of("Asia/Tokyo")));
 
         List<Operator> operators = odptApiClient.getOperators();
         operatorRepository.deleteAll();
