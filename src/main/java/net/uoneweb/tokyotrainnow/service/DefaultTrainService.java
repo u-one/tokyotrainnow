@@ -9,7 +9,10 @@ import net.uoneweb.tokyotrainnow.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Clock;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -18,6 +21,11 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class DefaultTrainService implements TrainService {
+    @Autowired
+    Clock clock;
+
+    @Autowired
+    private MetaDataRepository metaDataRepository;
 
     @Autowired
     private OdptApiClient odptApiClient;
@@ -42,6 +50,8 @@ public class DefaultTrainService implements TrainService {
 
     @Override
     public void update() {
+        LocalDateTime now = LocalDateTime.now(clock);
+
         List<Operator> operators = odptApiClient.getOperators();
         operatorRepository.deleteAll();
         for (Operator operator : operators) {
@@ -71,6 +81,12 @@ public class DefaultTrainService implements TrainService {
         for (TrainType trainType : trainTypes) {
             trainTypeRepository.add(trainType.getSameAs(), trainType);
         }
+
+        metaDataRepository.setOperatorsUpdateTime(now);
+        metaDataRepository.setRailDirectionsUpdateTime(now);
+        metaDataRepository.setRailwaysUpdateTime(now);
+        metaDataRepository.setStationsUpdateTime(now);
+        metaDataRepository.setTrainTypesUpdateTime(now);
     }
 
     @Override
@@ -177,7 +193,16 @@ public class DefaultTrainService implements TrainService {
             log.info(section.toString());
         }
 
+        currentRailway.setOperatorUpdateTime(metaDataRepository.getOperatorsUpdateTime());
+        currentRailway.setRailwayUpdateTime(metaDataRepository.getRailwaysUpdateTime());
+        currentRailway.setTrainTypeUpdateTime(metaDataRepository.getTrainTypesUpdateTime());
+        currentRailway.setTrainDate(lastTrainDate(trains));
+
         return currentRailway;
+    }
+
+    LocalDateTime lastTrainDate(List<Train> trains) {
+        return trains.stream().map(t -> t.getDate()).sorted(Comparator.reverseOrder()).findFirst().orElse(null);
     }
 
     boolean isAscendingDirection(Train train, Railway railway) {

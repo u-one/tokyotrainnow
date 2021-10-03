@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.Clock;
+
 @Configuration
 public class ApplicationConfigurer {
     @Autowired
@@ -16,5 +18,10 @@ public class ApplicationConfigurer {
         RestTemplate restTemplate =  new RestTemplate();
         restTemplateCustomizer.customize(restTemplate);
         return restTemplate;
+    }
+
+    @Bean
+    Clock clock() {
+        return Clock.systemDefaultZone();
     }
 }

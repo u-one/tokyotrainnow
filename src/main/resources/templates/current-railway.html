@@ -26,6 +26,8 @@
     <div></div>
 </b>
 
+<div class="trainDate" th:text="'列車情報生成時刻:' + ${#temporals.format(railway.getTrainDate(), 'yyyy/MM/dd HH:mm:ss')}">-</div>
+
 <table>
     <thead>
     <tr>
@@ -50,6 +52,14 @@
     </tr>
     </tbody>
 </table>
+
+<hr>
+<div class="staticDataUpdateDate">
+各種静的データ更新日時
+<div th:text="'事業者情報:' + ${#temporals.format(railway.getOperatorUpdateTime(), 'yyyy/MM/dd HH:mm:ss')}"> - </div>
+<div th:text="'路線・駅情報:' + ${#temporals.format(railway.getRailwayUpdateTime(), 'yyyy/MM/dd HH:mm:ss')}"> - </div>
+<div th:text="'列車種別情報:' + ${#temporals.format(railway.getTrainTypeUpdateTime(), 'yyyy/MM/dd HH:mm:ss')}"> - </div>
+</div>
 
 </body>
 </html>

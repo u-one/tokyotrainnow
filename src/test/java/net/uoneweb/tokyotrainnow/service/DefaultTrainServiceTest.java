@@ -14,18 +14,26 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class DefaultTrainServiceTest {
 
     private AutoCloseable closable;
+
+    @Mock
+    private Clock clock;
+
+    @Mock
+    private MetaDataRepository metaDataRepository;
 
     @Mock
     private OdptApiClient odptApiClient;
@@ -54,6 +62,7 @@ public class DefaultTrainServiceTest {
     @BeforeEach
     void setup() {
         closable = MockitoAnnotations.openMocks(this);
+        when(clock.getZone()).thenReturn(ZoneId.of("Asia/Tokyo"));
     }
 
     @AfterEach
@@ -64,10 +73,18 @@ public class DefaultTrainServiceTest {
     @Test
     public void updateSuccess() {
         Railway railway = createRailway();
+        when(clock.instant()).thenReturn(Instant.parse("2021-10-01T03:00:00.000Z"));
         when(odptApiClient.getRailways()).thenReturn(List.of(railway));
         doNothing().when(railwayRepository).add("odpt.Railway:JR-East.SobuRapid", railway);
 
         trainService.update();
+
+        LocalDateTime expectedTime = LocalDateTime.of(2021,10,1,12,00,00);
+        verify(metaDataRepository, times(1)).setOperatorsUpdateTime(expectedTime);
+        verify(metaDataRepository, times(1)).setRailwaysUpdateTime(expectedTime);
+        verify(metaDataRepository, times(1)).setRailDirectionsUpdateTime(expectedTime);
+        verify(metaDataRepository, times(1)).setStationsUpdateTime(expectedTime);
+        verify(metaDataRepository, times(1)).setTrainTypesUpdateTime(expectedTime);
     }
 
     @Test
@@ -102,6 +119,11 @@ public class DefaultTrainServiceTest {
                 .trainTypeTitles(Map.of("en", "Rapid","ja", "快速"))
                 .build());
 
+        LocalDateTime updateTime = LocalDateTime.of(2021,10,01,12,00,00);
+        when(metaDataRepository.getOperatorsUpdateTime()).thenReturn(updateTime);
+        when(metaDataRepository.getRailwaysUpdateTime()).thenReturn(updateTime);
+        when(metaDataRepository.getTrainTypesUpdateTime()).thenReturn(updateTime);
+
         CurrentRailway railway = trainService.getCurrentRailway("odpt.Railway:JR-East.SobuRapid");
         assertThat(railway.getTitle()).isEqualTo("総武快速線");
 
@@ -127,6 +149,27 @@ public class DefaultTrainServiceTest {
         // 千葉-稲毛
         assertThat(railway.getSections().get(3).getTrains())
                 .extracting(CurrentRailway.Train::getTrainNumber).containsExactly("575F");
+
+        assertThat(railway.getOperatorUpdateTime()).isEqualTo(updateTime);
+        assertThat(railway.getRailwayUpdateTime()).isEqualTo(updateTime);
+        assertThat(railway.getTrainTypeUpdateTime()).isEqualTo(updateTime);
+        assertThat(railway.getTrainDate()).isEqualTo(LocalDateTime.of(2021,9,5, 5,11,15));
+    }
+
+    @Test
+    public void lastTrainDateReturnsLatestOne() {
+        List<Train> trains = List.of(
+                Train.builder().date(LocalDateTime.of(2021,10,01,12,00,00)).build(),
+                Train.builder().date(LocalDateTime.of(2021,10,01,12,00,01)).build(),
+                Train.builder().date(LocalDateTime.of(2021,10,01,12,00,02)).build()
+                );
+        assertThat(trainService.lastTrainDate(trains)).isEqualTo(LocalDateTime.of(2021, 10,01, 12,00,02));
+    }
+
+    @Test
+    public void lastTrainDateMayReturnNull() {
+        List<Train> trains = List.of();
+        assertThat(trainService.lastTrainDate(trains)).isNull();
     }
 
     @ParameterizedTest

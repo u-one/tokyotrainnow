@@ -2,6 +2,7 @@ package net.uoneweb.tokyotrainnow.entity;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +26,14 @@ public class CurrentRailway {
     private String ascendingTitle;
 
     private String descendingTitle;
+
+    private LocalDateTime operatorUpdateTime;
+
+    private LocalDateTime railwayUpdateTime;
+
+    private LocalDateTime trainTypeUpdateTime;
+
+    private LocalDateTime trainDate;
 
     // 列車の在線位置をあらわす区間単位
     @Data
