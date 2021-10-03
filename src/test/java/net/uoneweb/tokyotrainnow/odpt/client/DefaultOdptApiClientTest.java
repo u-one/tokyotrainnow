@@ -1,5 +1,6 @@
 package net.uoneweb.tokyotrainnow.odpt.client;
 
+import net.uoneweb.tokyotrainnow.TestDataBuilder;
 import net.uoneweb.tokyotrainnow.odpt.entity.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -68,6 +70,14 @@ public class DefaultOdptApiClientTest {
                 "小田急バス"
         ).stream().sorted().collect(Collectors.toList());
         assertIterableEquals(expected, titles);
+
+        assertThat(operators).contains(Operator.builder()
+                        .id("urn:ucode:_00001C000000000000010000030E6606")
+                        .sameAs("odpt.Operator:JR-East")
+                        .date(LocalDateTime.of(2019,04, 22, 15,00,00))
+                        .title("JR東日本")
+                        .operatorTitles(Map.of("en", "JR East","ja", "JR東日本"))
+                .build());
     }
 
     @Test
@@ -79,13 +89,11 @@ public class DefaultOdptApiClientTest {
                 .andRespond(withSuccess(railwaysFile, MediaType.APPLICATION_JSON));
 
         List<Railway> railways = odptApiClient.getRailways();
-        Map<String, Railway> map = railways.stream().collect(Collectors.toMap(
-                r -> r.getSameAs(),
-                r -> r
-        ));
-        assertEquals(map.get("odpt.Railway:Odakyu.Odawara").getTitle(), "小田原線");
-        assertEquals(map.get("odpt.Railway:JR-East.SobuRapid").getStationOrder().size(), 10);
-        assertEquals(map.get("odpt.Railway:TokyoMetro.Chiyoda").getRailwayTitles().get("en"), "Chiyoda Line");
+
+        assertThat(railways).extracting(r -> r.getSameAs())
+                .containsExactly("odpt.Railway:Odakyu.Odawara", "odpt.Railway:JR-East.SobuRapid", "odpt.Railway:TokyoMetro.Chiyoda");
+
+        assertThat(railways).contains(TestDataBuilder.soubuRapid());
     }
 
     @Test
@@ -106,16 +114,39 @@ public class DefaultOdptApiClientTest {
         assertEquals("表参道", map.get("odpt.Station:TokyoMetro.Chiyoda.OmoteSando").getTitle());
 
         Station shinjuku = map.get("odpt.Station:JR-East.ChuoRapid.Shinjuku");
-        assertEquals("新宿", shinjuku.getTitle());
-        assertEquals("odpt.Railway:JR-East.ChuoRapid", shinjuku.getRailway());
-        assertEquals("odpt.Operator:JR-East", shinjuku.getOperator());
-        assertEquals("JC05", shinjuku.getStationCode());
-        assertEquals(35.69018, shinjuku.getGeo_lat());
-        assertEquals(139.70038, shinjuku.getGeo_long());
-        assertEquals("Shinjuku", shinjuku.getStationTitle().get("en"));
-        assertEquals(1, shinjuku.getPassengerSurveys().size());
-        assertEquals(4, shinjuku.getStationTimetables().size());
-        assertEquals(11, shinjuku.getConnectingRailways().size());
+        assertThat(shinjuku).isEqualTo(
+                Station.builder()
+                        .id("urn:ucode:_00001C000000000000010000031027F5")
+                        .date(LocalDateTime.of(2021,6,21,14,00,00))
+                        .title("新宿")
+                        .sameAs("odpt.Station:JR-East.ChuoRapid.Shinjuku")
+                        .railway("odpt.Railway:JR-East.ChuoRapid")
+                        .operator("odpt.Operator:JR-East")
+                        .stationCode("JC05")
+                        .stationTitle(Map.of("en", "Shinjuku", "ja", "新宿"))
+                        .geo_lat(35.69018)
+                        .geo_long(139.70038)
+                        .passengerSurveys(List.of("odpt.PassengerSurvey:JR-East.Shinjuku"))
+                        .stationTimetables(List.of(
+                                "odpt.StationTimetable:JR-East.ChuoRapid.Shinjuku.Inbound.Weekday",
+                                "odpt.StationTimetable:JR-East.ChuoRapid.Shinjuku.Inbound.SaturdayHoliday",
+                                "odpt.StationTimetable:JR-East.ChuoRapid.Shinjuku.Outbound.Weekday",
+                                "odpt.StationTimetable:JR-East.ChuoRapid.Shinjuku.Outbound.SaturdayHoliday"
+                        ))
+                        .connectingRailways(List.of(
+                                "odpt.Railway:JR-East.ChuoSobuLocal",
+                                "odpt.Railway:JR-East.SaikyoKawagoe",
+                                "odpt.Railway:JR-East.ShonanShinjuku",
+                                "odpt.Railway:JR-East.Yamanote",
+                                "odpt.Railway:Keio.Keio",
+                                "odpt.Railway:Keio.KeioNew",
+                                "odpt.Railway:Odakyu.Odawara",
+                                "odpt.Railway:Seibu.Shinjuku",
+                                "odpt.Railway:Toei.Oedo",
+                                "odpt.Railway:Toei.Shinjuku",
+                                "odpt.Railway:TokyoMetro.Marunouchi"
+                        ))
+                .build());
     }
 
     @Test
@@ -131,8 +162,18 @@ public class DefaultOdptApiClientTest {
                 t -> t.getSameAs(),
                 t -> t
         ));
-        assertEquals("快速", map.get("odpt.TrainType:JR-East.Rapid").getTitle());
-        assertEquals(2, map.get("odpt.TrainType:TokyoMetro.SemiExpress").getTrainTypeTitles().size());
+
+        assertThat(trainTypes).extracting(t -> t.getSameAs()).containsExactly(
+                "odpt.TrainType:JR-East.Rapid", "odpt.TrainType:TokyoMetro.SemiExpress");
+
+        assertThat(trainTypes).contains(TrainType.builder()
+                .id("urn:ucode:_00001C0000000000000100000320572A")
+                .date(LocalDateTime.of(2019,4,25,16,0,0,0))
+                .title("快速")
+                .sameAs("odpt.TrainType:JR-East.Rapid")
+                .operator("odpt.Operator:JR-East")
+                .trainTypeTitles(Map.of("en", "Rapid","ja", "快速"))
+                .build());
     }
 
     @Test
@@ -149,7 +190,25 @@ public class DefaultOdptApiClientTest {
                 .andRespond(withSuccess(trainsFile, MediaType.APPLICATION_JSON));
 
         List<Train> trains = odptApiClient.getTrains();
-        assertEquals(2, trains.size());
+        assertThat(trains).extracting(t -> t.getSameAs())
+                .containsExactly("odpt.Train:JR-East.SobuRapid.2296F", "odpt.Train:JR-East.SobuRapid.2054M");
+
+        assertThat(trains).contains(Train.builder()
+                        .id("urn:uuid:db9becf7-5190-4a3d-8130-75c007e5b9e8")
+                        .date(LocalDateTime.of(2021,8,14,22,27,13))
+                        .valid(LocalDateTime.of(2021,8,14,22,32,13))
+                        .delay(0)
+                        .sameAs("odpt.Train:JR-East.SobuRapid.2054M")
+                        .railway("odpt.Railway:JR-East.SobuRapid")
+                        .operator("odpt.Operator:JR-East")
+                        .toStation("odpt.Station:JR-East.SobuRapid.Ichikawa")
+                        .trainType("odpt.TrainType:JR-East.LimitedExpress")
+                        .fromStation("odpt.Station:JR-East.SobuRapid.Funabashi")
+                        .trainNumber("2054M")
+                        .railDirection("odpt.RailDirection:Inbound")
+                        .carComposition(12)
+                        .destinationStations(List.of("odpt.Station:JR-East.Yokosuka.Ofuna"))
+                .build());
     }
 
     @Test
@@ -178,13 +237,16 @@ public class DefaultOdptApiClientTest {
                 .andRespond(withSuccess(railDirectionFile, MediaType.APPLICATION_JSON));
 
         List<RailDirection> railDirections = odptApiClient.getRailDirections();
-        Map<String, RailDirection> map = railDirections.stream().collect(Collectors.toMap(
-                t -> t.getSameAs(),
-                t -> t
-        ));
-        assertEquals("上り", map.get("odpt.RailDirection:Inbound").getTitle());
-        assertThat(map.get("odpt.RailDirection:Outbound").getRailDirectionTitles())
-                .containsEntry("en", "Outbound")
-                .containsEntry("ja", "下り");
+
+        assertThat(railDirections).extracting(d -> d.getSameAs())
+                .containsExactly("odpt.RailDirection:Inbound", "odpt.RailDirection:Outbound");
+
+        assertThat(railDirections).contains(RailDirection.builder()
+                .id("urn:ucode:_00001C0000000000000100000320030B")
+                .date(LocalDateTime.of(2019,4,25, 14,0,0))
+                .title("上り")
+                .sameAs("odpt.RailDirection:Inbound")
+                .railDirectionTitles(Map.of("en", "Inbound", "ja", "上り"))
+                .build());
     }
 }

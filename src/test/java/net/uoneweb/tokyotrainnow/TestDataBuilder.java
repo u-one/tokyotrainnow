@@ -1,7 +1,9 @@
 package net.uoneweb.tokyotrainnow;
 
+import net.uoneweb.tokyotrainnow.odpt.entity.Railway;
 import net.uoneweb.tokyotrainnow.odpt.entity.Station;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -140,4 +142,70 @@ public class TestDataBuilder {
 
     }
 
+    public static Railway soubuRapid() {
+        return Railway.builder()
+                .id("urn:ucode:_00001C00000000000001000003100E1D")
+                .sameAs("odpt.Railway:JR-East.SobuRapid")
+                .date(LocalDateTime.of(2021,06,21,14,00,00))
+                .title("総武快速線")
+                .color("#0074BE")
+                .lineCode("JO")
+                .operator("odpt.Operator:JR-East")
+                .railwayTitles(Map.of("en", "Sobu Rapid Line","ja", "総武快速線"))
+                .stationOrder(List.of(
+                        Railway.Station.builder()
+                                .index(1)
+                                .station("odpt.Station:JR-East.SobuRapid.Tokyo")
+                                .stationTitles(Map.of("en", "Tokyo","ja", "東京"))
+                                .build(),
+                        Railway.Station.builder()
+                                .index(2)
+                                .station("odpt.Station:JR-East.SobuRapid.ShinNihombashi")
+                                .stationTitles(Map.of("en", "Shin-Nihombashi","ja", "新日本橋"))
+                                .build(),
+                        Railway.Station.builder()
+                                .index(3)
+                                .station("odpt.Station:JR-East.SobuRapid.Bakurocho")
+                                .stationTitles(Map.of("en", "Bakurocho","ja", "馬喰町"))
+                                .build(),
+                        Railway.Station.builder()
+                                .index(4)
+                                .station("odpt.Station:JR-East.SobuRapid.Kinshicho")
+                                .stationTitles(Map.of("en", "Kinshicho","ja", "錦糸町"))
+                                .build(),
+                        Railway.Station.builder()
+                                .index(5)
+                                .station("odpt.Station:JR-East.SobuRapid.ShinKoiwa")
+                                .stationTitles(Map.of("en", "Shin-Koiwa","ja", "新小岩"))
+                                .build(),
+                        Railway.Station.builder()
+                                .index(6)
+                                .station("odpt.Station:JR-East.SobuRapid.Ichikawa")
+                                .stationTitles(Map.of("en", "Ichikawa","ja", "市川"))
+                                .build(),
+                        Railway.Station.builder()
+                                .index(7)
+                                .station("odpt.Station:JR-East.SobuRapid.Funabashi")
+                                .stationTitles(Map.of("en", "Funabashi","ja", "船橋"))
+                                .build(),
+                        Railway.Station.builder()
+                                .index(8)
+                                .station("odpt.Station:JR-East.SobuRapid.Tsudanuma")
+                                .stationTitles(Map.of("en", "Tsudanuma","ja", "津田沼"))
+                                .build(),
+                        Railway.Station.builder()
+                                .index(9)
+                                .station("odpt.Station:JR-East.SobuRapid.Inage")
+                                .stationTitles(Map.of("en", "Inage","ja", "稲毛"))
+                                .build(),
+                        Railway.Station.builder()
+                                .index(10)
+                                .station("odpt.Station:JR-East.SobuRapid.Chiba")
+                                .stationTitles(Map.of("en", "Chiba","ja", "千葉"))
+                                .build()
+                ))
+                .ascendingRailDirection("odpt.RailDirection:Outbound")
+                .descendingRailDirection("odpt.RailDirection:Inbound")
+                .build();
+    }
 }
