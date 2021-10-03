@@ -2,64 +2,143 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <html lang="jp" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>東京鉄道Now</title>
+<style>
+  html * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    width: 100%;
+    background-color:#FFFFFF;
+    font-family: sans-serif;
+  }
+  header {
+    background: #444444;
+    color: #dddddd;
+  }
+  .header-container {
+    padding: 10px 10px 10px 10px;
+  }
+  nav {
+  }
+  .nav-container {
+    padding: 0px 20px 0px 20px;
+  }
+  footer {}
+  .footer-container {
+    padding: 20px;
+    font-size: 0.8rem;
+  }
+  main {}
+  .main-container {
+     padding: 0px 10px 40px 10px;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  tbody .railwayItem:nth-of-type(2n+1) {
+    background: #eeeeee;
+  }
+
+  thead {
+    background: #666666;
+    color: #ffffff;
+    font-weight: bold;
+  }
+
+  tr {
+    /* white-space: nowrap; */
+  }
+  td {
+    padding: 1px 2px;
+  }
+  .station {
+    font-weight: bold;
+  }
+  .date {
+    font-size: 0.8rem;
+  }
+  .trainDate {
+    text-align: right;
+  }
+  .staticDataUpdateDate {
+    font-size: 0.8rem;
+  }
+</style>
 </head>
-<body style="background-color:#EEEEEE">
-<h2>東京鉄道Now</h2>
+<body>
+<header>
+    <div class="header-container">
+        <h2>東京鉄道Now</h2>
+    </div>
+</header>
+<nav>
+    <div class="nav-container">
+    </div>
+</nav>
+<main>
+    <div class="main-container">
+        開発中。
+        <h5>
+            このサイトは東京公共交通オープンデータチャレンジAPIを利用して制作しています。
+        </h5>
+        <table>
+            <tr>
+                <td rowspan="2" style="background-color:#808080" th:style="'background-color:' + ${railway.color}" width="20px"></td>
+                <td th:text="${railway.getOperator()}">事業者</td>
+            </tr>
+            <tr><td><h2 th:text="${railway.title}">路線名</h2></td></tr>
+        </table>
+        <div style="background-color:#0074BE"></div>
+        <b>
+            <div></div>
+        </b>
 
-開発中。
-<h5>
-このサイトは東京公共交通オープンデータチャレンジAPIを利用して制作しています。
-</h5>
+        <div class="trainDate date" th:text="'列車情報生成時刻:' + ${#temporals.format(railway.getTrainDate(), 'yyyy/MM/dd HH:mm:ss')}">-</div>
 
-<table>
-    <tr>
-        <td rowspan="2" style="background-color:#808080" th:style="'background-color:' + ${railway.color}" width="20px"></td>
-        <td th:text="${railway.getOperator()}">事業者</td>
-    </tr>
-    <tr><td><h2 th:text="${railway.title}">路線名</h2></td></tr>
-</table>
-<div style="background-color:#0074BE"></div>
-<b>
-    <div></div>
-</b>
-
-<div class="trainDate" th:text="'列車情報生成時刻:' + ${#temporals.format(railway.getTrainDate(), 'yyyy/MM/dd HH:mm:ss')}">-</div>
-
-<table>
-    <thead>
-    <tr>
-        <td></td>
-        <td th:text="${railway.ascendingTitle}">下り</td>
-        <td th:text="${railway.descendingTitle}">上り</td>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="station : ${railway.sections}">
-        <td><span th:text="${station.getTitle()}"></span></td>
-        <td>
-            <div th:each="train : ${station.getTrainsByDirection(true)}">
-                <span th:text="${train.getTrainNumber()} + ' ' + ${train.getTrainType()} + ' ' + ${train.getDestination} + '行 ' + ${train.carComposition} + '両'"></span>
-            </div>
-        </td>
-        <td>
-            <div th:each="train : ${station.getTrainsByDirection(false)}">
-                <span th:text="${train.getTrainNumber()} + ' ' + ${train.getTrainType()} + ' ' + ${train.getDestination} + '行 ' + ${train.carComposition} + '両'"></span>
-            </div>
-        </td>
-    </tr>
-    </tbody>
-</table>
-
+        <table>
+            <thead>
+            <tr>
+                <td></td>
+                <td th:text="${railway.ascendingTitle}">下り</td>
+                <td th:text="${railway.descendingTitle}">上り</td>
+            </tr>
+            </thead>
+            <tbody class="railway">
+            <tr class="railwayItem" th:each="station : ${railway.sections}">
+                <td class="station"><span th:text="${station.getTitle()}"></span></td>
+                <td>
+                    <div th:each="train : ${station.getTrainsByDirection(true)}">
+                        <span th:text="${train.getTrainNumber()} + ' ' + ${train.getTrainType()} + ' ' + ${train.getDestination} + '行 ' + ${train.carComposition} + '両'"></span>
+                    </div>
+                </td>
+                <td>
+                    <div th:each="train : ${station.getTrainsByDirection(false)}">
+                        <span th:text="${train.getTrainNumber()} + ' ' + ${train.getTrainType()} + ' ' + ${train.getDestination} + '行 ' + ${train.carComposition} + '両'"></span>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
 <hr>
-<div class="staticDataUpdateDate">
-各種静的データ更新日時
-<div th:text="'事業者情報:' + ${#temporals.format(railway.getOperatorUpdateTime(), 'yyyy/MM/dd HH:mm:ss')}"> - </div>
-<div th:text="'路線・駅情報:' + ${#temporals.format(railway.getRailwayUpdateTime(), 'yyyy/MM/dd HH:mm:ss')}"> - </div>
-<div th:text="'列車種別情報:' + ${#temporals.format(railway.getTrainTypeUpdateTime(), 'yyyy/MM/dd HH:mm:ss')}"> - </div>
-</div>
-
+<footer>
+    <div class="footer-container">
+        <div class="staticDataUpdateDate">
+            各種静的データ更新日時
+            <div class="date" th:text="'事業者情報:' + ${#temporals.format(railway.getOperatorUpdateTime(), 'yyyy/MM/dd HH:mm:ss')}"> - </div>
+            <div class="date" th:text="'路線・駅情報:' + ${#temporals.format(railway.getRailwayUpdateTime(), 'yyyy/MM/dd HH:mm:ss')}"> - </div>
+            <div class="date" th:text="'列車種別情報:' + ${#temporals.format(railway.getTrainTypeUpdateTime(), 'yyyy/MM/dd HH:mm:ss')}"> - </div>
+        </div>
+        <p class="copyright">(c) u-one 2021 All rights reserved.</p>
+    </div>
+</footer>
 </body>
 </html>
