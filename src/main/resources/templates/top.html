@@ -5,7 +5,19 @@
 
 <head>
     <meta charset="UTF-8">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7M2T977YVM"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-7M2T977YVM');
+    </script>
     <title>東京鉄道Now</title>
+
+
     <style>
   html * {
     box-sizing: border-box;
@@ -108,12 +120,14 @@
         <a href="./current-railway/odpt.Railway:TokyoMetro.Tozai">東西線</a>
         <a href="./current-railway/odpt.Railway:TokyoMetro.Yurakucho">有楽町線</a>
 
-        <h3>都営</h3>
-        <a href="./current-railway/odpt.Railway:Toei.Arakawa">荒川線</a>
+        <h3>都営地下鉄</h3>
         <a href="./current-railway/odpt.Railway:Toei.Asakusa">都営浅草線</a>
         <a href="./current-railway/odpt.Railway:Toei.Mita">都営三田線</a>
         <a href="./current-railway/odpt.Railway:Toei.Oedo">都営大江戸線</a>
         <a href="./current-railway/odpt.Railway:Toei.Shinjuku">都営新宿線</a>
+
+        <h3>都電</h3>
+        <a href="./current-railway/odpt.Railway:Toei.Arakawa">荒川線</a>
 
     </div>
 </main>
