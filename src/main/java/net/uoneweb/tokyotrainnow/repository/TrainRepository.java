@@ -12,7 +12,7 @@ public class TrainRepository {
     @Autowired
     OdptApiClient apiClient;
 
-    public List<Train> find(String operatorId, String railwayId) {
-        return apiClient.getTrain(operatorId, railwayId);
+    public List<Train> find(String railwayId) {
+        return apiClient.getTrain(railwayId);
     }
 }

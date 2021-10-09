@@ -17,5 +17,5 @@ public interface OdptApiClient {
 
     List<Train> getTrains();
 
-    List<Train> getTrain(String operator, String railway);
+    List<Train> getTrain(String railway);
 }

@@ -36,7 +36,7 @@ public class TrainRepositoryTest {
 
     @Test
     public void findByStationIdSuccess() {
-        when(odptApiClient.getTrain("odpt.Operator:JR-East", "odpt.Railway:JR-East.SobuRapid"))
+        when(odptApiClient.getTrain("odpt.Railway:JR-East.SobuRapid"))
                 .thenReturn(
                         List.of(
                                 Train.builder()
@@ -74,7 +74,7 @@ public class TrainRepositoryTest {
                         )
                 );
 
-        List<Train> trains = repository.find("odpt.Operator:JR-East", "odpt.Railway:JR-East.SobuRapid");
+        List<Train> trains = repository.find("odpt.Railway:JR-East.SobuRapid");
 
         assertThat(trains).hasSize(2);
     }

@@ -112,7 +112,7 @@ public class DefaultTrainServiceTest {
         when(stationRepository.findByStationId("odpt.Station:JR-East.SobuRapid.Chiba")).thenReturn(TestDataBuilder.sobuRapidChiba());
         when(stationRepository.findByStationId("odpt.Station:JR-East.Yokosuka.Ofuna")).thenReturn(TestDataBuilder.yokosukaOfuna());
         when(stationRepository.findByStationId("odpt.Station:JR-East.Uchibo.Kimitsu")).thenReturn(TestDataBuilder.uchiboKimitsu());
-        when(trainRepository.find("odpt.Operator:JR-East", "odpt.Railway:JR-East.SobuRapid")).thenReturn(createTrains());
+        when(trainRepository.find("odpt.Railway:JR-East.SobuRapid")).thenReturn(createTrains());
         when(trainTypeRepository.findByTrainTypeId("odpt.TrainType:JR-East.Rapid")).thenReturn(TrainType.builder()
                 .sameAs("odpt.TrainType:JR-East.Rapid")
                 .title("快速")

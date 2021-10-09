@@ -81,10 +81,9 @@ public class DefaultOdptApiClient implements OdptApiClient {
         return Arrays.asList(trains);
     }
 
-    public List<Train> getTrain(String operator, String railway) {
+    public List<Train> getTrain(String railway) {
         String url = config.getEndpoint() +"odpt:Train?"
                 + "acl:consumerKey=" + config.getKey()
-                + "&odpt:operator=" + operator
                 + "&odpt:railway=" + railway;
 
         ResponseEntity<Train[]> res = restOperations.getForEntity(url, Train[].class);

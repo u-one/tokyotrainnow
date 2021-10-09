@@ -80,6 +80,8 @@
 </header>
 <nav>
     <div class="nav-container">
+        <ul>
+        </ul>
     </div>
 </nav>
 <main>
@@ -115,12 +117,12 @@
                 <td class="station"><span th:text="${station.getTitle()}"></span></td>
                 <td>
                     <div th:each="train : ${station.getTrainsByDirection(true)}">
-                        <span th:text="${train.getTrainNumber()} + ' ' + ${train.getTrainType()} + ' ' + ${train.getDestination} + '行 ' + ${train.carComposition} + '両'"></span>
+                        <span th:text="${train.getTrainNumber()} + ' ' + ${train.getTrainType()} + ' ' + ${train.getDestination} + '行 ' + ${train.carComposition != 0 ? train.carComposition + '両 ' : ''} + ${train.delay != 0 ? '遅延' + train.delay + '分' : ''}"></span>
                     </div>
                 </td>
                 <td>
                     <div th:each="train : ${station.getTrainsByDirection(false)}">
-                        <span th:text="${train.getTrainNumber()} + ' ' + ${train.getTrainType()} + ' ' + ${train.getDestination} + '行 ' + ${train.carComposition} + '両'"></span>
+                        <span th:text="${train.getTrainNumber()} + ' ' + ${train.getTrainType()} + ' ' + ${train.getDestination} + '行 ' + ${train.carComposition != 0 ? train.carComposition + '両 ' : ''} + ${train.delay != 0 ? '遅延' + train.delay + '分' : ''}"></span>
                     </div>
                 </td>
             </tr>

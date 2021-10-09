@@ -160,7 +160,7 @@ public class DefaultTrainService implements TrainService {
                 .lineCode(railway.getLineCode())
                 .sections(sections).build();
 
-        List<Train> trains = trainRepository.find("odpt.Operator:JR-East", railwayId);
+        List<Train> trains = trainRepository.find(railwayId);
         for (Train train : trains) {
             boolean ascending = isAscendingDirection(train, railway);
             final String from = train.getFromStation();

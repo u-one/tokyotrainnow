@@ -215,16 +215,14 @@ public class DefaultOdptApiClientTest {
     public void getTrainSuccess() {
         MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
 
-        String operator = "odpt.Operator:JR-East";
         String railway = "odpt.Railway:JR-East.SobuRapid";
 
         server.expect(requestTo("http://localhost:8081/odpt:Train?"
                         + "acl:consumerKey=TEST-KEY"
-                        + "&odpt:operator=" + operator
                         + "&odpt:railway=" + railway))
                 .andRespond(withSuccess(trainsFile, MediaType.APPLICATION_JSON));
 
-        List<Train> trains = odptApiClient.getTrain(operator, railway);
+        List<Train> trains = odptApiClient.getTrain(railway);
         assertEquals(2, trains.size());
     }
 
