@@ -77,6 +77,9 @@
   .staticDataUpdateDate {
     font-size: 0.8rem;
   }
+  .train {
+    font-size: 0.8rem;
+  }
 </style>
 </head>
 <body>
@@ -123,13 +126,13 @@
             <tr class="railwayItem" th:each="station : ${railway.sections}">
                 <td class="station"><span th:text="${station.getTitle()}"></span></td>
                 <td>
-                    <div th:each="train : ${station.getTrainsByDirection(true)}">
-                        <span th:text="${train.getTrainNumber()} + ' ' + ${train.getTrainType()} + ' ' + ${train.getDestination} + '行 ' + ${train.carComposition != 0 ? train.carComposition + '両 ' : ''} + ${train.delay != 0 ? '遅延' + train.delay + '分' : ''}"></span>
+                    <div class="train" th:each="train : ${station.getTrainsByDirection(true)}">
+                        <span th:text="${train.getTrainNumber()} + ' ' + ${train.getTrainType()} + ' ' + ${train.getDestination} + '行 ' + ${train.carComposition != 0 ? train.carComposition + '両 ' : ''} + ${train.delay/60 != 0 ? '遅延' + train.delay/60 + '分' : ''}"></span>
                     </div>
                 </td>
                 <td>
-                    <div th:each="train : ${station.getTrainsByDirection(false)}">
-                        <span th:text="${train.getTrainNumber()} + ' ' + ${train.getTrainType()} + ' ' + ${train.getDestination} + '行 ' + ${train.carComposition != 0 ? train.carComposition + '両 ' : ''} + ${train.delay != 0 ? '遅延' + train.delay + '分' : ''}"></span>
+                    <div class="train" th:each="train : ${station.getTrainsByDirection(false)}">
+                        <span th:text="${train.getTrainNumber()} + ' ' + ${train.getTrainType()} + ' ' + ${train.getDestination} + '行 ' + ${train.carComposition != 0 ? train.carComposition + '両 ' : ''} + ${train.delay/60 != 0 ? '遅延' + train.delay/60 + '分' : ''}"></span>
                     </div>
                 </td>
             </tr>
