@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.cloud.gcp.data.datastore.core.mapping.Entity;
+import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -32,6 +33,7 @@ public class TrainType {
     @JsonProperty("dc:title")
     private String title;
 
+    @Id
     @JsonProperty("owl:sameAs")
     private String sameAs;
 

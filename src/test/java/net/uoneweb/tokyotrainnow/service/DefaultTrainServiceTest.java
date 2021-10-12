@@ -43,19 +43,19 @@ public class DefaultTrainServiceTest {
     private OperatorRepository operatorRepository;
 
     @Mock
-    private DefaultRailDirectionRepository railDirectionRepository;
+    private RailDirectionRepository railDirectionRepository;
 
     @Mock
     private RailwayRepository railwayRepository;
 
     @Mock
-    private DefaultStationRepository stationRepository;
+    private StationRepository stationRepository;
 
     @Mock
     private TrainRepository trainRepository;
 
     @Mock
-    private DefaultTrainTypeRepository trainTypeRepository;
+    private TrainTypeRepository trainTypeRepository;
 
     @InjectMocks
     DefaultTrainService trainService;

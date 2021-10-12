@@ -32,19 +32,19 @@ public class DefaultTrainService implements TrainService {
     private OperatorRepository operatorRepository;
 
     @Autowired
-    private DefaultRailDirectionRepository railDirectionRepository;
+    private RailDirectionRepository railDirectionRepository;
 
     @Autowired
     private RailwayRepository railwayRepository;
 
     @Autowired
-    private DefaultStationRepository stationRepository;
+    private StationRepository stationRepository;
 
     @Autowired
     private TrainRepository trainRepository;
 
     @Autowired
-    private DefaultTrainTypeRepository trainTypeRepository;
+    private TrainTypeRepository trainTypeRepository;
 
     @Override
     public void update() {
