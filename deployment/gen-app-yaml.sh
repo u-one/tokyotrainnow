@@ -7,7 +7,10 @@ ODPT_API_ENDPOINT=$3
 cat <<EOF > app.yaml
 runtime: java11
 
-instance_class: F1
+instance_class: B2
+
+manual_scaling:
+  instances: 1
 
 env_variables:
     SPRING_PROFILES_ACTIVE: ${ACTIVE_PROFILES}
