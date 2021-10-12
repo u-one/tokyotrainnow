@@ -55,7 +55,7 @@ public class DefaultTrainServiceTest {
     private TrainRepository trainRepository;
 
     @Mock
-    private TrainTypeRepository trainTypeRepository;
+    private DefaultTrainTypeRepository trainTypeRepository;
 
     @InjectMocks
     DefaultTrainService trainService;
@@ -114,12 +114,12 @@ public class DefaultTrainServiceTest {
         when(stationRepository.findById("odpt.Station:JR-East.Yokosuka.Ofuna")).thenReturn(Optional.of(TestDataBuilder.yokosukaOfuna()));
         when(stationRepository.findById("odpt.Station:JR-East.Uchibo.Kimitsu")).thenReturn(Optional.of(TestDataBuilder.uchiboKimitsu()));
         when(trainRepository.find("odpt.Railway:JR-East.SobuRapid")).thenReturn(createTrains());
-        when(trainTypeRepository.findByTrainTypeId("odpt.TrainType:JR-East.Rapid")).thenReturn(TrainType.builder()
+        when(trainTypeRepository.findById("odpt.TrainType:JR-East.Rapid")).thenReturn(Optional.of(TrainType.builder()
                 .sameAs("odpt.TrainType:JR-East.Rapid")
                 .title("快速")
                 .operator("odpt.Operator:JR-East")
                 .trainTypeTitles(Map.of("en", "Rapid","ja", "快速"))
-                .build());
+                .build()));
 
         LocalDateTime updateTime = LocalDateTime.of(2021,10,01,12,00,00);
         when(metaDataRepository.getOperatorsUpdateTime()).thenReturn(updateTime);

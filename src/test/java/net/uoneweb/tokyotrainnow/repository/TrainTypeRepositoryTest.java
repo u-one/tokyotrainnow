@@ -8,16 +8,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class TrainTypeRepositoryTest {
 
     @Autowired
-    private TrainTypeRepository repository;
+    private DefaultTrainTypeRepository repository;
 
     @BeforeEach
     public void beforeEach() {
@@ -44,9 +45,9 @@ public class TrainTypeRepositoryTest {
                 .trainTypeTitles(Map.of("en", "Semi Express","ja", "準急"))
                 .build();
 
-        repository.add("odpt.TrainType:JR-East.Local", local);
-        repository.add("odpt.TrainType:JR-East.Rapid", rapid);
-        repository.add("odpt.TrainType:TokyoMetro.SemiExpress", semiexp);
+        repository.save(local);
+        repository.save(rapid);
+        repository.save(semiexp);
     }
 
     @Test
@@ -58,7 +59,9 @@ public class TrainTypeRepositoryTest {
 
     @Test
     public void findByTrainTypeIdSuccess() {
-        TrainType trainType = repository.findByTrainTypeId("odpt.TrainType:TokyoMetro.SemiExpress");
-        assertEquals("準急", trainType.getTitle());
+        Optional<TrainType> opt = repository.findById("odpt.TrainType:TokyoMetro.SemiExpress");
+        assertThat(opt).hasValueSatisfying(trainType -> {
+            assertThat(trainType.getTitle()).isEqualTo("準急");
+        });
     }
 }

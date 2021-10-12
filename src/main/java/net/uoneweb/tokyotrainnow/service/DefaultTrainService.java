@@ -44,7 +44,7 @@ public class DefaultTrainService implements TrainService {
     private TrainRepository trainRepository;
 
     @Autowired
-    private TrainTypeRepository trainTypeRepository;
+    private DefaultTrainTypeRepository trainTypeRepository;
 
     @Override
     public void update() {
@@ -77,7 +77,7 @@ public class DefaultTrainService implements TrainService {
         List<TrainType> trainTypes = odptApiClient.getTrainTypes();
         trainTypeRepository.deleteAll();
         for (TrainType trainType : trainTypes) {
-            trainTypeRepository.add(trainType.getSameAs(), trainType);
+            trainTypeRepository.save(trainType);
         }
 
         metaDataRepository.setOperatorsUpdateTime(now);
@@ -179,7 +179,13 @@ public class DefaultTrainService implements TrainService {
 
             int index = findIndex(sections, from, to, ascending);
 
-            final String trainType = trainTypeRepository.findByTrainTypeId(train.getTrainType()).getTrainTypeTitles().get("ja");
+            final Optional<TrainType> oTrainType = trainTypeRepository.findById(train.getTrainType());
+            String trainType = "----";
+            if (oTrainType.isEmpty()) {
+                log.error("TrainType is empty: " + train.getTrainType());
+            } else {
+                trainType = oTrainType.get().getTrainTypeTitles().get("ja");
+            }
 
             sections.get(index).addTrain(CurrentRailway.Train.builder()
                             .destination(dest)

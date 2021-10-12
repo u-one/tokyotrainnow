@@ -14,7 +14,7 @@ import org.springframework.cloud.gcp.data.datastore.core.mapping.Entity;
 import java.time.LocalDateTime;
 import java.util.Map;
 
-@Entity(name = "rail_driections")
+@Entity(name = "rail_directions")
 @Data
 @Builder
 @NoArgsConstructor
