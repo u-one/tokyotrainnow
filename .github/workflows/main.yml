@@ -95,7 +95,7 @@ jobs:
         run: |
                 echo "Generating environments"
                 chmod +x ./deployment/gen-app-yaml.sh
-                ./deployment/gen-app-yaml.sh dev ${{ secrets.ODPT_API_TOKEN }} ${{ secrets.ODPT_API_ENDPOINT }}
+                ./deployment/gen-app-yaml.sh prod ${{ secrets.ODPT_API_TOKEN }} ${{ secrets.ODPT_API_ENDPOINT }}
       - name: Deploy to App Engine
         uses: google-github-actions/deploy-appengine@v0.4.0
         with:
