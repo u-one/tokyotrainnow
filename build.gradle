@@ -39,6 +39,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'com.io-informatics.oss:jackson-jsonld:0.1.1'
 	implementation 'com.google.appengine:appengine-api-1.0-sdk:+'  // Google App Engine plugin設定
+	// https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-gcp-starter-data-datastore
+	implementation 'org.springframework.cloud:spring-cloud-gcp-starter-data-datastore:1.2.8.RELEASE'
+
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

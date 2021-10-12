@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -76,7 +77,7 @@ public class DefaultTrainServiceTest {
         when(clock.instant()).thenReturn(Instant.parse("2021-10-01T12:00:00.000Z"));
         when(clock.withZone(ZoneId.of("Asia/Tokyo"))).thenReturn(clock);
         when(odptApiClient.getRailways()).thenReturn(List.of(railway));
-        doNothing().when(railwayRepository).add("odpt.Railway:JR-East.SobuRapid", railway);
+        when(railwayRepository.save(railway)).thenReturn(null);
 
         trainService.update();
 
@@ -90,23 +91,23 @@ public class DefaultTrainServiceTest {
 
     @Test
     public void getRailwaySuccess() {
-        when(railwayRepository.findByRailwayId("odpt.Railway:JR-East.SobuRapid")).thenReturn(createRailway());
+        when(railwayRepository.findById("odpt.Railway:JR-East.SobuRapid")).thenReturn(Optional.of(createRailway()));
         Railway railway = trainService.getRailway("odpt.Railway:JR-East.SobuRapid");
         assertEquals("総武快速線", railway.getTitle());
     }
 
     @Test
     public void getCurrentRailwaySuccess() {
-        when(railwayRepository.findByRailwayId("odpt.Railway:JR-East.SobuRapid")).thenReturn(createRailway());
+        when(railwayRepository.findById("odpt.Railway:JR-East.SobuRapid")).thenReturn(Optional.of(createRailway()));
         when(railDirectionRepository.find("odpt.RailDirection:Inbound")).thenReturn(RailDirection.builder()
                 .railDirectionTitles(Map.of("en", "Inbound", "ja", "上り"))
                 .build());
         when(railDirectionRepository.find("odpt.RailDirection:Outbound")).thenReturn(RailDirection.builder()
                 .railDirectionTitles(Map.of("en", "Outbound", "ja", "下り"))
                 .build());
-        when(operatorRepository.findByOperatorId("odpt.Operator:JR-East")).thenReturn(Operator.builder()
+        when(operatorRepository.findById("odpt.Operator:JR-East")).thenReturn(Optional.of(Operator.builder()
                 .operatorTitles(Map.of("en", "JR East", "ja", "JR東日本"))
-                .build());
+                .build()));
         when(stationRepository.findByStationId("odpt.Station:JR-East.SobuRapid.Tokyo")).thenReturn(TestDataBuilder.sobuRapidTokyo());
         when(stationRepository.findByStationId("odpt.Station:JR-East.SobuRapid.Inage")).thenReturn(TestDataBuilder.sobuRapidInage());
         when(stationRepository.findByStationId("odpt.Station:JR-East.SobuRapid.Chiba")).thenReturn(TestDataBuilder.sobuRapidChiba());

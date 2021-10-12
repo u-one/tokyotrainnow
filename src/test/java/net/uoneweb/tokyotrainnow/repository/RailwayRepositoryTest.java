@@ -8,15 +8,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class RailwayRepositoryTest {
     @Autowired
-    private RailwayRepository repository;
+    private DefaultRailwayRepository repository;
 
     @BeforeEach
     public void beforeEach() {
@@ -61,9 +62,9 @@ public class RailwayRepositoryTest {
                 .descendingRailDirection("odpt.RailDirection:Inbound")
                 .build();
 
-        repository.add("odpt.Railway:JR-East.ChuoSobuLocal",  sobu);
-        repository.add("odpt.Railway:JR-East.SobuRapid",  sobuRapid);
-        repository.add("odpt.Railway:Odakyu.Odawara",  odakyuOdawara);
+        repository.save(sobu);
+        repository.save(sobuRapid);
+        repository.save(odakyuOdawara);
     }
 
     @Test
@@ -75,14 +76,16 @@ public class RailwayRepositoryTest {
 
     @Test
     public void findByOperatorIdSuccess() {
-        List<Railway> railways = repository.findByOperatorId("odpt.Operator:JR-East");
+        List<Railway> railways = repository.findRailwaysByOperatorId("odpt.Operator:JR-East");
         List<String> titles = railways.stream().map(o -> o.getTitle()).sorted().collect(Collectors.toList());
         assertIterableEquals(List.of("中央・総武各駅停車", "総武快速線"), titles);
     }
 
     @Test
-    public void findByRailwayIdSuccess() {
-        Railway railway = repository.findByRailwayId("odpt.Railway:JR-East.SobuRapid");
-        assertEquals("総武快速線", railway.getTitle());
+    public void findByIdSuccess() {
+        Optional<Railway> oRailway = repository.findById("odpt.Railway:JR-East.SobuRapid");
+        assertThat(oRailway).hasValueSatisfying(r -> {
+            assertThat(r.getTitle()).isEqualTo("総武快速線");
+        });
     }
 }

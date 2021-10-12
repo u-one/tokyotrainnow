@@ -8,16 +8,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class OperatorRepositoryTest {
 
     @Autowired
-    private OperatorRepository repository;
+    private DefaultOperatorRepository repository;
 
     @BeforeEach
     public void beforeEach() {
@@ -34,8 +35,8 @@ public class OperatorRepositoryTest {
                 .operatorTitles(Map.of("en", "Tokyo Metro","ja", "東京メトロ"))
                 .build();
 
-        repository.add("odpt.Operator:JR-East",  jrEast);
-        repository.add("odpt.Operator:TokyoMetro", tokyoMetro);
+        repository.save(jrEast);
+        repository.save(tokyoMetro);
     }
 
     @Test
@@ -47,7 +48,9 @@ public class OperatorRepositoryTest {
 
     @Test
     public void findSuccess() {
-        Operator operator = repository.findByOperatorId("odpt.Operator:JR-East");
-        assertEquals("JR東日本", operator.getTitle());
+        Optional<Operator> oOperator = repository.findById("odpt.Operator:JR-East");
+        assertThat(oOperator).hasValueSatisfying(operator -> {
+            assertThat(operator.getTitle()).isEqualTo("JR東日本");
+        });
     }
 }

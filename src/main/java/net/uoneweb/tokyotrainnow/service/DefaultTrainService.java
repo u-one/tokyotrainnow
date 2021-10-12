@@ -12,10 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -56,7 +53,7 @@ public class DefaultTrainService implements TrainService {
         List<Operator> operators = odptApiClient.getOperators();
         operatorRepository.deleteAll();
         for (Operator operator : operators) {
-            operatorRepository.add(operator.getSameAs(), operator);
+            operatorRepository.save(operator);
         }
 
         List<RailDirection> railDirections = odptApiClient.getRailDirections();
@@ -68,7 +65,7 @@ public class DefaultTrainService implements TrainService {
         List<Railway> railways = odptApiClient.getRailways();
         railwayRepository.deleteAll();
         for (Railway railway : railways) {
-            railwayRepository.add(railway.getSameAs(), railway);
+            railwayRepository.save(railway);
         }
 
         List<Station> stations = odptApiClient.getStations();
@@ -92,18 +89,20 @@ public class DefaultTrainService implements TrainService {
 
     @Override
     public Railway getRailway(String railwayId) {
-        return railwayRepository.findByRailwayId(railwayId);
+        return railwayRepository.findById(railwayId).orElse(null);
     }
 
     @Override
     public CurrentRailway getCurrentRailway(String railwayId) {
         final String lang = "ja";
 
-        Railway railway = railwayRepository.findByRailwayId(railwayId);
-        if (Objects.isNull(railway)) {
+        Optional<Railway> oRailway = railwayRepository.findById(railwayId);
+        if (oRailway.isEmpty()) {
             log.error("Railway is null", railwayId);
             return null;
         }
+
+        Railway railway = oRailway.get();
 
         String ascendingTitle = "-";
         RailDirection ascendingRailDirecton = railDirectionRepository.find(railway.getAscendingRailDirection());
@@ -121,12 +120,12 @@ public class DefaultTrainService implements TrainService {
             descendingTitle = descendingRailDirection.getRailDirectionTitles().get(lang);
         }
 
-        Operator operator = operatorRepository.findByOperatorId(railway.getOperator());
+        Optional<Operator> oOperator = operatorRepository.findById(railway.getOperator());
         String operatorTitle = "";
-        if (Objects.isNull(operator)) {
+        if (oOperator.isEmpty()) {
             log.error("operator is null", railway.getOperator());
         } else {
-            operatorTitle = operator.getOperatorTitles().get(lang);
+            operatorTitle = oOperator.get().getOperatorTitles().get(lang);
         }
 
         List<Railway.Station> stations = railway.getStationOrder();

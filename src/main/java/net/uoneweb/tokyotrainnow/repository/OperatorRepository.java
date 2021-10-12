@@ -1,30 +1,15 @@
 package net.uoneweb.tokyotrainnow.repository;
 
 import net.uoneweb.tokyotrainnow.odpt.entity.Operator;
-import org.springframework.stereotype.Repository;
+import org.springframework.cloud.gcp.data.datastore.repository.DatastoreRepository;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
-@Repository
-public class OperatorRepository {
-    private static Map<String, Operator> map = new HashMap<>();
+public interface OperatorRepository extends DatastoreRepository<Operator, String> {
+    List<Operator> findAll();
 
-    public void add(String operatorId, Operator operator) {
-        map.put(operatorId, operator);
-    }
+    void deleteAll();
 
-    public List<Operator> findAll() {
-        return map.values().stream().collect(Collectors.toList());
-    }
-
-    public void deleteAll() {
-        map.clear();;
-    }
-
-    public Operator findByOperatorId(String operatorId) {
-        return map.get(operatorId);
-    }
+    Optional<Operator> findById(String operatorId);
 }
