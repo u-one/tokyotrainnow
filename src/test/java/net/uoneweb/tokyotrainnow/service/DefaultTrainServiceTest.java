@@ -2,6 +2,7 @@ package net.uoneweb.tokyotrainnow.service;
 
 import net.uoneweb.tokyotrainnow.TestDataBuilder;
 import net.uoneweb.tokyotrainnow.entity.CurrentRailway;
+import net.uoneweb.tokyotrainnow.entity.MetaData;
 import net.uoneweb.tokyotrainnow.odpt.client.OdptApiClient;
 import net.uoneweb.tokyotrainnow.odpt.entity.*;
 import net.uoneweb.tokyotrainnow.repository.*;
@@ -82,11 +83,13 @@ public class DefaultTrainServiceTest {
         trainService.update();
 
         LocalDateTime expectedTime = LocalDateTime.of(2021,10,1,12,00,00);
-        verify(metaDataRepository, times(1)).setOperatorsUpdateTime(expectedTime);
-        verify(metaDataRepository, times(1)).setRailwaysUpdateTime(expectedTime);
-        verify(metaDataRepository, times(1)).setRailDirectionsUpdateTime(expectedTime);
-        verify(metaDataRepository, times(1)).setStationsUpdateTime(expectedTime);
-        verify(metaDataRepository, times(1)).setTrainTypesUpdateTime(expectedTime);
+        verify(metaDataRepository, times(1)).save(MetaData.builder()
+                        .operatorsUpdateTime(expectedTime)
+                        .railwaysUpdateTime(expectedTime)
+                        .railDirectionsUpdateTime(expectedTime)
+                        .stationsUpdateTime(expectedTime)
+                        .trainTypesUpdateTime(expectedTime)
+                .build());
     }
 
     @Test
@@ -122,9 +125,13 @@ public class DefaultTrainServiceTest {
                 .build()));
 
         LocalDateTime updateTime = LocalDateTime.of(2021,10,01,12,00,00);
-        when(metaDataRepository.getOperatorsUpdateTime()).thenReturn(updateTime);
-        when(metaDataRepository.getRailwaysUpdateTime()).thenReturn(updateTime);
-        when(metaDataRepository.getTrainTypesUpdateTime()).thenReturn(updateTime);
+        when(metaDataRepository.findById(1L)).thenReturn(Optional.of(MetaData.builder()
+                        .operatorsUpdateTime(updateTime)
+                        .railwaysUpdateTime(updateTime)
+                        .railDirectionsUpdateTime(updateTime)
+                        .stationsUpdateTime(updateTime)
+                        .trainTypesUpdateTime(updateTime)
+                .build()));
 
         CurrentRailway railway = trainService.getCurrentRailway("odpt.Railway:JR-East.SobuRapid");
         assertThat(railway.getTitle()).isEqualTo("総武快速線");

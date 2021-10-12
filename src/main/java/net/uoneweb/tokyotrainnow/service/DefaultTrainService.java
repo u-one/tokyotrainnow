@@ -3,6 +3,7 @@ package net.uoneweb.tokyotrainnow.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.uoneweb.tokyotrainnow.entity.CurrentRailway;
+import net.uoneweb.tokyotrainnow.entity.MetaData;
 import net.uoneweb.tokyotrainnow.odpt.client.OdptApiClient;
 import net.uoneweb.tokyotrainnow.odpt.entity.*;
 import net.uoneweb.tokyotrainnow.repository.*;
@@ -12,7 +13,10 @@ import org.springframework.stereotype.Service;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -80,11 +84,14 @@ public class DefaultTrainService implements TrainService {
             trainTypeRepository.save(trainType);
         }
 
-        metaDataRepository.setOperatorsUpdateTime(now);
-        metaDataRepository.setRailDirectionsUpdateTime(now);
-        metaDataRepository.setRailwaysUpdateTime(now);
-        metaDataRepository.setStationsUpdateTime(now);
-        metaDataRepository.setTrainTypesUpdateTime(now);
+        metaDataRepository.save(MetaData.builder()
+                .operatorsUpdateTime(now)
+                .railDirectionsUpdateTime(now)
+                .railwaysUpdateTime(now)
+                .stationsUpdateTime(now)
+                .trainTypesUpdateTime(now)
+                .build());
+
     }
 
     @Override
@@ -201,9 +208,12 @@ public class DefaultTrainService implements TrainService {
             log.info(section.toString());
         }
 
-        currentRailway.setOperatorUpdateTime(metaDataRepository.getOperatorsUpdateTime());
-        currentRailway.setRailwayUpdateTime(metaDataRepository.getRailwaysUpdateTime());
-        currentRailway.setTrainTypeUpdateTime(metaDataRepository.getTrainTypesUpdateTime());
+        Optional<MetaData> oMetaData = metaDataRepository.findById(1L);
+        MetaData metadata = oMetaData.orElse(MetaData.builder().build());
+
+        currentRailway.setOperatorUpdateTime(metadata.getOperatorsUpdateTime());
+        currentRailway.setRailwayUpdateTime(metadata.getRailwaysUpdateTime());
+        currentRailway.setTrainTypeUpdateTime(metadata.getTrainTypesUpdateTime());
         currentRailway.setTrainDate(lastTrainDate(trains));
 
         return currentRailway;

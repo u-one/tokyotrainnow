@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class DefaultMetaDataRepositoryTest {
 
-    private final MetaDataRepository repository = new DefaultMetaDataRepository();
+    private final DefaultMetaDataRepository repository = new DefaultMetaDataRepository();
 
     private final LocalDateTime time = LocalDateTime.of(2021, 10, 1, 12, 00, 00);
 
