@@ -55,6 +55,13 @@ jobs:
           server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
           settings-path: ${{ github.workspace }} # location for the settings.xml file
 
+      - name: Setup Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0.2.0
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+
       - name: Build with Gradle
         run: gradle build
 
@@ -70,6 +77,13 @@ jobs:
     needs: [build]
     steps:
       - uses: actions/checkout@v2
+
+      - name: Setup Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0.2.0
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
 
       - name: Download deployment artifacts
         uses: actions/download-artifact@v2
