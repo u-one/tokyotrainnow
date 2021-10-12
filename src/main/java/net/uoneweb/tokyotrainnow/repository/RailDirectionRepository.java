@@ -1,24 +1,7 @@
 package net.uoneweb.tokyotrainnow.repository;
 
 import net.uoneweb.tokyotrainnow.odpt.entity.RailDirection;
-import org.springframework.stereotype.Repository;
+import org.springframework.cloud.gcp.data.datastore.repository.DatastoreRepository;
 
-import java.util.HashMap;
-import java.util.Map;
-
-@Repository
-public class RailDirectionRepository {
-    private static Map<String, RailDirection> map = new HashMap<>();
-
-    public void add(String railDirectionId, RailDirection railDirection) {
-        map.put(railDirectionId, railDirection);
-    }
-
-    public void deleteAll() {
-        map.clear();
-    }
-
-    public RailDirection find(String railDirectionId) {
-        return map.get(railDirectionId);
-    }
+public interface RailDirectionRepository extends DatastoreRepository<RailDirection, String> {
 }

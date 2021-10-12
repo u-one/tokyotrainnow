@@ -9,10 +9,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.cloud.gcp.data.datastore.core.mapping.Entity;
 
 import java.time.LocalDateTime;
 import java.util.Map;
 
+@Entity(name = "rail_driections")
 @Data
 @Builder
 @NoArgsConstructor

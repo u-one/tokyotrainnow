@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -15,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class RailDirectionRepositoryTest {
 
     @Autowired
-    RailDirectionRepository repository;
+    DefaultRailDirectionRepository repository;
 
     @BeforeEach
     public void beforeEach() {
@@ -29,12 +30,14 @@ public class RailDirectionRepositoryTest {
                 .railDirectionTitles(Map.of("en", "Outbound","ja", "下り"))
                 .build();
 
-        repository.add("odpt.RailDirection:Inbound", outbound);
+        repository.save(outbound);
     }
 
     @Test
     public void findSuccess() {
-        RailDirection railDirection = repository.find("odpt.RailDirection:Inbound");
-        assertThat(railDirection.getTitle()).isEqualTo("下り");
+        Optional<RailDirection> oRailDirection = repository.findById("odpt.RailDirection:Outbound");
+        assertThat(oRailDirection).hasValueSatisfying(rd -> {
+            assertThat(rd.getTitle()).isEqualTo("下り");
+        });
     }
 }

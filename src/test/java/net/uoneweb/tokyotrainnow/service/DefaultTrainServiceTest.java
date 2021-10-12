@@ -43,7 +43,7 @@ public class DefaultTrainServiceTest {
     private OperatorRepository operatorRepository;
 
     @Mock
-    private RailDirectionRepository railDirectionRepository;
+    private DefaultRailDirectionRepository railDirectionRepository;
 
     @Mock
     private RailwayRepository railwayRepository;
@@ -99,12 +99,12 @@ public class DefaultTrainServiceTest {
     @Test
     public void getCurrentRailwaySuccess() {
         when(railwayRepository.findById("odpt.Railway:JR-East.SobuRapid")).thenReturn(Optional.of(createRailway()));
-        when(railDirectionRepository.find("odpt.RailDirection:Inbound")).thenReturn(RailDirection.builder()
+        when(railDirectionRepository.findById("odpt.RailDirection:Inbound")).thenReturn(Optional.of(RailDirection.builder()
                 .railDirectionTitles(Map.of("en", "Inbound", "ja", "上り"))
-                .build());
-        when(railDirectionRepository.find("odpt.RailDirection:Outbound")).thenReturn(RailDirection.builder()
+                .build()));
+        when(railDirectionRepository.findById("odpt.RailDirection:Outbound")).thenReturn(Optional.of(RailDirection.builder()
                 .railDirectionTitles(Map.of("en", "Outbound", "ja", "下り"))
-                .build());
+                .build()));
         when(operatorRepository.findById("odpt.Operator:JR-East")).thenReturn(Optional.of(Operator.builder()
                 .operatorTitles(Map.of("en", "JR East", "ja", "JR東日本"))
                 .build()));

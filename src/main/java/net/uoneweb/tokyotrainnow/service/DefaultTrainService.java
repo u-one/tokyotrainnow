@@ -32,7 +32,7 @@ public class DefaultTrainService implements TrainService {
     private OperatorRepository operatorRepository;
 
     @Autowired
-    private RailDirectionRepository railDirectionRepository;
+    private DefaultRailDirectionRepository railDirectionRepository;
 
     @Autowired
     private RailwayRepository railwayRepository;
@@ -59,7 +59,7 @@ public class DefaultTrainService implements TrainService {
         List<RailDirection> railDirections = odptApiClient.getRailDirections();
         railDirectionRepository.deleteAll();
         for (RailDirection railDirection : railDirections) {
-            railDirectionRepository.add(railDirection.getSameAs(), railDirection);
+            railDirectionRepository.save(railDirection);
         }
 
         List<Railway> railways = odptApiClient.getRailways();
@@ -105,19 +105,19 @@ public class DefaultTrainService implements TrainService {
         Railway railway = oRailway.get();
 
         String ascendingTitle = "-";
-        RailDirection ascendingRailDirecton = railDirectionRepository.find(railway.getAscendingRailDirection());
-        if (Objects.isNull(ascendingRailDirecton)) {
+        Optional<RailDirection> oAscendingRailDirecton = railDirectionRepository.findById(railway.getAscendingRailDirection());
+        if (oAscendingRailDirecton.isEmpty()) {
             log.error("raildirection is null", railway.getAscendingRailDirection());
         } else {
-            ascendingTitle = ascendingRailDirecton.getRailDirectionTitles().get(lang);
+            ascendingTitle = oAscendingRailDirecton.get().getRailDirectionTitles().get(lang);
         }
 
         String descendingTitle = "-";
-        RailDirection descendingRailDirection = railDirectionRepository.find(railway.getDescendingRailDirection());
-        if (Objects.isNull(ascendingRailDirecton)) {
+        Optional<RailDirection> oDescendingRailDirection = railDirectionRepository.findById(railway.getDescendingRailDirection());
+        if (oDescendingRailDirection.isEmpty()) {
             log.error("raildirection is null", railway.getDescendingRailDirection());
         } else {
-            descendingTitle = descendingRailDirection.getRailDirectionTitles().get(lang);
+            descendingTitle = oDescendingRailDirection.get().getRailDirectionTitles().get(lang);
         }
 
         Optional<Operator> oOperator = operatorRepository.findById(railway.getOperator());
