@@ -8,15 +8,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class StationRepositoryTest {
     @Autowired
-    private StationRepository repository;
+    private DefaultStationRepository repository;
 
     @BeforeEach
     public void beforeEach() {
@@ -60,8 +61,8 @@ public class StationRepositoryTest {
                 .stationTitle(Map.of("en", "Seijogakuen-Mae","ja", "成城学園前"))
                 .build();
 
-        repository.add("odpt.Station:JR-East.ChuoRapid.Shinjuku", shinjuku);
-        repository.add("odpt.Station:Odakyu.Odawara.SeijogakuenMae", seijo);
+        repository.save(shinjuku);
+        repository.save(seijo);
     }
 
     @Test
@@ -73,7 +74,9 @@ public class StationRepositoryTest {
 
     @Test
     public void findByStationIdSuccess() {
-        Station station = repository.findByStationId("odpt.Station:JR-East.ChuoRapid.Shinjuku");
-        assertEquals("新宿", station.getTitle());
+        Optional<Station> opt = repository.findById("odpt.Station:JR-East.ChuoRapid.Shinjuku");
+        assertThat(opt).hasValueSatisfying(station -> {
+            assertThat(station.getTitle()).isEqualTo("新宿");
+        });
     }
 }

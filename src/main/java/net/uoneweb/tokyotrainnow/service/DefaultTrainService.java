@@ -38,7 +38,7 @@ public class DefaultTrainService implements TrainService {
     private RailwayRepository railwayRepository;
 
     @Autowired
-    private StationRepository stationRepository;
+    private DefaultStationRepository stationRepository;
 
     @Autowired
     private TrainRepository trainRepository;
@@ -71,7 +71,7 @@ public class DefaultTrainService implements TrainService {
         List<Station> stations = odptApiClient.getStations();
         stationRepository.deleteAll();
         for (Station station : stations) {
-            stationRepository.add(station.getSameAs(), station);
+            stationRepository.save(station);
         }
 
         List<TrainType> trainTypes = odptApiClient.getTrainTypes();
@@ -132,12 +132,13 @@ public class DefaultTrainService implements TrainService {
         List<CurrentRailway.Section> sections = new ArrayList<>();
         for (int i = 0; i < stations.size(); i++) {
             String stationId = stations.get(i).getStation();
-            Station station = stationRepository.findByStationId(stationId);
-            if (Objects.isNull(station)) {
+            Optional<Station> oStation = stationRepository.findById(stationId);
+            if (oStation.isEmpty()) {
                 log.error("Station is null", stationId);
                 return null;
             }
 
+            Station station = oStation.get();
             sections.add(CurrentRailway.Station.builder()
                     .title(station.getStationTitle().get(lang))
                     .stationId(station.getSameAs())
@@ -165,15 +166,16 @@ public class DefaultTrainService implements TrainService {
             final String from = train.getFromStation();
             final String to = train.getToStation();
 
-            final String dest = train.getDestinationStations().stream().map(
-                    destId -> stationRepository.findByStationId(destId))
-                .map(station -> {
-                    String title = "-";
-                    if (Objects.nonNull(station)) {
-                        title = station.getStationTitle().get(lang);
-                    }
-                    return title;
-                }).collect(Collectors.joining("・"));
+            final String dest = train.getDestinationStations()
+                    .stream()
+                    .map(destId -> stationRepository.findById(destId))
+                    .map(opt -> {
+                        if (opt.isPresent()) {
+                            return opt.get().getStationTitle().get(lang);
+                        } else {
+                            return "-";
+                        }
+                    }).collect(Collectors.joining("・"));
 
             int index = findIndex(sections, from, to, ascending);
 

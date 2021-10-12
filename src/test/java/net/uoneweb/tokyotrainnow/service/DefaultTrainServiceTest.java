@@ -49,7 +49,7 @@ public class DefaultTrainServiceTest {
     private RailwayRepository railwayRepository;
 
     @Mock
-    private StationRepository stationRepository;
+    private DefaultStationRepository stationRepository;
 
     @Mock
     private TrainRepository trainRepository;
@@ -108,11 +108,11 @@ public class DefaultTrainServiceTest {
         when(operatorRepository.findById("odpt.Operator:JR-East")).thenReturn(Optional.of(Operator.builder()
                 .operatorTitles(Map.of("en", "JR East", "ja", "JR東日本"))
                 .build()));
-        when(stationRepository.findByStationId("odpt.Station:JR-East.SobuRapid.Tokyo")).thenReturn(TestDataBuilder.sobuRapidTokyo());
-        when(stationRepository.findByStationId("odpt.Station:JR-East.SobuRapid.Inage")).thenReturn(TestDataBuilder.sobuRapidInage());
-        when(stationRepository.findByStationId("odpt.Station:JR-East.SobuRapid.Chiba")).thenReturn(TestDataBuilder.sobuRapidChiba());
-        when(stationRepository.findByStationId("odpt.Station:JR-East.Yokosuka.Ofuna")).thenReturn(TestDataBuilder.yokosukaOfuna());
-        when(stationRepository.findByStationId("odpt.Station:JR-East.Uchibo.Kimitsu")).thenReturn(TestDataBuilder.uchiboKimitsu());
+        when(stationRepository.findById("odpt.Station:JR-East.SobuRapid.Tokyo")).thenReturn(Optional.of(TestDataBuilder.sobuRapidTokyo()));
+        when(stationRepository.findById("odpt.Station:JR-East.SobuRapid.Inage")).thenReturn(Optional.of(TestDataBuilder.sobuRapidInage()));
+        when(stationRepository.findById("odpt.Station:JR-East.SobuRapid.Chiba")).thenReturn(Optional.of(TestDataBuilder.sobuRapidChiba()));
+        when(stationRepository.findById("odpt.Station:JR-East.Yokosuka.Ofuna")).thenReturn(Optional.of(TestDataBuilder.yokosukaOfuna()));
+        when(stationRepository.findById("odpt.Station:JR-East.Uchibo.Kimitsu")).thenReturn(Optional.of(TestDataBuilder.uchiboKimitsu()));
         when(trainRepository.find("odpt.Railway:JR-East.SobuRapid")).thenReturn(createTrains());
         when(trainTypeRepository.findByTrainTypeId("odpt.TrainType:JR-East.Rapid")).thenReturn(TrainType.builder()
                 .sameAs("odpt.TrainType:JR-East.Rapid")
