@@ -40,7 +40,10 @@
   .nav-container {
     padding: 0px 20px 0px 20px;
   }
-  footer {}
+  footer {
+    background: #444444;
+    color: #dddddd;
+  }
   .footer-container {
     padding: 20px;
     font-size: 0.8rem;
@@ -72,13 +75,14 @@
 <main>
     <div class="main-container">
         <h4>
-            開発中。
-            このサイトでは東京を中心とした鉄道路線ごとの現在の列車情報を確認することができます。
+            このサイトでは東京を中心とした鉄道路線ごとの現在の列車位置を確認することができます。
         </h4>
         <div class="info">
             <ul>
-                <li>このサイトは東京公共交通オープンデータチャレンジAPIを利用して制作しています。</li>
-                <li>情報が提供されている路線のみ対応していますので、これ以外の路線については対応することができません。</li>
+                <li>このサイトは東京公共交通オープンデータチャレンジにおいて提供されるデータを利用しています。</li>
+                <li>公共交通事業者により提供されたデータを元にしていますが、必ずしも正確・完全なものとは限りません。</li>
+                <li>本アプリケーションの表示内容について、公共交通事業者への直接の問合せは行わないでください。 (お問い合わせは<a href="mailto:uonejp@gmail.com">こちら</a>)</li>
+                <li>列車の位置情報や精度は事業者から提供されている情報に依存しています。路線の追加などは要望を頂いてもこちらで応じることはできません。</li>
             </ul>
         </div>
 
@@ -134,7 +138,7 @@
 <hr>
 <footer>
     <div class="footer-container">
-        <p class="copyright">(c) u-one 2021 All rights reserved.</p>
+        <p class="copyright">(c) 2021 <a href="mailto:uonejp@gmail.com">u-one</a> All rights reserved.</p>
     </div>
 </footer>
 </body>
