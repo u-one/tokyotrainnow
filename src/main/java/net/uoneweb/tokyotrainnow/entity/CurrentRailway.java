@@ -35,6 +35,8 @@ public class CurrentRailway {
 
     private LocalDateTime trainDate;
 
+    private long validSeconds;
+
     // 列車の在線位置をあらわす区間単位
     @Data
     public static abstract class Section {

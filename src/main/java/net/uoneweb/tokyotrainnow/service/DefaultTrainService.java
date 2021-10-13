@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -215,12 +216,20 @@ public class DefaultTrainService implements TrainService {
         currentRailway.setRailwayUpdateTime(metadata.getRailwaysUpdateTime());
         currentRailway.setTrainTypeUpdateTime(metadata.getTrainTypesUpdateTime());
         currentRailway.setTrainDate(lastTrainDate(trains));
+        currentRailway.setValidSeconds(validLimit(trains));
 
         return currentRailway;
     }
 
     LocalDateTime lastTrainDate(List<Train> trains) {
         return trains.stream().map(t -> t.getDate()).sorted(Comparator.reverseOrder()).findFirst().orElse(null);
+    }
+
+    long validLimit(List<Train> trains) {
+        LocalDateTime now = LocalDateTime.now(clock.withZone(ZoneId.of("Asia/Tokyo")));
+        LocalDateTime limit = trains.stream().map(t -> t.getValid()).sorted().findFirst()
+                .orElse(now.plusMinutes(5));
+        return ChronoUnit.SECONDS.between(now, limit);
     }
 
     boolean isAscendingDirection(Train train, Railway railway) {

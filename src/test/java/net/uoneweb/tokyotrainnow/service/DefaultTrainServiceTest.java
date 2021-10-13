@@ -101,6 +101,8 @@ public class DefaultTrainServiceTest {
 
     @Test
     public void getCurrentRailwaySuccess() {
+        when(clock.instant()).thenReturn(Instant.parse("2021-10-01T12:00:00.000Z"));
+        when(clock.withZone(ZoneId.of("Asia/Tokyo"))).thenReturn(clock);
         when(railwayRepository.findById("odpt.Railway:JR-East.SobuRapid")).thenReturn(Optional.of(createRailway()));
         when(railDirectionRepository.findById("odpt.RailDirection:Inbound")).thenReturn(Optional.of(RailDirection.builder()
                 .railDirectionTitles(Map.of("en", "Inbound", "ja", "上り"))
@@ -162,7 +164,8 @@ public class DefaultTrainServiceTest {
         assertThat(railway.getOperatorUpdateTime()).isEqualTo(updateTime);
         assertThat(railway.getRailwayUpdateTime()).isEqualTo(updateTime);
         assertThat(railway.getTrainTypeUpdateTime()).isEqualTo(updateTime);
-        assertThat(railway.getTrainDate()).isEqualTo(LocalDateTime.of(2021,9,5, 5,11,15));
+        assertThat(railway.getTrainDate()).isEqualTo(LocalDateTime.of(2021,10,1, 12,0,0));
+        assertThat(railway.getValidSeconds()).isEqualTo(300);
     }
 
     @Test
@@ -180,6 +183,29 @@ public class DefaultTrainServiceTest {
         List<Train> trains = List.of();
         assertThat(trainService.lastTrainDate(trains)).isNull();
     }
+
+    @Test
+    public void validLimitReturnsNearestOne() {
+        when(clock.instant()).thenReturn(Instant.parse("2021-10-01T11:59:00.000Z"));
+        when(clock.withZone(ZoneId.of("Asia/Tokyo"))).thenReturn(clock);
+
+        List<Train> trains = List.of(
+                Train.builder().valid(LocalDateTime.of(2021,10,01,12,00,00)).build(),
+                Train.builder().valid(LocalDateTime.of(2021,10,01,12,00,01)).build(),
+                Train.builder().valid(LocalDateTime.of(2021,10,01,12,00,02)).build()
+        );
+        assertThat(trainService.validLimit(trains)).isEqualTo(60);
+    }
+
+    @Test
+    public void validLimitNotReturnNull() {
+        when(clock.instant()).thenReturn(Instant.parse("2021-10-01T11:59:00.000Z"));
+        when(clock.withZone(ZoneId.of("Asia/Tokyo"))).thenReturn(clock);
+
+        List<Train> trains = List.of();
+        assertThat(trainService.validLimit(trains)).isEqualTo(300);
+    }
+
 
     @ParameterizedTest
     @CsvSource({
@@ -251,8 +277,8 @@ public class DefaultTrainServiceTest {
         return List.of(
                 Train.builder()
                         .id("urn:uuid:0557289e-7209-458f-b8b6-eac9f37e99e4")
-                        .date(LocalDateTime.of(2021,9,5, 5,11,15))
-                        .valid(LocalDateTime.of(2021,9,5, 5,16,15))
+                        .date(LocalDateTime.of(2021,10,1, 12,0,0))
+                        .valid(LocalDateTime.of(2021,10,1, 12,5,0))
                         .sameAs("odpt.Train:JR-East.SobuRapid.2296F")
                         .railway("odpt.Railway:JR-East.SobuRapid")
                         .operator("odpt.Operator:JR-East")
@@ -267,8 +293,8 @@ public class DefaultTrainServiceTest {
                         .build(),
                 Train.builder()
                         .id("urn:uuid:f5e7a725-33a8-4b4c-a89e-8ba2aba9d6dc")
-                        .date(LocalDateTime.of(2021,9,5, 5,11,15))
-                        .valid(LocalDateTime.of(2021,9,5, 5,16,15))
+                        .date(LocalDateTime.of(2021,10,1, 12,0,0))
+                        .valid(LocalDateTime.of(2021,10,1, 12,5,0))
                         .sameAs("odpt.Train:JR-East.SobuRapid.575F")
                         .railway("odpt.Railway:JR-East.SobuRapid")
                         .operator("odpt.Operator:JR-East")
