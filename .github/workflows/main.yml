@@ -71,10 +71,10 @@ jobs:
           name: deployment-artifacts
           path: build/libs
 
-  deploy:
+  deploy-gcp:
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
-    needs: [build]
+    #needs: [build]
     steps:
       - uses: actions/checkout@v2
 

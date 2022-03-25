@@ -1,11 +1,13 @@
 package net.uoneweb.tokyotrainnow.repository;
 
+import net.uoneweb.tokyotrainnow.entity.MetaData;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Repository
-public class DefaultMetaDataRepository {
+public class DefaultMetaDataRepository implements MetaDataRepository {
     private LocalDateTime operatorsUpdateTime;
 
     private LocalDateTime railwaysUpdateTime;
@@ -15,6 +17,27 @@ public class DefaultMetaDataRepository {
     private LocalDateTime stationsUpdateTime;
 
     private LocalDateTime trainTypesUpdateTime;
+
+    @Override
+    public MetaData save(MetaData metaData) {
+        operatorsUpdateTime = metaData.getOperatorsUpdateTime();
+        railwaysUpdateTime = metaData.getRailwaysUpdateTime();
+        railDirectionsUpdateTime = metaData.getRailDirectionsUpdateTime();
+        stationsUpdateTime = metaData.getStationsUpdateTime();
+        trainTypesUpdateTime = metaData.getTrainTypesUpdateTime();
+        return metaData;
+    }
+
+    @Override
+    public Optional<MetaData> findById(Long id) {
+        return Optional.of(MetaData.builder()
+                .operatorsUpdateTime(operatorsUpdateTime)
+                .railDirectionsUpdateTime(railwaysUpdateTime)
+                .railwaysUpdateTime(railDirectionsUpdateTime)
+                .stationsUpdateTime(stationsUpdateTime)
+                .trainTypesUpdateTime(trainTypesUpdateTime)
+                .build());
+    }
 
     public LocalDateTime getOperatorsUpdateTime() {
         return operatorsUpdateTime;

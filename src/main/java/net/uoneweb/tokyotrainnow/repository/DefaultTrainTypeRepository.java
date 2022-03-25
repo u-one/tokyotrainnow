@@ -12,27 +12,33 @@ import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
-public class DefaultTrainTypeRepository {
+public class DefaultTrainTypeRepository implements TrainTypeRepository {
     private Map<String, TrainType> trainTypeMap = new HashMap<>();
 
-    public void save(TrainType trainType) {
+    @Override
+    public TrainType save(TrainType trainType) {
         trainTypeMap.put(trainType.getSameAs(), trainType);
+        return trainType;
     }
 
+    @Override
     public List<TrainType> findAll() {
         return trainTypeMap.values().stream().collect(Collectors.toList());
     }
 
+    @Override
     public void deleteAll() {
         trainTypeMap.clear();
     }
 
+    @Override
     public List<TrainType> findByOperatorId(String operatorId) {
         List<TrainType> trainTypes = trainTypeMap.values().stream().filter(t -> t.getOperator() == operatorId)
                 .collect(Collectors.toList());
         return trainTypes;
     }
 
+    @Override
     public Optional<TrainType> findById(String trainTypeId) {
         return Optional.of(trainTypeMap.get(trainTypeId));
     }

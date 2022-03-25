@@ -10,21 +10,26 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
-public class DefaultOperatorRepository {
+public class DefaultOperatorRepository implements OperatorRepository {
     private static Map<String, Operator> map = new HashMap<>();
 
-    public void save(Operator operator) {
+    @Override
+    public Operator save(Operator operator) {
         map.put(operator.getSameAs(), operator);
+        return operator;
     }
 
+    @Override
     public List<Operator> findAll() {
         return map.values().stream().collect(Collectors.toList());
     }
 
+    @Override
     public void deleteAll() {
         map.clear();
     }
 
+    @Override
     public Optional<Operator> findById(String operatorId) {
         return Optional.of(map.get(operatorId));
     }

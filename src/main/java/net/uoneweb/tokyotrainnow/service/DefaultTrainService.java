@@ -5,8 +5,19 @@ import lombok.extern.slf4j.Slf4j;
 import net.uoneweb.tokyotrainnow.entity.CurrentRailway;
 import net.uoneweb.tokyotrainnow.entity.MetaData;
 import net.uoneweb.tokyotrainnow.odpt.client.OdptApiClient;
-import net.uoneweb.tokyotrainnow.odpt.entity.*;
-import net.uoneweb.tokyotrainnow.repository.*;
+import net.uoneweb.tokyotrainnow.odpt.entity.Operator;
+import net.uoneweb.tokyotrainnow.odpt.entity.RailDirection;
+import net.uoneweb.tokyotrainnow.odpt.entity.Railway;
+import net.uoneweb.tokyotrainnow.odpt.entity.Station;
+import net.uoneweb.tokyotrainnow.odpt.entity.Train;
+import net.uoneweb.tokyotrainnow.odpt.entity.TrainType;
+import net.uoneweb.tokyotrainnow.repository.MetaDataRepository;
+import net.uoneweb.tokyotrainnow.repository.OperatorRepository;
+import net.uoneweb.tokyotrainnow.repository.RailDirectionRepository;
+import net.uoneweb.tokyotrainnow.repository.RailwayRepository;
+import net.uoneweb.tokyotrainnow.repository.StationRepository;
+import net.uoneweb.tokyotrainnow.repository.TrainRepository;
+import net.uoneweb.tokyotrainnow.repository.TrainTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -115,7 +126,7 @@ public class DefaultTrainService implements TrainService {
         String ascendingTitle = "-";
         Optional<RailDirection> oAscendingRailDirecton = railDirectionRepository.findById(railway.getAscendingRailDirection());
         if (oAscendingRailDirecton.isEmpty()) {
-            log.error("raildirection is null", railway.getAscendingRailDirection());
+            log.error("raildirection is null");
         } else {
             ascendingTitle = oAscendingRailDirecton.get().getRailDirectionTitles().get(lang);
         }
@@ -123,7 +134,7 @@ public class DefaultTrainService implements TrainService {
         String descendingTitle = "-";
         Optional<RailDirection> oDescendingRailDirection = railDirectionRepository.findById(railway.getDescendingRailDirection());
         if (oDescendingRailDirection.isEmpty()) {
-            log.error("raildirection is null", railway.getDescendingRailDirection());
+            log.error("raildirection is null");
         } else {
             descendingTitle = oDescendingRailDirection.get().getRailDirectionTitles().get(lang);
         }
@@ -196,12 +207,12 @@ public class DefaultTrainService implements TrainService {
             }
 
             sections.get(index).addTrain(CurrentRailway.Train.builder()
-                            .destination(dest)
-                            .delay(train.getDelay())
-                            .trainNumber(train.getTrainNumber())
-                            .trainType(trainType)
-                            .ascending(ascending)
-                            .carComposition(train.getCarComposition())
+                    .destination(dest)
+                    .delay(train.getDelay())
+                    .trainNumber(train.getTrainNumber())
+                    .trainType(trainType)
+                    .ascending(ascending)
+                    .carComposition(train.getCarComposition())
                     .build());
         }
 
@@ -236,8 +247,7 @@ public class DefaultTrainService implements TrainService {
         final String direction = train.getRailDirection();
         if (direction.equals(railway.getAscendingRailDirection())) {
             return true;
-        }
-        else if (direction.equals(railway.getDescendingRailDirection())) {
+        } else if (direction.equals(railway.getDescendingRailDirection())) {
             return false;
         }
         log.warn("Did not match any direction: ", direction, train, railway);
@@ -261,7 +271,7 @@ public class DefaultTrainService implements TrainService {
                 return lineIndex;
             }
         } else {
-            for (int i = sections.size() - 1; i >= 0 ; i--) {
+            for (int i = sections.size() - 1; i >= 0; i--) {
                 CurrentRailway.Section section = sections.get(i);
                 if (!section.getStationId().equals(from)) {
                     continue;

@@ -1,7 +1,14 @@
 package net.uoneweb.tokyotrainnow.repository;
 
 import net.uoneweb.tokyotrainnow.odpt.entity.TrainType;
-import org.springframework.cloud.gcp.data.datastore.repository.DatastoreRepository;
 
-public interface TrainTypeRepository extends DatastoreRepository<TrainType, String> {
+import java.util.List;
+import java.util.Optional;
+
+public interface TrainTypeRepository {
+    TrainType save(TrainType trainType);
+    List<TrainType> findAll();
+    void deleteAll();
+    List<TrainType> findByOperatorId(String operatorId);
+    Optional<TrainType> findById(String trainTypeId);
 }
