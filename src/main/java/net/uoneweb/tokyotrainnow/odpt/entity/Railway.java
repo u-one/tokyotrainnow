@@ -12,16 +12,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.gcp.data.datastore.core.mapping.Entity;
+//import org.springframework.cloud.gcp.data.datastore.core.mapping.Entity; // GCP
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.data.annotation.Id;
+//import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
 @Slf4j
+/*
+for GCP
 @Entity(name = "railways")
+*/
 @Data
 @Builder
 @NoArgsConstructor
@@ -39,7 +42,7 @@ public class Railway {
     @JsonProperty("dc:title")
     private String title;
 
-    @Id
+    //@Id
     @JsonProperty("owl:sameAs")
     private String sameAs;
 

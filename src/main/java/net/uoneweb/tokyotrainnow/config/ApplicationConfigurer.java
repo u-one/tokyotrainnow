@@ -1,17 +1,18 @@
 package net.uoneweb.tokyotrainnow.config;
 
-import net.uoneweb.tokyotrainnow.odpt.entity.Railway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateCustomizer;
-import org.springframework.cloud.gcp.autoconfigure.datastore.DatastoreProvider;
-import org.springframework.cloud.gcp.data.datastore.core.DatastoreTransactionManager;
-import org.springframework.cloud.gcp.data.datastore.core.convert.DatastoreCustomConversions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.Clock;
-import java.util.Arrays;
+
+/*
+import org.springframework.cloud.gcp.autoconfigure.datastore.DatastoreProvider;
+import org.springframework.cloud.gcp.data.datastore.core.DatastoreTransactionManager;
+import org.springframework.cloud.gcp.data.datastore.core.convert.DatastoreCustomConversions;
+ */
 
 @Configuration
 public class ApplicationConfigurer {
@@ -30,6 +31,7 @@ public class ApplicationConfigurer {
         return Clock.systemDefaultZone();
     }
 
+    /*
     @Bean
     DatastoreTransactionManager datastoreTransactionManager(DatastoreProvider datastore) {
         return new DatastoreTransactionManager(datastore);
@@ -39,4 +41,5 @@ public class ApplicationConfigurer {
     public DatastoreCustomConversions datastoreCustomConversions() {
         return new DatastoreCustomConversions(Arrays.asList(Railway.RAILWAYSTATION_STRING_CONVERTER, Railway.STRING_RAILWAYSTATION_CONVERTER));
     }
+     */
 }

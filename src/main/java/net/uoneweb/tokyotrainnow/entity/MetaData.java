@@ -2,16 +2,18 @@ package net.uoneweb.tokyotrainnow.entity;
 
 import lombok.Builder;
 import lombok.Data;
+/*
 import org.springframework.cloud.gcp.data.datastore.core.mapping.Entity;
 import org.springframework.data.annotation.Id;
+ */
 
 import java.time.LocalDateTime;
 
-@Entity(name = "metadata")
+//@Entity(name = "metadata")
 @Data
 @Builder
 public class MetaData {
-    @Id
+    //@Id
     @Builder.Default
     private Long id = 1L;
 

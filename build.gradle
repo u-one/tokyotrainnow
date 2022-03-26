@@ -6,7 +6,9 @@ buildscript {
 	}
 	dependencies {
 		classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.2.0.RELEASE'
+		/*
 		classpath 'com.google.cloud.tools:appengine-gradle-plugin:2.2.0'
+		 */
 	}
 }
 
@@ -18,7 +20,7 @@ plugins {
 }
 
 // Google App Engine plugin設定
-apply plugin: 'com.google.cloud.tools.appengine'
+// apply plugin: 'com.google.cloud.tools.appengine'
 
 group = 'net.uoneweb'
 version = '0.0.1-SNAPSHOT'
@@ -38,10 +40,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'com.io-informatics.oss:jackson-jsonld:0.1.1'
+	/*
 	implementation 'com.google.appengine:appengine-api-1.0-sdk:+'  // Google App Engine plugin設定
 	// https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-gcp-starter-data-datastore
 	implementation 'org.springframework.cloud:spring-cloud-gcp-starter-data-datastore:1.2.8.RELEASE'
-
+	 */
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -53,9 +56,11 @@ test {
 }
 
 // Google App Engine plugin設定
+/*
 appengine {
 	deploy {
 		projectId = 'tokyotrainnow'
 		version = 'GCLOUD_CONFIG'
 	}
 }
+ */

@@ -1,9 +1,10 @@
 package net.uoneweb.tokyotrainnow.repository.gcp;
 
-import net.uoneweb.tokyotrainnow.entity.MetaData;
-import org.springframework.cloud.gcp.data.datastore.repository.DatastoreRepository;
 import org.springframework.stereotype.Repository;
 
+//import org.springframework.cloud.gcp.data.datastore.repository.DatastoreRepository;
+
 @Repository
-public interface GcpMetaDataRepository extends DatastoreRepository<MetaData, Long> {
+public interface GcpMetaDataRepository // extends DatastoreRepository<MetaData, Long>
+{
 }
