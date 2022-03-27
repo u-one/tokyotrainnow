@@ -161,8 +161,7 @@ public class DefaultTrainService implements TrainService {
             sections.add(CurrentRailway.Station.builder()
                     .title(station.getStationTitle().get(lang))
                     .stationId(station.getSameAs())
-                    .stationCode(station.getStationCode())
-                    .odptStation(station).build());
+                    .stationCode(station.getStationCode()).build());
             if (i < stations.size() - 1) {
                 sections.add(CurrentRailway.Line.builder()
                         .title("|")

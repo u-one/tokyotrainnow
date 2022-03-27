@@ -65,14 +65,11 @@ public class CurrentRailway {
     @Setter
     @ToString(callSuper = true)
     public static class Station extends Section {
-        private net.uoneweb.tokyotrainnow.odpt.entity.Station odptStation;
-
         @Builder
-        public Station(String title, String stationId, String stationCode, net.uoneweb.tokyotrainnow.odpt.entity.Station odptStation) {
+        public Station(String title, String stationId, String stationCode) {
             this.setTitle(title);
             this.setStationId(stationId);
             this.setStationCode(stationCode);
-            this.odptStation = odptStation;
         }
     }
 
@@ -89,6 +86,7 @@ public class CurrentRailway {
         }
     }
 
+    @AllArgsConstructor
     @Data
     @Builder
     public static class Train {
