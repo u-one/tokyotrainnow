@@ -72,9 +72,8 @@ jobs:
           path: build/libs
 
   deploy-gcp:
-    if: | # stopped using gcp. disable for now
-      ${{ false }} &&
-      ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    if: ${{ false }} # stopped using gcp. disable for now
+    #if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     needs: [build]
     steps:
