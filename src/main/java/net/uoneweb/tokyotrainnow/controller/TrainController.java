@@ -1,6 +1,8 @@
 package net.uoneweb.tokyotrainnow.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.uoneweb.tokyotrainnow.config.SiteConfig;
 import net.uoneweb.tokyotrainnow.entity.CurrentRailway;
 import net.uoneweb.tokyotrainnow.service.TrainService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +15,17 @@ import java.util.List;
 
 @Slf4j
 @Controller
+@RequiredArgsConstructor
 public class TrainController {
+    private final SiteConfig siteConfig;
+
     @Autowired
     private TrainService trainService;
 
     @GetMapping(path = {"/"})
     public String top(Model model) {
+        model.addAttribute("supportedOperators", siteConfig.supportedRailways());
+        model.addAttribute("unsupportedOperators", siteConfig.unsupportedRailways());
         return "top";
     }
 

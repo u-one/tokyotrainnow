@@ -1,7 +1,10 @@
 package net.uoneweb.tokyotrainnow.controller;
 
+import net.uoneweb.tokyotrainnow.config.SiteConfig;
 import net.uoneweb.tokyotrainnow.service.TrainService;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -9,8 +12,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -21,6 +22,9 @@ public class TrainControllerTest {
 
     @Mock
     TrainService service;
+
+    @Mock
+    SiteConfig siteConfig;
 
     private MockMvc mockMvc;
 
