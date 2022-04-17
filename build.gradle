@@ -54,6 +54,16 @@ dependencies {
 
 test {
 	useJUnitPlatform()
+	finalizedBy(jacocoTestReport)
+}
+
+jacocoTestReport {
+	reports {
+		xml.enabled(true)
+		csv.enabled(false)
+		html.enabled(true)
+	}
+	dependsOn(test)
 }
 
 // Google App Engine plugin設定
