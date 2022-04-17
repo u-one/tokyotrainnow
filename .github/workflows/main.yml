@@ -62,8 +62,11 @@ jobs:
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
 
-      - name: Build with Gradle
-        run: gradle build
+      - name: Build
+        run: ./gradlew build
+
+      - name: Test
+        run: ./gradlew test
 
       - uses: codecov/codecov-action@v2
 
