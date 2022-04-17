@@ -65,6 +65,8 @@ jobs:
       - name: Build with Gradle
         run: gradle build
 
+      - uses: codecov/codecov-action@v2
+
       - name: Upload deployment artifacts
         uses: actions/upload-artifact@v2
         with:
