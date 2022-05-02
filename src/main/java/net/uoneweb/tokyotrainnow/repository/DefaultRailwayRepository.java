@@ -37,6 +37,6 @@ public class DefaultRailwayRepository implements RailwayRepository {
 
     @Override
     public Optional<Railway> findById(String railwayId) {
-        return Optional.of(map.get(railwayId));
+        return Optional.ofNullable(map.get(railwayId));
     }
 }
