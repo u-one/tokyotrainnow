@@ -2,10 +2,10 @@ package net.uoneweb.tokyotrainnow.repository;
 
 import net.uoneweb.tokyotrainnow.odpt.entity.RailDirection;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 @Repository
@@ -25,9 +25,9 @@ public class DefaultRailDirectionRepository implements RailDirectionRepository {
 
     @Override
     public Optional<RailDirection> findById(String railDirectionId) {
-        if (Objects.isNull(railDirectionId)) {
+        if (!StringUtils.hasText(railDirectionId)) {
             return Optional.empty();
         }
-        return Optional.of(map.get(railDirectionId));
+        return Optional.ofNullable(map.get(railDirectionId));
     }
 }

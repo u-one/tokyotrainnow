@@ -21,7 +21,7 @@ public class RailDirectionFactory {
                 .id("urn:ucode:_00001C0000000000000100000320030D")
                 .date(LocalDateTime.of(2019,04,25,14,00,00))
                 .title("下り")
-                .sameAs("odpt.RailDirection:Inbound")
+                .sameAs("odpt.RailDirection:Outbound")
                 .railDirectionTitles(Map.of("en", "Outbound", "ja", "下り"))
                 .build();
     }
