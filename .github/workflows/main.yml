@@ -90,6 +90,10 @@ jobs:
           distribution: 'adopt'
 
       - name: SmokeTest
+        env:
+          SPRING_PROFILES_ACTIVE: smoke-test
+          SMOKE_TEST_ODPT_API_ENDPOINT: ${{ secrets.SMOKE_TEST_ODPT_API_ENDPOINT }}
+          SMOKE_TEST_ODPT_API_KEY: ${{ secrets.SMOKE_TEST_ODPT_API_KEY }}
         run: ./gradlew smokeTest
 
       - name: Upload test reports
@@ -97,6 +101,7 @@ jobs:
         with:
           name: test-reports
           path: build/reports
+        if: ${{ always() }}
 
 
   deploy-gcp:
