@@ -13,8 +13,9 @@ public class DefaultRailDirectionRepository implements RailDirectionRepository {
     private static Map<String, RailDirection> map = new HashMap<>();
 
     @Override
-    public void save(RailDirection railDirection) {
+    public RailDirection save(RailDirection railDirection) {
         map.put(railDirection.getSameAs(), railDirection);
+        return railDirection;
     }
 
     @Override

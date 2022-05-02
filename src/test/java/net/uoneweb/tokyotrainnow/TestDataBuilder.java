@@ -1,5 +1,6 @@
 package net.uoneweb.tokyotrainnow;
 
+import net.uoneweb.tokyotrainnow.odpt.entity.Operator;
 import net.uoneweb.tokyotrainnow.odpt.entity.Railway;
 import net.uoneweb.tokyotrainnow.odpt.entity.Station;
 
@@ -8,6 +9,25 @@ import java.util.List;
 import java.util.Map;
 
 public class TestDataBuilder {
+
+    public static Operator jrEast() {
+        return Operator.builder()
+                .id("urn:ucode:_00001C000000000000010000030E6606")
+                .date(LocalDateTime.of(2019, 04, 22, 15, 00, 00))
+                .title("JR東日本")
+                .sameAs("odpt.Operator:JR-East")
+                .operatorTitles(Map.of("en", "JR East", "ja", "JR東日本"))
+                .build();
+    }
+    public static Operator tokyoTrans() {
+        return Operator.builder()
+                .id("urn:ucode:_00001C000000000000010000030E6609")
+                .date(LocalDateTime.of(2019, 04, 22, 15, 00, 00))
+                .title("東京都交通局")
+                .sameAs("odpt.Operator:Toei")
+                .operatorTitles(Map.of("en", "Tokyo Metropolitan Bureau of Transportation", "ja", "東京都交通局"))
+                .build();
+    }
 
     public static Station sobuRapidTokyo() {
         return Station.builder()

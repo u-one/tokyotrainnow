@@ -1,11 +1,24 @@
 package net.uoneweb.tokyotrainnow.service;
 
+import net.uoneweb.tokyotrainnow.RailDirectionFactory;
 import net.uoneweb.tokyotrainnow.TestDataBuilder;
+import net.uoneweb.tokyotrainnow.TrainTypeFactory;
 import net.uoneweb.tokyotrainnow.entity.CurrentRailway;
 import net.uoneweb.tokyotrainnow.entity.MetaData;
 import net.uoneweb.tokyotrainnow.odpt.client.OdptApiClient;
-import net.uoneweb.tokyotrainnow.odpt.entity.*;
-import net.uoneweb.tokyotrainnow.repository.*;
+import net.uoneweb.tokyotrainnow.odpt.entity.Operator;
+import net.uoneweb.tokyotrainnow.odpt.entity.RailDirection;
+import net.uoneweb.tokyotrainnow.odpt.entity.Railway;
+import net.uoneweb.tokyotrainnow.odpt.entity.Station;
+import net.uoneweb.tokyotrainnow.odpt.entity.Train;
+import net.uoneweb.tokyotrainnow.odpt.entity.TrainType;
+import net.uoneweb.tokyotrainnow.repository.MetaDataRepository;
+import net.uoneweb.tokyotrainnow.repository.OperatorRepository;
+import net.uoneweb.tokyotrainnow.repository.RailDirectionRepository;
+import net.uoneweb.tokyotrainnow.repository.RailwayRepository;
+import net.uoneweb.tokyotrainnow.repository.StationRepository;
+import net.uoneweb.tokyotrainnow.repository.TrainRepository;
+import net.uoneweb.tokyotrainnow.repository.TrainTypeRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -74,22 +87,47 @@ public class DefaultTrainServiceTest {
 
     @Test
     public void updateSuccess() {
-        Railway railway = createRailway();
         when(clock.instant()).thenReturn(Instant.parse("2021-10-01T12:00:00.000Z"));
         when(clock.withZone(ZoneId.of("Asia/Tokyo"))).thenReturn(clock);
-        when(odptApiClient.getRailways()).thenReturn(List.of(railway));
-        when(railwayRepository.save(railway)).thenReturn(null);
+
+        final Operator jrEast = TestDataBuilder.jrEast();
+        when(odptApiClient.getOperators()).thenReturn(List.of(jrEast));
+        when(operatorRepository.save(jrEast)).thenReturn(null);
+
+        final RailDirection inbound = RailDirectionFactory.inbound();
+        when(odptApiClient.getRailDirections()).thenReturn(List.of(inbound));
+        when(railDirectionRepository.save(inbound)).thenReturn(null);
+
+        final Railway sobuRapid = TestDataBuilder.soubuRapid();
+        when(odptApiClient.getRailways()).thenReturn(List.of(sobuRapid));
+        when(railwayRepository.save(sobuRapid)).thenReturn(null);
+
+        final Station tokyo = TestDataBuilder.sobuRapidTokyo();
+        when(odptApiClient.getStations()).thenReturn(List.of(tokyo));
+        when(stationRepository.save(tokyo)).thenReturn(null);
+
+        final TrainType rapid = TrainTypeFactory.rapid();
+        when(odptApiClient.getTrainTypes()).thenReturn(List.of(rapid));
+        when(trainTypeRepository.save(rapid)).thenReturn(null);
+
+        LocalDateTime expectedTime = LocalDateTime.of(2021,10,1,12,00,00);
+        final MetaData metaData = MetaData.builder()
+                .operatorsUpdateTime(expectedTime)
+                .railwaysUpdateTime(expectedTime)
+                .railDirectionsUpdateTime(expectedTime)
+                .stationsUpdateTime(expectedTime)
+                .trainTypesUpdateTime(expectedTime)
+                .build();
+        when(metaDataRepository.save(metaData)).thenReturn(null);
 
         trainService.update();
 
-        LocalDateTime expectedTime = LocalDateTime.of(2021,10,1,12,00,00);
-        verify(metaDataRepository, times(1)).save(MetaData.builder()
-                        .operatorsUpdateTime(expectedTime)
-                        .railwaysUpdateTime(expectedTime)
-                        .railDirectionsUpdateTime(expectedTime)
-                        .stationsUpdateTime(expectedTime)
-                        .trainTypesUpdateTime(expectedTime)
-                .build());
+        verify(operatorRepository, times(1)).save(jrEast);
+        verify(railDirectionRepository, times(1)).save(inbound);
+        verify(railwayRepository, times(1)).save(sobuRapid);
+        verify(stationRepository, times(1)).save(tokyo);
+        verify(trainTypeRepository, times(1)).save(rapid);
+        verify(metaDataRepository, times(1)).save(metaData);
     }
 
     @Test
