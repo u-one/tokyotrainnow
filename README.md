@@ -3,6 +3,8 @@
 ![build and deploy](https://github.com/u-one/tokyotrainnow/actions/workflows/main.yml/badge.svg)
 [![codecov](https://codecov.io/gh/u-one/tokyotrainnow/branch/main/graph/badge.svg?token=IXTGKP5JMM)](https://codecov.io/gh/u-one/tokyotrainnow)
 
+[![Maintainability](https://api.codeclimate.com/v1/badges/9bace3b745e9746e043d/maintainability)](https://codeclimate.com/github/u-one/tokyotrainnow/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/9bace3b745e9746e043d/test_coverage)](https://codeclimate.com/github/u-one/tokyotrainnow/test_coverage)
+
 東京を中心とした鉄道路線ごとの現在の列車位置を表示するWebアプリケーション実装
 
 * Spring Boot
