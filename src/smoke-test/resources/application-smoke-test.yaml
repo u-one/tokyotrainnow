@@ -2,5 +2,5 @@ net:
   uoneweb:
     tokyotrainnow:
       odptapi:
-        key: "TEST-KEY"
-        endpoint: "http://localhost:8081/"
+        key: "${SMOKE_TEST_ODPT_API_KEY}"
+        endpoint: "${SMOKE_TEST_ODPT_API_ENDPOINT}"
