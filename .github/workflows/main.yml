@@ -92,12 +92,18 @@ jobs:
       - name: SmokeTest
         run: ./gradlew smokeTest
 
+      - name: Upload test reports
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-reports
+          path: build/reports
+
 
   deploy-gcp:
     if: ${{ false }} # stopped using gcp. disable for now
     #if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
-    needs: [build]
+    needs: [smoke-test]
     steps:
       - uses: actions/checkout@v2
 
