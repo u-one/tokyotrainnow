@@ -9,7 +9,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Slf4j
-@Profile("dev")
+@Profile({"dev", "smoke-test"})
 @Component
 public class ApplicationInitializer {
 
