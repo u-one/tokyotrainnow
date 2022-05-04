@@ -232,9 +232,6 @@ public class DefaultTrainService implements TrainService {
     }
 
     TrainType findTrainType(String trainTypeId) {
-        if (!StringUtils.hasText(trainTypeId)) {
-            return TrainType.EMPTY;
-        }
         return trainTypeRepository.findById(trainTypeId)
                 .orElseThrow(() -> new RuntimeException("Could not find TrainType: " + trainTypeId));
     }

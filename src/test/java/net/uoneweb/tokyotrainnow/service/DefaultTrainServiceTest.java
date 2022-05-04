@@ -247,13 +247,6 @@ public class DefaultTrainServiceTest {
         });
     }
 
-    @ParameterizedTest
-    @NullAndEmptySource
-    public void findTrainType_EmptyId_ReturnsEmpty(String trainTypeId) {
-        final TrainType actual = trainService.findTrainType(trainTypeId);
-        assertThat(actual).isEqualTo(TrainType.EMPTY);
-    }
-
     @Test
     public void findTrainType_NotFound_ExceptionThrown() {
         assertThatThrownBy(() -> {
