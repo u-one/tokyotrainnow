@@ -1,6 +1,13 @@
 package net.uoneweb.tokyotrainnow.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import net.uoneweb.tokyotrainnow.controller.TrainOnRail;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -46,13 +53,13 @@ public class CurrentRailway {
 
         private String stationCode = "";
 
-        private List<Train> trains = new ArrayList<>();
+        private List<TrainOnRail> trains = new ArrayList<>();
 
-        public void addTrain(Train train) {
+        public void addTrain(TrainOnRail train) {
             trains.add(train);
         }
 
-        public List<Train> getTrainsByDirection(boolean ascending) {
+        public List<TrainOnRail> getTrainsByDirection(boolean ascending) {
             return trains.stream().filter(t -> t.isAscending() == ascending)
                     .collect(Collectors.toList());
         }
@@ -64,9 +71,9 @@ public class CurrentRailway {
     @Getter
     @Setter
     @ToString(callSuper = true)
-    public static class Station extends Section {
+    public static class EStation extends Section {
         @Builder
-        public Station(String title, String stationId, String stationCode) {
+        public EStation(String title, String stationId, String stationCode) {
             this.setTitle(title);
             this.setStationId(stationId);
             this.setStationCode(stationCode);
@@ -86,23 +93,4 @@ public class CurrentRailway {
         }
     }
 
-    @AllArgsConstructor
-    @Data
-    @Builder
-    public static class Train {
-        @NonNull
-        String destination;
-
-        @NonNull
-        String trainNumber;
-
-        @NonNull
-        String trainType;
-
-        int carComposition;
-
-        int delay;
-
-        boolean ascending;
-    }
 }
