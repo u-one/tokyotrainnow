@@ -2,7 +2,6 @@ package net.uoneweb.tokyotrainnow.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.uoneweb.tokyotrainnow.controller.Sections;
 import net.uoneweb.tokyotrainnow.controller.TrainOnRail;
 import net.uoneweb.tokyotrainnow.entity.CurrentRailway;
 import net.uoneweb.tokyotrainnow.entity.MetaData;
@@ -158,35 +157,15 @@ public class DefaultTrainService implements TrainService {
     }
 
     CurrentRailway createCurrentRailway(Operator operator, Railway railway, String lang) {
-        final RailDirection ascendingRailDirection = findRailDirection(railway.getAscendingRailDirection());
-        final RailDirection descendingRailDirection = findRailDirection(railway.getDescendingRailDirection());
+        final RailDirection ascending = findRailDirection(railway.getAscendingRailDirection());
+        final RailDirection descending = findRailDirection(railway.getDescendingRailDirection());
 
-        final String operatorTitle = operator.getOperatorTitles().get(lang);
-        final String ascendingTitle = ascendingRailDirection.getRailDirectionTitles().get(lang);
-        final String descendingTitle = descendingRailDirection.getRailDirectionTitles().get(lang);
-
-        final String title = railway.getTitle();
-        final String color = railway.getColor();
-        final String lineCode = railway.getLineCode();
-
-        final List<Railway.Station> stations = railway.getStationOrder();
+        final List<Railway.Station> omittedStations = railway.getStationOrder();
+        final List<Station> stations = findStations(omittedStations);
         final List<Train> trains = trainRepository.find(railway.getSameAs());
-        final Sections sections = createSections(stations, lang);
+        final List<TrainOnRail> trainsOnRail = createTrainsOnRail(trains, railway, lang);
 
-        final CurrentRailway currentRailway = CurrentRailway.builder()
-                .title(title)
-                .ascendingTitle(ascendingTitle)
-                .descendingTitle(descendingTitle)
-                .operator(operatorTitle)
-                .color(color)
-                .lineCode(lineCode)
-                .sections(sections.asList()).build();
-
-
-        for (Train train : trains) {
-            final TrainOnRail etrain = createTrain(train, railway, lang);
-            sections.add(etrain);
-        }
+        final CurrentRailway currentRailway = new CurrentRailway(operator, railway, ascending, descending, stations, trainsOnRail, lang);
 
         final MetaData metadata = metaDataRepository.findById(1L)
                         .orElse(MetaData.builder().build());
@@ -200,15 +179,6 @@ public class DefaultTrainService implements TrainService {
         return currentRailway;
     }
 
-    Sections createSections(List<Railway.Station> inputStatons, String lang) {
-        Sections sections = new Sections(lang);
-        List<Station> stations = findStations(inputStatons);
-        for (Station station : stations) {
-            sections = sections.add(station);
-        }
-        return sections;
-    }
-
     List<Station> findStations(List<Railway.Station> inputStations) {
         final List<Station> stations = new ArrayList<>();
         for (Railway.Station inputStation : inputStations) {
@@ -220,15 +190,16 @@ public class DefaultTrainService implements TrainService {
         return Collections.unmodifiableList(stations);
     }
 
-    Station findStation(String stationId) {
-        if (!StringUtils.hasText(stationId)) {
-            return Station.EMPTY;
+    List<TrainOnRail> createTrainsOnRail(final List<Train> trains, final Railway railway, final String lang) {
+        List<TrainOnRail> trainOnRailList = new ArrayList<>();
+        for (Train train : trains) {
+            final TrainOnRail trainOnRail = createTrainOnRail(train, railway, lang);
+            trainOnRailList.add(trainOnRail);
         }
-        return stationRepository.findById(stationId)
-                .orElseThrow(() -> new RuntimeException("Could not find Station: " + stationId));
+        return Collections.unmodifiableList(trainOnRailList);
     }
 
-    TrainOnRail createTrain(Train train, Railway railway, String lang) {
+    TrainOnRail createTrainOnRail(Train train, Railway railway, String lang) {
         boolean ascending = isAscendingDirection(train, railway);
 
         final Station from = findStation(train.getFromStation());
@@ -250,6 +221,14 @@ public class DefaultTrainService implements TrainService {
                 .ascending(ascending)
                 .carComposition(train.getCarComposition())
                 .build();
+    }
+
+    Station findStation(String stationId) {
+        if (!StringUtils.hasText(stationId)) {
+            return Station.EMPTY;
+        }
+        return stationRepository.findById(stationId)
+                .orElseThrow(() -> new RuntimeException("Could not find Station: " + stationId));
     }
 
     TrainType findTrainType(String trainTypeId) {

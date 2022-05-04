@@ -6,11 +6,11 @@ import net.uoneweb.tokyotrainnow.odpt.entity.Station;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class SectionsTest {
     @Test
@@ -62,30 +62,79 @@ public class SectionsTest {
 
     @ParameterizedTest
     @CsvSource({
-            "odpt.Station:JR-East.SobuRapid.Tokyo, , true, 0",
+            "odpt.Station:JR-East.SobuRapid.Tokyo, empty, true, 0",
             "odpt.Station:JR-East.SobuRapid.Tokyo, odpt.Station:JR-East.SobuRapid.Inage, true, 1",
-            "odpt.Station:JR-East.SobuRapid.Inage, , true, 2",
-            "odpt.Station:JR-East.SobuRapid.Chiba, , true, 4",
-            "odpt.Station:JR-East.SobuRapid.Chiba, , false, 4",
+            "odpt.Station:JR-East.SobuRapid.Inage, empty, true, 2",
+            "odpt.Station:JR-East.SobuRapid.Chiba, empty, true, 4",
+            "odpt.Station:JR-East.SobuRapid.Chiba, empty, false, 4",
             "odpt.Station:JR-East.SobuRapid.Chiba, odpt.Station:JR-East.SobuRapid.Inage , false, 3",
-            "odpt.Station:JR-East.SobuRapid.Tokyo, , false, 0",
+            "odpt.Station:JR-East.SobuRapid.Tokyo, empty, false, 0",
     })
-    public void findIndex_ReturnsCorrectIndex(final String from, final String to, final boolean ascending, final int expected) {
-        Sections sections = new Sections("ja")
+    public void resolveIndex_ReturnsCorrectIndex(final String from, final String to, final boolean ascending, final int expected) {
+
+        final Sections sections = new Sections("ja")
                 .add(TestDataBuilder.sobuRapidTokyo())
                 .add(TestDataBuilder.sobuRapidInage())
                 .add(TestDataBuilder.sobuRapidChiba());
 
         final String fixedTo;
-        if (!StringUtils.hasText(to)) {
+        if ("empty".equals(to)) {
             fixedTo = Station.EMPTY.getSameAs();
         } else {
             fixedTo = to;
         }
 
-        int index = sections.findIndex(from, fixedTo, ascending);
+        final int actual = sections.resolveIndex(from, fixedTo, ascending);
 
-        assertThat(index).isEqualTo(expected);
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {
+            "odpt.Station:JR-East.SobuRapid.Chiba, null, true, 4",
+            "odpt.Station:JR-East.SobuRapid.Chiba, '', true, 4",
+            "odpt.Station:JR-East.SobuRapid.Tokyo, null, false, 0",
+            "odpt.Station:JR-East.SobuRapid.Tokyo, '', false, 0",
+    }, nullValues = {"null"})
+    public void resolveIndex_ToIsEmpty_ReturnsCorrectIndex(final String from, final String to, final boolean ascending, final int expected) {
+
+        final Sections sections = new Sections("ja")
+                .add(TestDataBuilder.sobuRapidTokyo())
+                .add(TestDataBuilder.sobuRapidInage())
+                .add(TestDataBuilder.sobuRapidChiba());
+
+        final int actual = sections.resolveIndex(from, to, ascending);
+
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    public void resolveIndex_NotFoundOnLine_ExceptionThrown() {
+        final Sections sections = new Sections("ja")
+                .add(TestDataBuilder.sobuRapidTokyo())
+                .add(TestDataBuilder.sobuRapidInage())
+                .add(TestDataBuilder.sobuRapidChiba());
+
+        assertThatThrownBy(() -> {
+            sections.resolveIndex("invalid", Station.EMPTY.getSameAs(), true);
+        });
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "odpt.Station:JR-East.SobuRapid.Tokyo, odpt.Station:JR-East.SobuRapid.Tokyo, false",
+            "odpt.Station:JR-East.SobuRapid.Chiba, odpt.Station:JR-East.SobuRapid.Chiba, true",
+    })
+    public void resolveIndex_IndexOutOfBounds_ExceptionThrown(final String from, final String to, final boolean ascending) {
+        final Sections sections = new Sections("ja")
+                .add(TestDataBuilder.sobuRapidTokyo())
+                .add(TestDataBuilder.sobuRapidInage())
+                .add(TestDataBuilder.sobuRapidChiba());
+
+        assertThatThrownBy(() -> {
+            sections.resolveIndex(from, to, ascending);
+        });
+
     }
 
 }

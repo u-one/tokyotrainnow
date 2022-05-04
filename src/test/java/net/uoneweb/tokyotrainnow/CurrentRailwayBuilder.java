@@ -13,7 +13,7 @@ public class CurrentRailwayBuilder {
                 .title("総武快速線")
                 .lineCode("JO")
                 .color("#0074BE")
-                .operator("odpt.Operator:JR-East")
+                .operator("JR東日本")
                 .sections(List.of(tokyo(List.of(t2115f())), line(List.of()), inage(List.of()), line(List.of()), chiba(List.of())))
                 .ascendingTitle("上り")
                 .descendingTitle("下り")
@@ -59,7 +59,17 @@ public class CurrentRailwayBuilder {
     }
 
     public static TrainOnRail t2115f() {
-        return new TrainOnRail("2115F", TrainTypeFactory.rapid(),15,0, false, TestDataBuilder.sobuRapidTokyo(), Station.EMPTY ,List.of(), "ja");
+        return TrainOnRail.builder()
+                .trainNumber("2115F")
+                .trainType(TrainTypeFactory.rapid())
+                .carComposition(15)
+                .delay(0)
+                .ascending(false)
+                .from(TestDataBuilder.sobuRapidTokyo())
+                .to(Station.EMPTY)
+                .destinations(List.of(TestDataBuilder.sobuRapidChiba()))
+                .lang("ja")
+                .build();
     }
 
 }

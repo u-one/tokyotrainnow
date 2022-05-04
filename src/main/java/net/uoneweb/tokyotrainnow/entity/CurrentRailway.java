@@ -7,7 +7,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import net.uoneweb.tokyotrainnow.controller.Sections;
 import net.uoneweb.tokyotrainnow.controller.TrainOnRail;
+import net.uoneweb.tokyotrainnow.odpt.entity.Operator;
+import net.uoneweb.tokyotrainnow.odpt.entity.RailDirection;
+import net.uoneweb.tokyotrainnow.odpt.entity.Railway;
+import net.uoneweb.tokyotrainnow.odpt.entity.Station;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,9 +20,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class CurrentRailway {
 
     private String title;
@@ -43,6 +47,26 @@ public class CurrentRailway {
     private LocalDateTime trainDate;
 
     private long validSeconds;
+
+    public CurrentRailway(final Operator operator, final Railway railway, final RailDirection ascending, final RailDirection descending,
+                          final List<Station> stations, final List<TrainOnRail> trains, String lang) {
+
+        this.title = railway.getTitle();
+        this.lineCode = railway.getLineCode();
+        this.color = railway.getColor();
+        this.operator = operator.getOperatorTitles().get(lang);
+        this.ascendingTitle = ascending.getRailDirectionTitles().get(lang);
+        this.descendingTitle = descending.getRailDirectionTitles().get(lang);
+
+        Sections sections = new Sections(lang);
+        for (Station station : stations) {
+            sections = sections.add(station);
+        }
+        for (TrainOnRail train : trains) {
+            sections.add(train);
+        }
+        this.sections = sections.asList();
+    }
 
     // 列車の在線位置をあらわす区間単位
     @Data
