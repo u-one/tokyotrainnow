@@ -25,6 +25,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -38,6 +39,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -208,6 +210,55 @@ public class DefaultTrainServiceTest {
         assertThat(railway.getTrainTypeUpdateTime()).isEqualTo(updateTime);
         assertThat(railway.getTrainDate()).isEqualTo(LocalDateTime.of(2021,10,1, 12,0,0));
         assertThat(railway.getValidSeconds()).isEqualTo(300);
+    }
+
+    @Test
+    public void findRailway_NotFound_ExceptionThrown() {
+        assertThatThrownBy(() -> {
+            trainService.findRailway("unknown");
+        });
+    }
+
+    @Test
+    public void findRailDirection_NotFound_ExceptionThrown() {
+        assertThatThrownBy(() -> {
+            trainService.findRailDirection("unknown");
+        });
+    }
+
+    @Test
+    public void findOperator_NotFound_ExceptionThrown() {
+        assertThatThrownBy(() -> {
+            trainService.findOperator("unknown");
+        });
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    public void findStation_EmptyId_ReturnsEmpty(String stationId) {
+        final Station actual = trainService.findStation(stationId);
+        assertThat(actual).isEqualTo(Station.EMPTY);
+    }
+
+    @Test
+    public void findStation_NotFound_ExceptionThrown() {
+        assertThatThrownBy(() -> {
+            trainService.findStation("unknown");
+        });
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    public void findTrainType_EmptyId_ReturnsEmpty(String trainTypeId) {
+        final TrainType actual = trainService.findTrainType(trainTypeId);
+        assertThat(actual).isEqualTo(TrainType.EMPTY);
+    }
+
+    @Test
+    public void findTrainType_NotFound_ExceptionThrown() {
+        assertThatThrownBy(() -> {
+            trainService.findTrainType("unknown");
+        });
     }
 
     @Test

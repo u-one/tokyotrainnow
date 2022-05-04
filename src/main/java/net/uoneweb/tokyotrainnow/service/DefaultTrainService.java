@@ -2,8 +2,8 @@ package net.uoneweb.tokyotrainnow.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.uoneweb.tokyotrainnow.controller.TrainOnRail;
 import net.uoneweb.tokyotrainnow.controller.Sections;
+import net.uoneweb.tokyotrainnow.controller.TrainOnRail;
 import net.uoneweb.tokyotrainnow.entity.CurrentRailway;
 import net.uoneweb.tokyotrainnow.entity.MetaData;
 import net.uoneweb.tokyotrainnow.odpt.client.OdptApiClient;
@@ -28,9 +28,10 @@ import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -142,28 +143,18 @@ public class DefaultTrainService implements TrainService {
     }
 
     Railway findRailway(String railwayId) {
-        final Optional<Railway> o = railwayRepository.findById(railwayId);
-        if (o.isEmpty()) {
-            throw new RuntimeException("Could not find Railway: " + railwayId);
-        }
-        return o.get();
+        return railwayRepository.findById(railwayId)
+                .orElseThrow(() -> new RuntimeException("Could not find Railway: " + railwayId));
     }
 
     RailDirection findRailDirection(String railDirectionId) {
-        final Optional<RailDirection> o = railDirectionRepository.findById(railDirectionId);
-        if (o.isEmpty()) {
-            throw new RuntimeException("Could not find RailDirection: " + railDirectionId);
-        }
-        return o.get();
-
+        return railDirectionRepository.findById(railDirectionId)
+                .orElseThrow(() -> new RuntimeException("Could not find RailDirection: " + railDirectionId));
     }
 
     Operator findOperator(String operatorId) {
-        final Optional<Operator> o = operatorRepository.findById(operatorId);
-        if (o.isEmpty()) {
-            throw new RuntimeException("Could not find Operator: " + operatorId);
-        }
-        return o.get();
+        return operatorRepository.findById(operatorId)
+                .orElseThrow(() -> new RuntimeException("Could not find Operator: " + operatorId));
     }
 
     CurrentRailway createCurrentRailway(Operator operator, Railway railway, String lang) {
@@ -179,6 +170,7 @@ public class DefaultTrainService implements TrainService {
         final String lineCode = railway.getLineCode();
 
         final List<Railway.Station> stations = railway.getStationOrder();
+        final List<Train> trains = trainRepository.find(railway.getSameAs());
         final Sections sections = createSections(stations, lang);
 
         final CurrentRailway currentRailway = CurrentRailway.builder()
@@ -190,14 +182,14 @@ public class DefaultTrainService implements TrainService {
                 .lineCode(lineCode)
                 .sections(sections.asList()).build();
 
-        final List<Train> trains = trainRepository.find(railway.getSameAs());
+
         for (Train train : trains) {
             final TrainOnRail etrain = createTrain(train, railway, lang);
             sections.add(etrain);
         }
 
-        Optional<MetaData> oMetaData = metaDataRepository.findById(1L);
-        MetaData metadata = oMetaData.orElse(MetaData.builder().build());
+        final MetaData metadata = metaDataRepository.findById(1L)
+                        .orElse(MetaData.builder().build());
 
         currentRailway.setOperatorUpdateTime(metadata.getOperatorsUpdateTime());
         currentRailway.setRailwayUpdateTime(metadata.getRailwaysUpdateTime());
@@ -208,22 +200,33 @@ public class DefaultTrainService implements TrainService {
         return currentRailway;
     }
 
-    Sections createSections(List<Railway.Station> stations, String lang) {
+    Sections createSections(List<Railway.Station> inputStatons, String lang) {
         Sections sections = new Sections(lang);
-        for (int i = 0; i < stations.size(); i++) {
-            String stationId = stations.get(i).getStation();
-            Optional<Station> oStation = stationRepository.findById(stationId);
-            if (oStation.isEmpty()) {
-                log.error("Station is null", stationId);
-                return sections;
-            }
-
-            Station station = oStation.get();
+        List<Station> stations = findStations(inputStatons);
+        for (Station station : stations) {
             sections = sections.add(station);
         }
         return sections;
     }
 
+    List<Station> findStations(List<Railway.Station> inputStations) {
+        final List<Station> stations = new ArrayList<>();
+        for (Railway.Station inputStation : inputStations) {
+            final String stationId = inputStation.getStation();
+            final Station station = stationRepository.findById(stationId)
+                    .orElseThrow(() -> new RuntimeException("Could not find Station: " + stationId));
+            stations.add(station);
+        }
+        return Collections.unmodifiableList(stations);
+    }
+
+    Station findStation(String stationId) {
+        if (!StringUtils.hasText(stationId)) {
+            return Station.EMPTY;
+        }
+        return stationRepository.findById(stationId)
+                .orElseThrow(() -> new RuntimeException("Could not find Station: " + stationId));
+    }
 
     TrainOnRail createTrain(Train train, Railway railway, String lang) {
         boolean ascending = isAscendingDirection(train, railway);
@@ -249,30 +252,20 @@ public class DefaultTrainService implements TrainService {
                 .build();
     }
 
-    Station findStation(String stationId) {
-        if (!StringUtils.hasText(stationId)) {
-            return Station.EMPTY;
-        }
-        final Optional<Station> o = stationRepository.findById(stationId);
-        if (o.isEmpty()) {
-            throw new RuntimeException("Could not find Station: " + stationId);
-        }
-        return o.get();
-    }
-
     TrainType findTrainType(String trainTypeId) {
         if (!StringUtils.hasText(trainTypeId)) {
             return TrainType.EMPTY;
         }
-        final Optional<TrainType> o = trainTypeRepository.findById(trainTypeId);
-        if (o.isEmpty()) {
-            throw new RuntimeException("Could not find TrainType: " + trainTypeId);
-        }
-        return o.get();
+        return trainTypeRepository.findById(trainTypeId)
+                .orElseThrow(() -> new RuntimeException("Could not find TrainType: " + trainTypeId));
     }
 
     LocalDateTime lastTrainDate(List<Train> trains) {
-        return trains.stream().map(t -> t.getDate()).sorted(Comparator.reverseOrder()).findFirst().orElse(null);
+        return trains.stream()
+                .map(t -> t.getDate())
+                .sorted(Comparator.reverseOrder())
+                .findFirst()
+                .orElse(null);
     }
 
     long validLimit(List<Train> trains) {
