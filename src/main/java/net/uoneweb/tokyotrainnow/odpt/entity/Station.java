@@ -26,6 +26,8 @@ import java.util.Map;
 @JsonldResource
 @JsonldType("odpt:Station")
 public class Station {
+    public static final Station EMPTY = Station.builder().sameAs("station_empty").build();
+
     @JsonldId
     private String id;
 

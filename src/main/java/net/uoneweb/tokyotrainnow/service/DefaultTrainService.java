@@ -2,6 +2,8 @@ package net.uoneweb.tokyotrainnow.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.uoneweb.tokyotrainnow.controller.TrainOnRail;
+import net.uoneweb.tokyotrainnow.controller.Trains;
 import net.uoneweb.tokyotrainnow.entity.CurrentRailway;
 import net.uoneweb.tokyotrainnow.entity.MetaData;
 import net.uoneweb.tokyotrainnow.odpt.client.OdptApiClient;
@@ -20,15 +22,14 @@ import net.uoneweb.tokyotrainnow.repository.TrainRepository;
 import net.uoneweb.tokyotrainnow.repository.TrainTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -66,180 +67,165 @@ public class DefaultTrainService implements TrainService {
     public void update() {
         LocalDateTime now = LocalDateTime.now(clock.withZone(ZoneId.of("Asia/Tokyo")));
 
-        List<Operator> operators = odptApiClient.getOperators();
+        updateOperators();
+        updateRailDirections();
+        updateRailways();
+        updateStations();
+        updateTrainTypes();
+
+        updateMetaData(now);
+    }
+
+    void updateOperators() {
+        final List<Operator> operators = odptApiClient.getOperators();
         operatorRepository.deleteAll();
         for (Operator operator : operators) {
             operatorRepository.save(operator);
         }
+    }
 
-        List<RailDirection> railDirections = odptApiClient.getRailDirections();
+    void updateRailDirections() {
+        final List<RailDirection> railDirections = odptApiClient.getRailDirections();
         railDirectionRepository.deleteAll();
         for (RailDirection railDirection : railDirections) {
             railDirectionRepository.save(railDirection);
         }
+    }
 
-        List<Railway> railways = odptApiClient.getRailways();
+    void updateRailways() {
+        final List<Railway> railways = odptApiClient.getRailways();
         railwayRepository.deleteAll();
         for (Railway railway : railways) {
             railwayRepository.save(railway);
         }
+    }
 
-        List<Station> stations = odptApiClient.getStations();
+    void updateStations() {
+        final List<Station> stations = odptApiClient.getStations();
         stationRepository.deleteAll();
         for (Station station : stations) {
             stationRepository.save(station);
         }
+    }
 
-        List<TrainType> trainTypes = odptApiClient.getTrainTypes();
+    void updateTrainTypes() {
+        final List<TrainType> trainTypes = odptApiClient.getTrainTypes();
         trainTypeRepository.deleteAll();
         for (TrainType trainType : trainTypes) {
             trainTypeRepository.save(trainType);
         }
+    }
 
+    void updateMetaData(LocalDateTime date) {
         metaDataRepository.save(MetaData.builder()
-                .operatorsUpdateTime(now)
-                .railDirectionsUpdateTime(now)
-                .railwaysUpdateTime(now)
-                .stationsUpdateTime(now)
-                .trainTypesUpdateTime(now)
+                .operatorsUpdateTime(date)
+                .railDirectionsUpdateTime(date)
+                .railwaysUpdateTime(date)
+                .stationsUpdateTime(date)
+                .trainTypesUpdateTime(date)
                 .build());
-
     }
 
     @Override
     public Railway getRailway(String railwayId) {
-        return railwayRepository.findById(railwayId).orElse(null);
+        return findRailway(railwayId);
     }
 
     @Override
     public CurrentRailway getCurrentRailway(String railwayId) {
         final String lang = "ja";
+        final Railway railway = findRailway(railwayId);
+        final Operator operator = findOperator(railway.getOperator());
 
-        Optional<Railway> oRailway = railwayRepository.findById(railwayId);
-        if (oRailway.isEmpty()) {
-            log.error("Railway is null", railwayId);
-            return null;
-        }
-
-        Railway railway = oRailway.get();
-
-        String ascendingTitle = "-";
-        Optional<RailDirection> oAscendingRailDirecton = railDirectionRepository.findById(railway.getAscendingRailDirection());
-        if (oAscendingRailDirecton.isEmpty()) {
-            log.error("raildirection is null");
-        } else {
-            ascendingTitle = oAscendingRailDirecton.get().getRailDirectionTitles().get(lang);
-        }
-
-        String descendingTitle = "-";
-        Optional<RailDirection> oDescendingRailDirection = railDirectionRepository.findById(railway.getDescendingRailDirection());
-        if (oDescendingRailDirection.isEmpty()) {
-            log.error("raildirection is null");
-        } else {
-            descendingTitle = oDescendingRailDirection.get().getRailDirectionTitles().get(lang);
-        }
-
-        Optional<Operator> oOperator = operatorRepository.findById(railway.getOperator());
-        String operatorTitle = "";
-        if (oOperator.isEmpty()) {
-            log.error("operator is null", railway.getOperator());
-        } else {
-            operatorTitle = oOperator.get().getOperatorTitles().get(lang);
-        }
-
-        List<Railway.Station> stations = railway.getStationOrder();
-        List<CurrentRailway.Section> sections = new ArrayList<>();
-        for (int i = 0; i < stations.size(); i++) {
-            String stationId = stations.get(i).getStation();
-            Optional<Station> oStation = stationRepository.findById(stationId);
-            if (oStation.isEmpty()) {
-                log.error("Station is null", stationId);
-                return null;
-            }
-
-            Station station = oStation.get();
-            sections.add(CurrentRailway.Station.builder()
-                    .title(station.getStationTitle().get(lang))
-                    .stationId(station.getSameAs())
-                    .stationCode(station.getStationCode()).build());
-            if (i < stations.size() - 1) {
-                sections.add(CurrentRailway.Line.builder()
-                        .title("|")
-                        .build());
-            }
-        }
-
-        CurrentRailway currentRailway = CurrentRailway.builder()
-                .title(railway.getTitle())
-                .ascendingTitle(ascendingTitle)
-                .descendingTitle(descendingTitle)
-                .operator(operatorTitle)
-                .color(railway.getColor())
-                .lineCode(railway.getLineCode())
-                .sections(sections).build();
-
-        List<Train> trains = trainRepository.find(railwayId);
-        for (Train train : trains) {
-            boolean ascending = isAscendingDirection(train, railway);
-            final String from = train.getFromStation();
-            final String to = train.getToStation();
-
-            final String dest = train.getDestinationStations()
-                    .stream()
-                    .map(destId -> stationRepository.findById(destId))
-                    .map(opt -> {
-                        if (opt.isPresent()) {
-                            return opt.get().getStationTitle().get(lang);
-                        } else {
-                            return "-";
-                        }
-                    }).collect(Collectors.joining("・"));
-
-            int index = findIndex(sections, from, to, ascending);
-
-            final Optional<TrainType> oTrainType = trainTypeRepository.findById(train.getTrainType());
-            String trainType = "----";
-            if (oTrainType.isEmpty()) {
-                log.error("TrainType is empty: " + train.getTrainType());
-            } else {
-                trainType = oTrainType.get().getTrainTypeTitles().get("ja");
-            }
-
-            sections.get(index).addTrain(CurrentRailway.Train.builder()
-                    .destination(dest)
-                    .delay(train.getDelay())
-                    .trainNumber(train.getTrainNumber())
-                    .trainType(trainType)
-                    .ascending(ascending)
-                    .carComposition(train.getCarComposition())
-                    .build());
-        }
-
-        for (CurrentRailway.Section section : sections) {
-            log.info(section.toString());
-        }
-
-        Optional<MetaData> oMetaData = metaDataRepository.findById(1L);
-        MetaData metadata = oMetaData.orElse(MetaData.builder().build());
-
-        currentRailway.setOperatorUpdateTime(metadata.getOperatorsUpdateTime());
-        currentRailway.setRailwayUpdateTime(metadata.getRailwaysUpdateTime());
-        currentRailway.setTrainTypeUpdateTime(metadata.getTrainTypesUpdateTime());
-        currentRailway.setTrainDate(lastTrainDate(trains));
-        currentRailway.setValidSeconds(validLimit(trains));
-
-        return currentRailway;
+        return createCurrentRailway(operator, railway, lang);
     }
 
-    LocalDateTime lastTrainDate(List<Train> trains) {
-        return trains.stream().map(t -> t.getDate()).sorted(Comparator.reverseOrder()).findFirst().orElse(null);
+    Railway findRailway(String railwayId) {
+        return railwayRepository.findById(railwayId)
+                .orElseThrow(() -> new RuntimeException("Could not find Railway: " + railwayId));
     }
 
-    long validLimit(List<Train> trains) {
-        LocalDateTime now = LocalDateTime.now(clock.withZone(ZoneId.of("Asia/Tokyo")));
-        LocalDateTime limit = trains.stream().map(t -> t.getValid()).sorted().findFirst()
-                .orElse(now.plusMinutes(5));
-        return ChronoUnit.SECONDS.between(now, limit);
+    Operator findOperator(String operatorId) {
+        return operatorRepository.findById(operatorId)
+                .orElseThrow(() -> new RuntimeException("Could not find Operator: " + operatorId));
+    }
+
+    CurrentRailway createCurrentRailway(Operator operator, Railway railway, String lang) {
+        final RailDirection ascending = findRailDirection(railway.getAscendingRailDirection());
+        final RailDirection descending = findRailDirection(railway.getDescendingRailDirection());
+
+        final List<Railway.Station> omittedStations = railway.getStationOrder();
+        final List<Station> stations = findStations(omittedStations);
+        final List<Train> trains = trainRepository.find(railway.getSameAs());
+        final Trains trainsOnRail = createTrainsOnRail(trains, railway, lang);
+        final MetaData metadata = metaDataRepository.findById(1L)
+                .orElse(MetaData.builder().build());
+
+        return new CurrentRailway(operator, railway, ascending, descending, stations, trainsOnRail, metadata, clock, lang);
+    }
+
+    RailDirection findRailDirection(String railDirectionId) {
+        return railDirectionRepository.findById(railDirectionId)
+                .orElseThrow(() -> new RuntimeException("Could not find RailDirection: " + railDirectionId));
+    }
+
+    List<Station> findStations(List<Railway.Station> inputStations) {
+        final List<Station> stations = new ArrayList<>();
+        for (Railway.Station inputStation : inputStations) {
+            final String stationId = inputStation.getStation();
+            final Station station = stationRepository.findById(stationId)
+                    .orElseThrow(() -> new RuntimeException("Could not find Station: " + stationId));
+            stations.add(station);
+        }
+        return Collections.unmodifiableList(stations);
+    }
+
+    Trains createTrainsOnRail(final List<Train> trainList, final Railway railway, final String lang) {
+        Trains trains = new Trains();
+        for (Train train : trainList) {
+            final TrainOnRail trainOnRail = createTrainOnRail(train, railway, lang);
+            trains = trains.add(trainOnRail);
+        }
+        return trains;
+    }
+
+    TrainOnRail createTrainOnRail(Train train, Railway railway, String lang) {
+        boolean ascending = isAscendingDirection(train, railway);
+
+        final Station from = findStation(train.getFromStation());
+        final Station to = findStation(train.getToStation());
+        final List<Station> dest = train.getDestinationStations()
+                .stream()
+                .map(destId -> findStation(destId))
+                .collect(Collectors.toList());
+
+        final TrainType trainType = findTrainType(train.getTrainType());
+
+        return TrainOnRail.builder()
+                .from(from)
+                .to(to)
+                .destinations(dest)
+                .delay(train.getDelay())
+                .trainNumber(train.getTrainNumber())
+                .trainType(trainType)
+                .ascending(ascending)
+                .carComposition(train.getCarComposition())
+                .date(train.getDate())
+                .valid(train.getValid())
+                .build();
+    }
+
+    Station findStation(String stationId) {
+        if (!StringUtils.hasText(stationId)) {
+            return Station.EMPTY;
+        }
+        return stationRepository.findById(stationId)
+                .orElseThrow(() -> new RuntimeException("Could not find Station: " + stationId));
+    }
+
+    TrainType findTrainType(String trainTypeId) {
+        return trainTypeRepository.findById(trainTypeId)
+                .orElseThrow(() -> new RuntimeException("Could not find TrainType: " + trainTypeId));
     }
 
     boolean isAscendingDirection(Train train, Railway railway) {
@@ -253,39 +239,5 @@ public class DefaultTrainService implements TrainService {
         return false;
     }
 
-    int findIndex(List<CurrentRailway.Section> sections, String from, String to, boolean ascending) {
-        if (ascending) {
-            for (int i = 0; i < sections.size(); i++) {
-                CurrentRailway.Section section = sections.get(i);
-                if (!section.getStationId().equals(from)) {
-                    continue;
-                }
-                if (to == null) {
-                    return i;
-                }
-                int lineIndex = i + 1;
-                if (lineIndex >= sections.size()) {
-                    log.error("Section検出エラー(不正なインデックス)", lineIndex, from, to, sections);
-                }
-                return lineIndex;
-            }
-        } else {
-            for (int i = sections.size() - 1; i >= 0; i--) {
-                CurrentRailway.Section section = sections.get(i);
-                if (!section.getStationId().equals(from)) {
-                    continue;
-                }
-                if (to == null) {
-                    return i;
-                }
-                int lineIndex = i - 1;
-                if (lineIndex < 0) {
-                    log.error("Section検出エラー(不正なインデックス)", lineIndex, from, to, sections);
-                }
-                return lineIndex;
-            }
-        }
-        log.error("Section検出エラー(一致なし)", from, to, sections);
-        return 0;
-    }
+
 }

@@ -25,6 +25,8 @@ import java.util.Map;
 @JsonldResource
 @JsonldType("odpt:TrainType")
 public class TrainType {
+    public static final TrainType EMPTY = TrainType.builder().sameAs("empty_traintype").build();
+
     @JsonldId
     private String id;
 

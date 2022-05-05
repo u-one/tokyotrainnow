@@ -3,6 +3,7 @@ package net.uoneweb.tokyotrainnow.service;
 import net.uoneweb.tokyotrainnow.RailDirectionFactory;
 import net.uoneweb.tokyotrainnow.TestDataBuilder;
 import net.uoneweb.tokyotrainnow.TrainTypeFactory;
+import net.uoneweb.tokyotrainnow.controller.TrainOnRail;
 import net.uoneweb.tokyotrainnow.entity.CurrentRailway;
 import net.uoneweb.tokyotrainnow.entity.MetaData;
 import net.uoneweb.tokyotrainnow.odpt.client.OdptApiClient;
@@ -24,6 +25,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -37,6 +39,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -156,7 +159,10 @@ public class DefaultTrainServiceTest {
         when(stationRepository.findById("odpt.Station:JR-East.SobuRapid.Chiba")).thenReturn(Optional.of(TestDataBuilder.sobuRapidChiba()));
         when(stationRepository.findById("odpt.Station:JR-East.Yokosuka.Ofuna")).thenReturn(Optional.of(TestDataBuilder.yokosukaOfuna()));
         when(stationRepository.findById("odpt.Station:JR-East.Uchibo.Kimitsu")).thenReturn(Optional.of(TestDataBuilder.uchiboKimitsu()));
-        when(trainRepository.find("odpt.Railway:JR-East.SobuRapid")).thenReturn(createTrains());
+        when(trainRepository.find("odpt.Railway:JR-East.SobuRapid")).thenReturn(List.of(
+                TestDataBuilder.train2296FAtTokyo(),
+                TestDataBuilder.train575FOnLineInageToChiba()
+        ));
         when(trainTypeRepository.findById("odpt.TrainType:JR-East.Rapid")).thenReturn(Optional.of(TrainType.builder()
                 .sameAs("odpt.TrainType:JR-East.Rapid")
                 .title("快速")
@@ -187,17 +193,17 @@ public class DefaultTrainServiceTest {
 
         assertThat(railway.getSections()).hasSize(5);
         assertThat(railway.getSections())
-                .elements(0, 2, 4).hasOnlyElementsOfType(CurrentRailway.Station.class);
+                .elements(0, 2, 4).hasOnlyElementsOfType(CurrentRailway.EStation.class);
         assertThat(railway.getSections())
                 .elements(1,3).hasOnlyElementsOfType(CurrentRailway.Line.class);
 
         // 東京
         assertThat(railway.getSections().get(0).getTrains())
-                .extracting(CurrentRailway.Train::getTrainNumber).containsExactly("2296F");
+                .extracting(TrainOnRail::getTrainNumber).containsExactly("2296F");
 
         // 千葉-稲毛
         assertThat(railway.getSections().get(3).getTrains())
-                .extracting(CurrentRailway.Train::getTrainNumber).containsExactly("575F");
+                .extracting(TrainOnRail::getTrainNumber).containsExactly("575F");
 
         assertThat(railway.getOperatorUpdateTime()).isEqualTo(updateTime);
         assertThat(railway.getRailwayUpdateTime()).isEqualTo(updateTime);
@@ -207,41 +213,45 @@ public class DefaultTrainServiceTest {
     }
 
     @Test
-    public void lastTrainDateReturnsLatestOne() {
-        List<Train> trains = List.of(
-                Train.builder().date(LocalDateTime.of(2021,10,01,12,00,00)).build(),
-                Train.builder().date(LocalDateTime.of(2021,10,01,12,00,01)).build(),
-                Train.builder().date(LocalDateTime.of(2021,10,01,12,00,02)).build()
-                );
-        assertThat(trainService.lastTrainDate(trains)).isEqualTo(LocalDateTime.of(2021, 10,01, 12,00,02));
+    public void findRailway_NotFound_ExceptionThrown() {
+        assertThatThrownBy(() -> {
+            trainService.findRailway("unknown");
+        });
     }
 
     @Test
-    public void lastTrainDateMayReturnNull() {
-        List<Train> trains = List.of();
-        assertThat(trainService.lastTrainDate(trains)).isNull();
+    public void findRailDirection_NotFound_ExceptionThrown() {
+        assertThatThrownBy(() -> {
+            trainService.findRailDirection("unknown");
+        });
     }
 
     @Test
-    public void validLimitReturnsNearestOne() {
-        when(clock.instant()).thenReturn(Instant.parse("2021-10-01T11:59:00.000Z"));
-        when(clock.withZone(ZoneId.of("Asia/Tokyo"))).thenReturn(clock);
+    public void findOperator_NotFound_ExceptionThrown() {
+        assertThatThrownBy(() -> {
+            trainService.findOperator("unknown");
+        });
+    }
 
-        List<Train> trains = List.of(
-                Train.builder().valid(LocalDateTime.of(2021,10,01,12,00,00)).build(),
-                Train.builder().valid(LocalDateTime.of(2021,10,01,12,00,01)).build(),
-                Train.builder().valid(LocalDateTime.of(2021,10,01,12,00,02)).build()
-        );
-        assertThat(trainService.validLimit(trains)).isEqualTo(60);
+    @ParameterizedTest
+    @NullAndEmptySource
+    public void findStation_EmptyId_ReturnsEmpty(String stationId) {
+        final Station actual = trainService.findStation(stationId);
+        assertThat(actual).isEqualTo(Station.EMPTY);
     }
 
     @Test
-    public void validLimitNotReturnNull() {
-        when(clock.instant()).thenReturn(Instant.parse("2021-10-01T11:59:00.000Z"));
-        when(clock.withZone(ZoneId.of("Asia/Tokyo"))).thenReturn(clock);
+    public void findStation_NotFound_ExceptionThrown() {
+        assertThatThrownBy(() -> {
+            trainService.findStation("unknown");
+        });
+    }
 
-        List<Train> trains = List.of();
-        assertThat(trainService.validLimit(trains)).isEqualTo(300);
+    @Test
+    public void findTrainType_NotFound_ExceptionThrown() {
+        assertThatThrownBy(() -> {
+            trainService.findTrainType("unknown");
+        });
     }
 
 
@@ -261,28 +271,6 @@ public class DefaultTrainServiceTest {
         assertThat(trainService.isAscendingDirection(train, railway)).isEqualTo(expected);
     }
 
-    @ParameterizedTest
-    @CsvSource({
-            "odpt.Station:JR-East.SobuRapid.Tokyo, , true, 0",
-            "odpt.Station:JR-East.SobuRapid.Tokyo, odpt.Station:JR-East.SobuRapid.Inage, true, 1",
-            "odpt.Station:JR-East.SobuRapid.Inage, , true, 2",
-            "odpt.Station:JR-East.SobuRapid.Chiba, , true, 4",
-            "odpt.Station:JR-East.SobuRapid.Chiba, , false, 4",
-            "odpt.Station:JR-East.SobuRapid.Chiba, odpt.Station:JR-East.SobuRapid.Inage , false, 3",
-            "odpt.Station:JR-East.SobuRapid.Tokyo, , false, 0",
-    })
-    public void findIndexTest(String from, String to, boolean ascending, int expected) {
-        List<CurrentRailway.Section> sections = List.of(
-                CurrentRailway.Station.builder().stationId("odpt.Station:JR-East.SobuRapid.Tokyo").build(),
-                CurrentRailway.Line.builder().build(),
-                CurrentRailway.Station.builder().stationId("odpt.Station:JR-East.SobuRapid.Inage").build(),
-                CurrentRailway.Line.builder().build(),
-                CurrentRailway.Station.builder().stationId("odpt.Station:JR-East.SobuRapid.Chiba").build()
-        );
-        int index = trainService.findIndex(sections, from, to, ascending);
-
-        assertThat(index).isEqualTo(expected);
-    }
 
     private static Railway createRailway() {
         Railway sobuRapid = Railway.builder()
@@ -308,43 +296,5 @@ public class DefaultTrainServiceTest {
                 .descendingRailDirection("odpt.RailDirection:Inbound")
                 .build();
         return sobuRapid;
-    }
-
-
-    private static List<Train> createTrains() {
-        return List.of(
-                Train.builder()
-                        .id("urn:uuid:0557289e-7209-458f-b8b6-eac9f37e99e4")
-                        .date(LocalDateTime.of(2021,10,1, 12,0,0))
-                        .valid(LocalDateTime.of(2021,10,1, 12,5,0))
-                        .sameAs("odpt.Train:JR-East.SobuRapid.2296F")
-                        .railway("odpt.Railway:JR-East.SobuRapid")
-                        .operator("odpt.Operator:JR-East")
-                        .trainType("odpt.TrainType:JR-East.Rapid")
-                        .trainNumber("2296F")
-                        .carComposition(11)
-                        .fromStation("odpt.Station:JR-East.SobuRapid.Tokyo")
-                        .toStation(null)
-                        .railDirection("odpt.RailDirection:Inbound")
-                        .destinationStations(List.of("odpt.Station:JR-East.Yokosuka.Ofuna"))
-                        .delay(0)
-                        .build(),
-                Train.builder()
-                        .id("urn:uuid:f5e7a725-33a8-4b4c-a89e-8ba2aba9d6dc")
-                        .date(LocalDateTime.of(2021,10,1, 12,0,0))
-                        .valid(LocalDateTime.of(2021,10,1, 12,5,0))
-                        .sameAs("odpt.Train:JR-East.SobuRapid.575F")
-                        .railway("odpt.Railway:JR-East.SobuRapid")
-                        .operator("odpt.Operator:JR-East")
-                        .trainType("odpt.TrainType:JR-East.Rapid")
-                        .trainNumber("575F")
-                        .carComposition(15)
-                        .fromStation("odpt.Station:JR-East.SobuRapid.Inage")
-                        .toStation("odpt.Station:JR-East.SobuRapid.Chiba")
-                        .railDirection("odpt.RailDirection:Outbound")
-                        .destinationStations(List.of("odpt.Station:JR-East.Uchibo.Kimitsu"))
-                        .delay(0)
-                        .build()
-        );
     }
 }

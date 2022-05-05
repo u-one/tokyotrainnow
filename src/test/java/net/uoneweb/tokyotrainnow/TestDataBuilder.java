@@ -3,6 +3,7 @@ package net.uoneweb.tokyotrainnow;
 import net.uoneweb.tokyotrainnow.odpt.entity.Operator;
 import net.uoneweb.tokyotrainnow.odpt.entity.Railway;
 import net.uoneweb.tokyotrainnow.odpt.entity.Station;
+import net.uoneweb.tokyotrainnow.odpt.entity.Train;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -226,6 +227,44 @@ public class TestDataBuilder {
                 ))
                 .ascendingRailDirection("odpt.RailDirection:Outbound")
                 .descendingRailDirection("odpt.RailDirection:Inbound")
+                .build();
+    }
+
+    public static Train train2296FAtTokyo() {
+        return Train.builder()
+                .id("urn:uuid:0557289e-7209-458f-b8b6-eac9f37e99e4")
+                .date(LocalDateTime.of(2021,10,1, 12,0,0))
+                .valid(LocalDateTime.of(2021,10,1, 12,5,0))
+                .sameAs("odpt.Train:JR-East.SobuRapid.2296F")
+                .railway("odpt.Railway:JR-East.SobuRapid")
+                .operator("odpt.Operator:JR-East")
+                .trainType("odpt.TrainType:JR-East.Rapid")
+                .trainNumber("2296F")
+                .carComposition(11)
+                .fromStation("odpt.Station:JR-East.SobuRapid.Tokyo")
+                .toStation(null)
+                .railDirection("odpt.RailDirection:Inbound")
+                .destinationStations(List.of("odpt.Station:JR-East.Yokosuka.Ofuna"))
+                .delay(0)
+                .build();
+    }
+
+    public static Train train575FOnLineInageToChiba() {
+        return Train.builder()
+                .id("urn:uuid:f5e7a725-33a8-4b4c-a89e-8ba2aba9d6dc")
+                .date(LocalDateTime.of(2021,10,1, 12,0,0))
+                .valid(LocalDateTime.of(2021,10,1, 12,5,0))
+                .sameAs("odpt.Train:JR-East.SobuRapid.575F")
+                .railway("odpt.Railway:JR-East.SobuRapid")
+                .operator("odpt.Operator:JR-East")
+                .trainType("odpt.TrainType:JR-East.Rapid")
+                .trainNumber("575F")
+                .carComposition(15)
+                .fromStation("odpt.Station:JR-East.SobuRapid.Inage")
+                .toStation("odpt.Station:JR-East.SobuRapid.Chiba")
+                .railDirection("odpt.RailDirection:Outbound")
+                .destinationStations(List.of("odpt.Station:JR-East.Uchibo.Kimitsu"))
+                .delay(0)
                 .build();
     }
 }
