@@ -69,6 +69,8 @@ public class CurrentRailwayBuilder {
                 .to(Station.EMPTY)
                 .destinations(List.of(TestDataBuilder.sobuRapidChiba()))
                 .lang("ja")
+                .valid(LocalDateTime.of(2021,3,27,12,01,30))
+                .date(LocalDateTime.of(2021,3,27,12,00,03))
                 .build();
     }
 

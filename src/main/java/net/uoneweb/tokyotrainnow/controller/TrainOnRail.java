@@ -7,6 +7,7 @@ import lombok.NonNull;
 import net.uoneweb.tokyotrainnow.odpt.entity.Station;
 import net.uoneweb.tokyotrainnow.odpt.entity.TrainType;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -35,6 +36,10 @@ public class TrainOnRail {
 
     @NonNull
     List<Station> destinations;
+
+    private LocalDateTime date;
+
+    private LocalDateTime valid;
 
     @Builder.Default
     String lang = validateLanguage("ja");

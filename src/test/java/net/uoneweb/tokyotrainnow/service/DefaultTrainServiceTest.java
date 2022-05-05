@@ -254,44 +254,6 @@ public class DefaultTrainServiceTest {
         });
     }
 
-    @Test
-    public void lastTrainDateReturnsLatestOne() {
-        List<Train> trains = List.of(
-                Train.builder().date(LocalDateTime.of(2021,10,01,12,00,00)).build(),
-                Train.builder().date(LocalDateTime.of(2021,10,01,12,00,01)).build(),
-                Train.builder().date(LocalDateTime.of(2021,10,01,12,00,02)).build()
-                );
-        assertThat(trainService.lastTrainDate(trains)).isEqualTo(LocalDateTime.of(2021, 10,01, 12,00,02));
-    }
-
-    @Test
-    public void lastTrainDateMayReturnNull() {
-        List<Train> trains = List.of();
-        assertThat(trainService.lastTrainDate(trains)).isNull();
-    }
-
-    @Test
-    public void validLimitReturnsNearestOne() {
-        when(clock.instant()).thenReturn(Instant.parse("2021-10-01T11:59:00.000Z"));
-        when(clock.withZone(ZoneId.of("Asia/Tokyo"))).thenReturn(clock);
-
-        List<Train> trains = List.of(
-                Train.builder().valid(LocalDateTime.of(2021,10,01,12,00,00)).build(),
-                Train.builder().valid(LocalDateTime.of(2021,10,01,12,00,01)).build(),
-                Train.builder().valid(LocalDateTime.of(2021,10,01,12,00,02)).build()
-        );
-        assertThat(trainService.validLimit(trains)).isEqualTo(60);
-    }
-
-    @Test
-    public void validLimitNotReturnNull() {
-        when(clock.instant()).thenReturn(Instant.parse("2021-10-01T11:59:00.000Z"));
-        when(clock.withZone(ZoneId.of("Asia/Tokyo"))).thenReturn(clock);
-
-        List<Train> trains = List.of();
-        assertThat(trainService.validLimit(trains)).isEqualTo(300);
-    }
-
 
     @ParameterizedTest
     @CsvSource({

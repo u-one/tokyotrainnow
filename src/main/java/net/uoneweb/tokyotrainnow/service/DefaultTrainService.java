@@ -3,6 +3,7 @@ package net.uoneweb.tokyotrainnow.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.uoneweb.tokyotrainnow.controller.TrainOnRail;
+import net.uoneweb.tokyotrainnow.controller.Trains;
 import net.uoneweb.tokyotrainnow.entity.CurrentRailway;
 import net.uoneweb.tokyotrainnow.entity.MetaData;
 import net.uoneweb.tokyotrainnow.odpt.client.OdptApiClient;
@@ -26,10 +27,8 @@ import org.springframework.util.StringUtils;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -146,11 +145,6 @@ public class DefaultTrainService implements TrainService {
                 .orElseThrow(() -> new RuntimeException("Could not find Railway: " + railwayId));
     }
 
-    RailDirection findRailDirection(String railDirectionId) {
-        return railDirectionRepository.findById(railDirectionId)
-                .orElseThrow(() -> new RuntimeException("Could not find RailDirection: " + railDirectionId));
-    }
-
     Operator findOperator(String operatorId) {
         return operatorRepository.findById(operatorId)
                 .orElseThrow(() -> new RuntimeException("Could not find Operator: " + operatorId));
@@ -163,20 +157,16 @@ public class DefaultTrainService implements TrainService {
         final List<Railway.Station> omittedStations = railway.getStationOrder();
         final List<Station> stations = findStations(omittedStations);
         final List<Train> trains = trainRepository.find(railway.getSameAs());
-        final List<TrainOnRail> trainsOnRail = createTrainsOnRail(trains, railway, lang);
-
-        final CurrentRailway currentRailway = new CurrentRailway(operator, railway, ascending, descending, stations, trainsOnRail, lang);
-
+        final Trains trainsOnRail = createTrainsOnRail(trains, railway, lang);
         final MetaData metadata = metaDataRepository.findById(1L)
-                        .orElse(MetaData.builder().build());
+                .orElse(MetaData.builder().build());
 
-        currentRailway.setOperatorUpdateTime(metadata.getOperatorsUpdateTime());
-        currentRailway.setRailwayUpdateTime(metadata.getRailwaysUpdateTime());
-        currentRailway.setTrainTypeUpdateTime(metadata.getTrainTypesUpdateTime());
-        currentRailway.setTrainDate(lastTrainDate(trains));
-        currentRailway.setValidSeconds(validLimit(trains));
+        return new CurrentRailway(operator, railway, ascending, descending, stations, trainsOnRail, metadata, clock, lang);
+    }
 
-        return currentRailway;
+    RailDirection findRailDirection(String railDirectionId) {
+        return railDirectionRepository.findById(railDirectionId)
+                .orElseThrow(() -> new RuntimeException("Could not find RailDirection: " + railDirectionId));
     }
 
     List<Station> findStations(List<Railway.Station> inputStations) {
@@ -190,13 +180,13 @@ public class DefaultTrainService implements TrainService {
         return Collections.unmodifiableList(stations);
     }
 
-    List<TrainOnRail> createTrainsOnRail(final List<Train> trains, final Railway railway, final String lang) {
-        List<TrainOnRail> trainOnRailList = new ArrayList<>();
-        for (Train train : trains) {
+    Trains createTrainsOnRail(final List<Train> trainList, final Railway railway, final String lang) {
+        Trains trains = new Trains();
+        for (Train train : trainList) {
             final TrainOnRail trainOnRail = createTrainOnRail(train, railway, lang);
-            trainOnRailList.add(trainOnRail);
+            trains = trains.add(trainOnRail);
         }
-        return Collections.unmodifiableList(trainOnRailList);
+        return trains;
     }
 
     TrainOnRail createTrainOnRail(Train train, Railway railway, String lang) {
@@ -220,6 +210,8 @@ public class DefaultTrainService implements TrainService {
                 .trainType(trainType)
                 .ascending(ascending)
                 .carComposition(train.getCarComposition())
+                .date(train.getDate())
+                .valid(train.getValid())
                 .build();
     }
 
@@ -234,21 +226,6 @@ public class DefaultTrainService implements TrainService {
     TrainType findTrainType(String trainTypeId) {
         return trainTypeRepository.findById(trainTypeId)
                 .orElseThrow(() -> new RuntimeException("Could not find TrainType: " + trainTypeId));
-    }
-
-    LocalDateTime lastTrainDate(List<Train> trains) {
-        return trains.stream()
-                .map(t -> t.getDate())
-                .sorted(Comparator.reverseOrder())
-                .findFirst()
-                .orElse(null);
-    }
-
-    long validLimit(List<Train> trains) {
-        LocalDateTime now = LocalDateTime.now(clock.withZone(ZoneId.of("Asia/Tokyo")));
-        LocalDateTime limit = trains.stream().map(t -> t.getValid()).sorted().findFirst()
-                .orElse(now.plusMinutes(5));
-        return ChronoUnit.SECONDS.between(now, limit);
     }
 
     boolean isAscendingDirection(Train train, Railway railway) {
