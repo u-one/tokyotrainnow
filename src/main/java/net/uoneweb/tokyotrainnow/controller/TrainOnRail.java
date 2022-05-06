@@ -1,5 +1,6 @@
 package net.uoneweb.tokyotrainnow.controller;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,19 +29,25 @@ public class TrainOnRail {
 
     boolean ascending;
 
+    @JsonIgnore
     @NonNull
     Station from;
 
+    @JsonIgnore
     @NonNull
     Station to;
 
+    @JsonIgnore
     @NonNull
     List<Station> destinations;
 
+    @JsonIgnore
     private LocalDateTime date;
 
+    @JsonIgnore
     private LocalDateTime valid;
 
+    @JsonIgnore
     @Builder.Default
     String lang = validateLanguage("ja");
 
@@ -65,5 +72,13 @@ public class TrainOnRail {
             return "en";
         }
         return lang;
+    }
+
+    public String getFrom() {
+       return from.getTitle();
+    }
+
+    public String getTo() {
+        return to.getTitle();
     }
 }
